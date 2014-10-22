@@ -8,9 +8,11 @@ body, html{
 	font-weight:400;
 	padding-top:62px;/*Height of sub-header*/
     padding-bottom: 20px;
+	color:#4D4D4D;
 }
 h1, h2, h3, h4{
 	font-weight:300;
+	color: #2A7433;
 }
 
 /*
@@ -80,6 +82,11 @@ h1, h2, h3, h4{
 }
 
 /*
+//Section workflow
+*/
+
+
+/*
 //Webmapp selection//
 */
 #section-webmapp-selection{
@@ -102,3 +109,41 @@ h1, h2, h3, h4{
 	position: relative;
 }
 
+/**/
+.circle-tile {
+    margin-bottom: 15px;
+}
+.circle-tile-heading {
+	text-align: center;
+	font-size:32px;
+	background:#E98D32;
+    border-radius: 100%;
+    color: #FFFFFF;
+    margin: 0 auto -40px;
+    position: relative;
+    transition: all 0.3s ease-in-out 0s;
+    width: 80px;
+	height: 80px;
+    line-height: 80px;
+}
+.circle-tile-content {
+    padding-top: 50px;
+	background-color:#e5f1f9;
+	color:#4D4D4D;
+	text-align:left;
+}
+.circle-tile-title{
+  	padding: 0 15px;
+	font-size:1.3em;
+	font-weight:300;
+	color: #2A7433;
+}
+.circle-tile-description {
+	padding:15px;
+}
+.circle-tile-footer {
+    background-color: #E98D32;
+    display: block;
+    padding: 5px;
+    transition: all 0.3s ease-in-out 0s;
+}
