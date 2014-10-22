@@ -39,13 +39,19 @@ define([
             {
                 var requestUrl = portalUrl + "/sharing/rest/search";
                 var query = 'owner:'+ portal.user.username + ' AND type:"Web Map"'
-                var itemRequest = esriRequest({
-                    url: requestUrl,
-                    content: { f: "json", q: query,num:100},
-                    handleAs: "json"
+                var params = {q: query,
+                                num:100,  
+                                sortField: 'modified',
+                                sortOrder: 'desc'}
+                return portal.queryItems(params);
+                // var itemRequest = esriRequest({
+                    // url: requestUrl,
+                    // content: { f: "json", q: query,num:100,  sortField: 'modified',
+                    // sortOrder: 'desc'},
+                    // handleAs: "json"
                    
-                });
-                return itemRequest;
+                // });
+                // return itemRequest;
             }
         }
         ,

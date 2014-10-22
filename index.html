@@ -14,12 +14,14 @@
 
         <!--<link rel="stylesheet" href="css/bootstrap-theme.min.css">-->
         <link rel="stylesheet" href="css/bootstrap-theme.css">
+        <link rel="stylesheet" href="//js.arcgis.com/3.11/dgrid/css/skins/claro.css">
+        <link rel="stylesheet" href="//js.arcgis.com/3.11/dijit/themes/claro/claro.css">
         <link rel="stylesheet" href="//js.arcgis.com/3.11/esri/css/esri.css">
         <link rel="stylesheet" href="css/main.css">
 
         <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
-    <body>
+    <body class="claro">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -46,7 +48,7 @@
               <p>Veldwerk 2.0</p>
             </div>
             <div class="col-xs-3">
-              <p class="pull-right"><a href="#" class="user-toggle-actions"><span class="glyphicon glyphicon-user"></span> <span class="hidden-xs">Peter Henk</span> <span class="glyphicon glyphicon-chevron-down"></span></a></p>
+              <p class="pull-right"><a href="#" class="user-toggle-actions" id="loginLink"><span class="glyphicon glyphicon-user"></span> <span class="hidden-xs" id="userNameLabel">Peter Henk</span> <span class="glyphicon glyphicon-chevron-down"></span></a></p>
             </div>
           </div>
         </div><!-- end container -->
@@ -109,10 +111,10 @@
         </div>
         <div class="col-sm-6 col-md-4">
           <div class="thumbnail">
-            <img src="http://placehold.it/200x133" alt="...">
+            <img src="http://placehold.it/200x133" alt="..." id="map1Image">
             <div class="caption">
-              <h3>Titel kaart 1 kan best lang zijn</h3>
-              <p>wat details (wanneer aangemaakt, wie is eigenaar oid)</p>
+              <h3 id="map1Title">Titel kaart 1 kan best lang zijn</h3>
+              <p id="map1Desc">wat details (wanneer aangemaakt, wie is eigenaar oid)</p>
               <p><a href="#" class="btn btn-primary" role="button">Geselecteerd</a></p>
             </div>
           </div>
@@ -186,8 +188,118 @@
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
 
         <script src="js/vendor/bootstrap.min.js"></script>
-		<script src="//js.arcgis.com/3.11/"></script>
+		<script>
+        //async is a new dojoConfig option. The default value of false will load all the Dojo base modules
+        //here we set it to true to take advantage of the asynchronous nature of dojo and the the base modules
+        //are not automatically loaded.
+        var dojoConfig = { async: true, paths: { js: location.pathname.replace(/\/[^/]+$/, "") + "/js" } };
         
+    </script>
+    <script src="//js.arcgis.com/3.11/"></script>
+    <script>
+        //require function accepts an array of module ids and a function. The modules are provided as return variables passed as arguments to the function. This replaces the dojo.requires statements.
+        require([
+          
+          "dojo/ready",
+          "dojo/dom",
+          
+          "dojo/on",
+          
+          "js/VeldWerkCalls",
+
+        ], function (
+          
+          ready,
+          dom,
+          
+          on,
+          
+          VeldWerkCalls
+        ) {
+           
+            var vCalls;
+
+            ready(function () {
+
+
+                dom.byId('userNameLabel').innerHTML = 'Inloggen';
+                //search when enter key is pressed or button is clicked
+                on(dom.byId('loginLink'), 'click', GetWebMap);
+                //on(dom.byId('btnLayer'), 'click', GetLayer);
+               
+
+                vCalls = new VeldWerkCalls();
+
+              
+            });
+
+            function GetWebMap()
+            {
+                LogMessage("Start getting info");
+                //getfeatureservice item information
+
+                //var die = VeldWerkCalls.getHello();
+                
+                var die = vCalls.getHello();
+                LogMessage("hello: " + die);
+
+
+                var url = vCalls.getSla();
+                LogMessage("sla:" + url);
+
+                vCalls.signIn().then(function (loggedInUser) {
+                    LogMessage("Then");
+                    var userString = loggedInUser.fullName + " {" + loggedInUser.portal.name + "}";
+                    //setting username 
+                    dom.byId('userNameLabel').innerHTML = userString;
+                    //getting webmaps for this user
+                    vCalls.getWebMapsForUser().then(function (response) {
+                        LogMessage("Aantal webmaps found: " + response.total);
+                        if (response.total > 0)
+                        {
+                            var firstWebMap = response.results[0];
+                            var tUrl = firstWebMap.thumbnailUrl || '';
+                            var img = dom.byId('map1Image');
+                            img.src=tUrl;
+                            dom.byId('map1Title').innerHTML = firstWebMap.title;
+                            
+                            var webMapid = firstWebMap.id;
+                            LogMessage("now using webmap id: " + webMapid + " (" + firstWebMap.title + ")");
+                            //dom.byId('txtWebMapId').value = webMapid;
+                        }
+
+                    });
+                });
+
+
+
+            }
+
+
+            function GetLayer()
+            {
+                var webMapID = dom.byId('txtWebMapId').value;
+                vCalls.getLayersForWebMap(webMapID).then(function (resonse) {
+
+
+                });
+            }
+
+
+
+            function LogMessage(msg)
+            {
+                //var logTxt = dom.byId('txtContent')
+                //var txt = logTxt.value;
+                var d  = new Date();
+                var newtxt = d.toLocaleTimeString()+'-'+ msg;// + '\r\n' + txt;
+                console.log(newtxt);//logTxt.value = newtxt;
+            }
+
+
+
+        });
+    </script>
         <script src="js/main.js"></script>
 		
         <!-- google web font -->
