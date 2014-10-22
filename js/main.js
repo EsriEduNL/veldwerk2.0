@@ -24,7 +24,7 @@ require([
 	  ready(function () {
 		  //search when enter key is pressed or button is clicked
 		  on(dom.byId('loginLink'), 'click', GetWebMap);    
-
+		  
 		  vCalls = new VeldWerkCalls();
 
 	  });
@@ -72,7 +72,7 @@ require([
 						created = new Date(parseInt(e.created));
 						modified = new Date(parseInt(e.modified));
 						
-						$('.webmapp-list-container').append('<div class="col-sm-6 col-md-4 col-webmapp-'+e.id+'"><div class="thumbnail"><img src="'+e.thumbnailUrl+'" width="200" height="133" alt="Afbeelding voor webmapp '+e.title+'"><div class="caption"><h3 id="map1Title">'+e.title+'</h3><p>Omschrijving: '+e.description+'</p><ul class="webmapp-meta"><li>Gedeeld met: '+access+'</li><li>Aangemaakt op '+created+'</li><li>Laatst bewerkt op '+modified+'</li></ul><p><a href="#" data-webmappid="'+e.id+'" class="btn btn-primary" role="button">Geselecteerd</a></p></div></div></div>');
+						$('.webmapp-list-container').append('<div class="col-sm-6 col-md-4 col-lg-3 col-webmapp-'+e.id+'"><div class="thumbnail"><img src="'+e.thumbnailUrl+'" width="200" height="133" alt="Afbeelding voor webmapp '+e.title+'"><div class="caption"><h3 id="map1Title">'+e.title+'</h3><p>Omschrijving: '+e.description+'</p><ul class="webmapp-meta"><li>Gedeeld met: '+access+'</li><li>Aangemaakt op '+created+'</li><li>Laatst bewerkt op '+modified+'</li></ul><p><a href="#" data-webmappid="'+e.id+'" class="btn btn-primary" role="button">Geselecteerd</a></p></div></div></div>');
 						
                         LogMessage("now using webmap id: " + e.id + " (" + e.title + ")");  
                       });

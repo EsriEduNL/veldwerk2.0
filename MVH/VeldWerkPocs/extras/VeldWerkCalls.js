@@ -1,14 +1,14 @@
 define([
   "dojo/_base/declare",
   "dojo/_base/lang",
-  "dojo/cookie",
+
   "esri/request",
   "esri/arcgis/Portal",
   "esri/config"
 ], function (
   declare,
   lang,
-  cookie,
+
   esriRequest,
   arcgisPortal,
   config
@@ -20,43 +20,16 @@ define([
         portalUrl: null,
 
         constructor: function(options){
-            //portalUrl = document.location.protocol + '//www.arcgis.com';
             portalUrl = document.location.protocol + '//www.arcgis.com';
             //create the portal
             portal = new arcgisPortal.Portal(portalUrl);
-
-     
-
-            var idJson = cookie('veldwerk_identmanager2');
-
-
-
-            if (idJson)
-            {
-                var idObject = JSON.parse(idJson);
-                esri.id.initialize(idJson);
-
-                var cred = esri.id.findCredential(portalUrl)
-                if (!cred) {
-                    portal.signIn();
-                }
-            }
         },
     
-
-
     
         signIn: function()
         {
-            var def = portal.signIn();
-            def.then(function (result)
-            {
-                var json = JSON.stringify(esri.id.toJson());
+            return portal.signIn();
 
-                cookie('veldwerk_identmanager2', json, { expires: 5 });
-                
-            });
-            return def;
         },
 
         

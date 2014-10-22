@@ -129,6 +129,9 @@ h1, h2, h3, h4{
 #section-webmapp-selection{
 	background:#F2F3F5;
 }
+#section-webmapp-selection .thumbnail{
+    margin-bottom:15px;
+}
 #section-webmapp-selection .thumbnail h3{
 	word-wrap: break-word;
 }
@@ -140,6 +143,20 @@ ul.webmapp-meta li{
 	display:block;
 	color:#5F5F5F;
 	font-size:12px;
+}
+
+
+/*Adjust heights when not vertical stacked (>768px)*/
+@media (min-width: 768px) {
+	div[class*='col-webmapp']{
+		height:380px;
+		margin-bottom:20px;
+		overflow:hidden;
+	}
+	div[class*='col-webmapp']:hover{
+		overflow:visible;
+		z-index:100;
+	}
 }
 
 /*
