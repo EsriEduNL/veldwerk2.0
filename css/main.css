@@ -126,20 +126,33 @@ h1, h2, h3, h4{
 /*
 //Webmapp selection//
 */
-#section-webmapp-selection{
+#section-webmap-selection{
 	background:#F2F3F5;
 }
-#section-webmapp-selection .thumbnail{
+.webmap-selected-wrap{
+	display:none;
+}
+.webmap-selected-wrap img{
+	display:inline;
+}
+.webmap-selected-wrap .caption{
+	display:inline;
+   	margin:10px;
+}
+.webmap-selected-wrap .caption .btn{
+	display:none;
+}
+#section-webmap-selection .thumbnail{
     margin-bottom:15px;
 }
-#section-webmapp-selection .thumbnail h3{
+#section-webmap-selection .thumbnail h3{
 	word-wrap: break-word;
 }
-ul.webmapp-meta{
+ul.webmap-meta{
 	list-style:none;
 	padding:0;
 }
-ul.webmapp-meta li{
+ul.webmap-meta li{
 	display:block;
 	color:#5F5F5F;
 	font-size:12px;
@@ -148,12 +161,12 @@ ul.webmapp-meta li{
 
 /*Adjust heights when not vertical stacked (>768px)*/
 @media (min-width: 768px) {
-	div[class*='col-webmapp']{
+	div[class*='col-webmap']{
 		height:380px;
 		margin-bottom:20px;
 		overflow:hidden;
 	}
-	div[class*='col-webmapp']:hover{
+	div[class*='col-webmap']:hover{
 		overflow:visible;
 		z-index:100;
 	}
