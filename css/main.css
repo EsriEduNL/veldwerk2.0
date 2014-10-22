@@ -54,10 +54,36 @@ h1, h2, h3, h4{
 //Jumbo intro
 */
 #jumbo-introduction{
-	background:#e5f1f9;
+	
 }
 #jumbo-introduction h3{
 	color:#2a7433;
+}
+
+/*
+//Sections
+*/
+.section-white,
+.section-blue,
+.section-grey{
+  padding-top:40px;
+  padding-bottom:40px;
+}
+.section-white{
+	background-color:#FFF;
+}
+.section-grey{
+	background-color:#F2F3F5;
+}
+.section-blue{
+	background-color:#e5f1f9;
+}
+
+/*
+//Webmapp selection//
+*/
+#section-webmapp-selection{
+	background:#F2F3F5;
 }
 
 /*
@@ -75,3 +101,4 @@ h1, h2, h3, h4{
 	padding: 20px;
 	position: relative;
 }
+
