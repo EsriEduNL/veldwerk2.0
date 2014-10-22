@@ -21,7 +21,7 @@ define([
 
         constructor: function(options){
             portalUrl = document.location.protocol + '//www.arcgis.com';
-            //create the portal
+            //create the portalObject
             portal = new arcgisPortal.Portal(portalUrl);
         },
     
@@ -44,14 +44,6 @@ define([
                                 sortField: 'modified',
                                 sortOrder: 'desc'}
                 return portal.queryItems(params);
-                // var itemRequest = esriRequest({
-                    // url: requestUrl,
-                    // content: { f: "json", q: query,num:100,  sortField: 'modified',
-                    // sortOrder: 'desc'},
-                    // handleAs: "json"
-                   
-                // });
-                // return itemRequest;
             }
         }
         ,
@@ -68,19 +60,6 @@ define([
                 });
                 return itemRequest;
             }
-        }
-        ,
-
-        getHello: function ()
-        {
-            return "Hello world";
-        }
-        ,
-        
-        getSla: function()
-        {
-            return "sladiebla" + portalUrl;
-
         }
 
 

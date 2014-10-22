@@ -84,32 +84,6 @@ h1, h2, h3, h4{
 /*
 //Section workflow
 */
-
-
-/*
-//Webmapp selection//
-*/
-#section-webmapp-selection{
-	background:#F2F3F5;
-}
-
-/*
-//Login
-*/
-.row-login{
-  
-}
-.col-login{
-	background:#fbfbfb;
-	border: 1px solid rgb(237, 237, 237);
-	border-radius: 0px;
-	font-size: 14px;
-	margin: 20px 0px;
-	padding: 20px;
-	position: relative;
-}
-
-/**/
 .circle-tile {
     margin-bottom: 15px;
 }
@@ -147,3 +121,41 @@ h1, h2, h3, h4{
     padding: 5px;
     transition: all 0.3s ease-in-out 0s;
 }
+
+
+/*
+//Webmapp selection//
+*/
+#section-webmapp-selection{
+	background:#F2F3F5;
+}
+#section-webmapp-selection .thumbnail h3{
+	word-wrap: break-word;
+}
+ul.webmapp-meta{
+	list-style:none;
+	padding:0;
+}
+ul.webmapp-meta li{
+	display:block;
+	color:#5F5F5F;
+	font-size:12px;
+}
+
+/*
+//Login
+*/
+.row-login{
+  
+}
+.col-login{
+	background:#fbfbfb;
+	border: 1px solid rgb(237, 237, 237);
+	border-radius: 0px;
+	font-size: 14px;
+	margin: 20px 0px;
+	padding: 20px;
+	position: relative;
+}
+
+/**/
