@@ -1,13 +1,15 @@
 define([
   "dojo/_base/declare",
   "dojo/_base/lang",
-
+  "dojo/cookie",
+  
   "esri/request",
   "esri/arcgis/Portal",
   "esri/config"
 ], function (
   declare,
   lang,
+  cookie,
 
   esriRequest,
   arcgisPortal,
@@ -18,9 +20,10 @@ define([
     return declare([], {
         portal:null,
         portalUrl: null,
-        credCookieName:"veldwerk_identmanager",
+        credCookieName:null,
         constructor: function(options){
             portalUrl = document.location.protocol + '//www.arcgis.com';
+            credCookieName='veldwerk_identmanager3';
             //create the portalObject
             portal = new arcgisPortal.Portal(portalUrl);
             
@@ -44,7 +47,7 @@ define([
         getUser: function()
         {
             return portal.user;
-        }
+        },
     
         signIn: function()
         {
@@ -52,7 +55,10 @@ define([
             def.then(function (result)
             {
                 
-                syncCredsToCookie();
+                //this.syncCredsToCookie();
+                var json = JSON.stringify(esri.id.toJson());
+
+                cookie(credCookieName, json, { expires: 5 });
                 
             });
             return def;
@@ -63,15 +69,18 @@ define([
         {
             portal.signOut();
             esri.id.destroyCredentials();
-            syncCredsToCookie();
-        }
+            var json = JSON.stringify(esri.id.toJson());
+
+            cookie(credCookieName, json, { expires: 5 });
+            //syncCredsToCookie();
+        },
 
         syncCredsToCookie:function()
         {
             var json = JSON.stringify(esri.id.toJson());
 
             cookie(credCookieName, json, { expires: 5 });
-        }
+        },
         
         getWebMapsForUser:function()
         {
