@@ -1,0 +1,10 @@
+selecteer webmap
+selecteer vragen laag in webmap
+
+dupliceer vragen per groep
+
+maak webmap (met filter op groep)
+
+maak users
+maak groepen
+koppel users aan groepen
