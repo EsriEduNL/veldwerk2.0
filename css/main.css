@@ -1,0 +1,77 @@
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+body, html{
+	/*font:Verdana,Helvetica,sans-serif;*/
+	font-family: 'Open Sans', sans-serif;
+	font-style:normal;
+	font-weight:400;
+	padding-top:62px;/*Height of sub-header*/
+    padding-bottom: 20px;
+}
+h1, h2, h3, h4{
+	font-weight:300;
+}
+
+/*
+//Navigation
+*/
+.navbar{
+	background:#FFF;
+}
+.navbar-toggle{
+	border-color:#CCC;
+}
+.navbar-toggle:hover{
+	border-color:#007ac2;
+}
+.navbar-toggle .icon-bar{
+	background-color:#CCC;
+}
+.navbar-toggle:hover .icon-bar{
+	background-color:#007ac2;
+}
+.sub-header{
+	background:#007ac2;
+	color:#FFFFFF;
+}
+.sub-header p{
+	font-size:18px;
+	font-weight: light !important;
+	font-style: normal;
+	line-height: normal;
+	font-variant: normal;
+	font-weight:300;
+	padding:18px 0;
+	margin:0;
+}
+.sub-header p a.user-toggle-actions{
+ 	color:#FFF;
+	font-size:14px;
+}
+
+/*
+//Jumbo intro
+*/
+#jumbo-introduction{
+	background:#e5f1f9;
+}
+#jumbo-introduction h3{
+	color:#2a7433;
+}
+
+/*
+//Login
+*/
+.row-login{
+  
+}
+.col-login{
+	background:#fbfbfb;
+	border: 1px solid rgb(237, 237, 237);
+	border-radius: 0px;
+	font-size: 14px;
+	margin: 20px 0px;
+	padding: 20px;
+	position: relative;
+}
