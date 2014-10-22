@@ -47,38 +47,48 @@
         ) {
             var portal, portalUrl, itemGrid;
             var itemInfo, serviceInfo, layerInfos=[];
+            var vCalls;
 
-            //Replaces dojo.ready / dojo.addOnLoad
             ready(function () {
 
 
 
                 //search when enter key is pressed or button is clicked
-                on(dom.byId('btnSubmit'), 'click', DoWork);
-                parser.parse(); //replaces parseOnLoad = true in dojoConfig
+                on(dom.byId('btnWebMap'), 'click', GetWebMap);
+                on(dom.byId('btnLayer'), 'click', GetLayer);
+                parser.parse(); //replaces parseOnLoad = true in d
+
+                vCalls = new VeldWerkCalls();
 
               
             });
 
-            function DoWork()
+            function GetWebMap()
             {
                 LogMessage("Start getting info");
                 //getfeatureservice item information
 
                 //var die = VeldWerkCalls.getHello();
-                var sla = new VeldWerkCalls();
-                var die = sla.getHello();
+                
+                var die = vCalls.getHello();
                 LogMessage("hello: " + die);
 
 
-                var url = sla.getSla();
+                var url = vCalls.getSla();
                 LogMessage("sla:" + url);
 
-                sla.signIn().then(function (loggedInUser) {
+                vCalls.signIn().then(function (loggedInUser) {
                     LogMessage("Then");
 
-                    sla.getWebMapsForUser().then(function (response) {
-                        LogMessage("Aantal webmaps found: "+ response.total);
+                    vCalls.getWebMapsForUser().then(function (response) {
+                        LogMessage("Aantal webmaps found: " + response.total);
+                        if (response.total > 0)
+                        {
+                            var webMapid = response.results[0].id;
+                            LogMessage("now using webmap id: " + webMapid + " (" + response.results[0].title + ")");
+                            dom.byId('txtWebMapId').value = webMapid;
+                        }
+
                     });
                 });
 
@@ -87,7 +97,14 @@
             }
 
 
-           
+            function GetLayer()
+            {
+                var webMapID = dom.byId('txtWebMapId').value;
+                vCalls.getLayersForWebMap(webMapID).then(function (resonse) {
+
+
+                });
+            }
 
 
 
@@ -114,7 +131,9 @@
             
             <p>Hello world</p>
 
-            <input name="btnSubmit" type="submit" value="Submit" id="btnSubmit" />
+            <input name="txtWebMapId" id="txtWebMapId" placeholder="webmapid" size="50" /> 
+            <input name="btnSubmit" type="submit" value="GetWebMaps" id="btnWebMap" />
+            <input name="btnLayer" type="submit" value="GetLayers" id="btnLayer" />
         </div>
         <div id='gridpane' data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
 
