@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>FeatureService Copier</title>
+    <link rel="stylesheet" href="//js.arcgis.com/3.11/dojo/resources/dojo.css">
+    <link rel="stylesheet" href="//js.arcgis.com/3.11/dgrid/css/dgrid.css">
+    <link rel="stylesheet" href="//js.arcgis.com/3.11/dgrid/css/skins/claro.css">
+    <link rel="stylesheet" href="//js.arcgis.com/3.11/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="//js.arcgis.com/3.11/esri/css/esri.css">
+    <link rel="stylesheet" href="css/layout.css">
+
+    <script>
+        //async is a new dojoConfig option. The default value of false will load all the Dojo base modules
+        //here we set it to true to take advantage of the asynchronous nature of dojo and the the base modules
+        //are not automatically loaded.
+        var dojoConfig = { async: true, paths: { extras: location.pathname.replace(/\/[^/]+$/, "") + "/extras" } };
+        
+    </script>
+    <script src="//js.arcgis.com/3.11/"></script>
+    <script>
+        //require function accepts an array of module ids and a function. The modules are provided as return variables passed as arguments to the function. This replaces the dojo.requires statements.
+        require([
+          "dojo/parser",
+          "dojo/ready",
+          "dojo/dom",
+          "dojo/dom-construct",
+          "dojo/_base/array",
+          
+          "dojo/on",
+          
+          "extras/VeldWerkCalls",
+
+          "dijit/layout/BorderContainer",
+          "dijit/layout/ContentPane"
+
+        ], function (
+          parser,
+          ready,
+          dom,
+          domConstruct,
+          array,
+          
+          on,
+          
+          VeldWerkCalls
+        ) {
+            var portal, portalUrl, itemGrid;
+            var itemInfo, serviceInfo, layerInfos=[];
+
+            //Replaces dojo.ready / dojo.addOnLoad
+            ready(function () {
+
+
+
+                //search when enter key is pressed or button is clicked
+                on(dom.byId('btnSubmit'), 'click', DoWork);
+                parser.parse(); //replaces parseOnLoad = true in dojoConfig
+
+              
+            });
+
+            function DoWork()
+            {
+                LogMessage("Start getting info");
+                //getfeatureservice item information
+
+                //var die = VeldWerkCalls.getHello();
+                var sla = new VeldWerkCalls();
+                var die = sla.getHello();
+                LogMessage("hello: " + die);
+
+
+                var url = sla.getSla();
+                LogMessage("sla:" + url);
+
+                sla.signIn().then(function (loggedInUser) {
+                    LogMessage("Then");
+
+                    sla.getWebMapsForUser().then(function (response) {
+                        LogMessage("Aantal webmaps found: "+ response.total);
+                    });
+                });
+
+
+
+            }
+
+
+           
+
+
+
+            function LogMessage(msg)
+            {
+                var logTxt = dom.byId('txtContent')
+                var txt = logTxt.value;
+                var d  = new Date();
+                var newtxt = d.toLocaleTimeString()+'-'+ msg + '\r\n' + txt;
+                logTxt.value = newtxt;
+            }
+
+
+
+        });
+    </script>
+</head>
+
+<body class="claro">
+    <div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'headline',gutters:false"
+         style="width:100%;height:100%;margin:0;">
+        <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
+            <h1>Maarten testpage</h1>
+            
+            <p>Hello world</p>
+
+            <input name="btnSubmit" type="submit" value="Submit" id="btnSubmit" />
+        </div>
+        <div id='gridpane' data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
+
+            <textarea style="width:100%;height:100%" id="txtContent"></textarea>
+            <br />
+
+        </div>
+    </div>
+
+
+
+
+</body>
+</html>
