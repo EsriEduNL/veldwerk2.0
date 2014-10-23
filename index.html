@@ -217,6 +217,7 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
   <script src="js/vendor/jquery.smooth-scroll.js"></script>
+  <script src="js/vendor/store+json2.min.js"></script>
 
   <script src="js/vendor/bootstrap.min.js"></script>
   <script>
@@ -231,31 +232,31 @@
         //require function accepts an array of module ids and a function. The modules are provided as return variables passed as arguments to the function. This replaces the dojo.requires statements.
         
     </script>
-        <script src="js/main.js"></script>
-		
-        <!-- google web font -->
-        <script type="text/javascript">
-		WebFontConfig = {
-		  google: { families: [ 'Open+Sans:400italic,400,300,600,700:latin' ] }
-		};
-		(function() {
-		  var wf = document.createElement('script');
-		  wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-			'://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-		  wf.type = 'text/javascript';
-		  wf.async = 'true';
-		  var s = document.getElementsByTagName('script')[0];
-		  s.parentNode.insertBefore(wf, s);
-		})(); </script>
-        
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-        <script>
-            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-            e.src='//www.google-analytics.com/analytics.js';
-            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-            ga('create','UA-XXXXX-X');ga('send','pageview');
-        </script>
+	<script src="js/main.js"></script>
+    
+    <!-- google web font -->
+    <script type="text/javascript">
+    WebFontConfig = {
+      google: { families: [ 'Open+Sans:400italic,400,300,600,700:latin' ] }
+    };
+    (function() {
+      var wf = document.createElement('script');
+      wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+        '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+      wf.type = 'text/javascript';
+      wf.async = 'true';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(wf, s);
+    })(); </script>
+    
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <script>
+        (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+        function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+        e.src='//www.google-analytics.com/analytics.js';
+        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+        ga('create','UA-XXXXX-X');ga('send','pageview');
+    </script>
     </body>
 </html>

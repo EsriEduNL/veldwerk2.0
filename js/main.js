@@ -27,10 +27,11 @@ require([
 		  //search when enter key is pressed or button is clicked
 		  on(dom.byId('loginLink'), 'click', GetWebMap);   
 		  on(wind.doc, ".btn-select-this-webmap:click", function(e){
-		    var webmapid = $(this).data('webmapid');
-			$('.webmap-selected-wrap .selected-webmap').html($('.col-webmap-'+webmapid).html()).show();
+		    //var webmapid = $(this).data('webmapid');
+			$('.webmap-selected-wrap .selected-webmap').html($('.col-webmap-'+$(this).data('webmapid')).html()).show();
 			$('.webmap-list-container').hide();
 			$('.webmap-selected-wrap').show();
+			store.set('veldwerkWorkflowProgress', { webmapid: $(this).data('webmapid'), userdata: 'CSV/XLSX content' })
 			/*$.smoothScroll({
       			scrollElement: $('div.scrollme'),
       			scrollTarget: '#findme'
@@ -39,6 +40,7 @@ require([
 		  on(wind.doc, ".btn-select-different-webmap:click", function(e){
 		    $('.webmap-selected-wrap').hide();
 			$('.webmap-list-container').show();
+			store.set('veldwerkWorkflowProgress', { webmapid: ''})
 		  });
 		  vCalls = new VeldWerkCalls();
 
