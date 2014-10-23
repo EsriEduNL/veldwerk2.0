@@ -24,16 +24,16 @@ define([
             //create the portalObject
             portal = new arcgisPortal.Portal(portalUrl);
 			
-			credStoreKey:"veldwerk_identmanager";
+			credStoreKey="veldwerk_identmanager";
 						
-			var idjson = store.get(credstorekey);
+			var idjson = store.get(credStoreKey);
 
             if (idjson)
             {
                 
              esri.id.initialize(idjson);
 
-              var cred = esri.id.findcredential(portalurl)
+              var cred = esri.id.findCredential(portalUrl)
               if (!cred) {
 				portal.signin();
               }
@@ -50,7 +50,7 @@ define([
             {
                 var json = esri.id.toJson();
 
-                cookie(credStoreKey, json);
+                store.set(credStoreKey, json);
                 
             });
             return def;
