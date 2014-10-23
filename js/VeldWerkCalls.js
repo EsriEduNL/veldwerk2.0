@@ -18,21 +18,56 @@ define([
     return declare([], {
         portal:null,
         portalUrl: null,
-
+		credStoreKey:null,
         constructor: function(options){
             portalUrl = document.location.protocol + '//www.arcgis.com';
             //create the portalObject
             portal = new arcgisPortal.Portal(portalUrl);
+			
+			credStoreKey:"veldwerk_identmanager";
+						
+			var idjson = store.get(credstorekey);
+
+            if (idjson)
+            {
+                
+             esri.id.initialize(idjson);
+
+              var cred = esri.id.findcredential(portalurl)
+              if (!cred) {
+				portal.signin();
+              }
+            }
         },
     
     
         signIn: function()
         {
-            return portal.signIn();
+		
+			var idJson = store.get(credStoreKey);
+            var def = portal.signIn();
+			def.then(function (result)
+            {
+                var json = esri.id.toJson();
+
+                cookie(credStoreKey, json);
+                
+            });
+            return def;
 
         },
+		getUser: function()
+        {
+            return portal.user;
+        },
+        signOut:function()
+        {
+            portal.signOut();
+            esri.id.destroyCredentials();
+            store.remove(credStoreKey);
+        }
+		,
 
-        
         getWebMapsForUser:function()
         {
             if(portal.user)

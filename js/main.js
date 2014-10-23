@@ -25,6 +25,7 @@ require([
 
 	  ready(function () {
 		  //search when enter key is pressed or button is clicked
+		  store.set('sla','diebla');
 		  on(dom.byId('loginLink'), 'click', GetWebMap);   
 		  on(wind.doc, ".btn-select-this-webmap:click", function(e){
 		    //var webmapid = $(this).data('webmapid');
