@@ -44,20 +44,32 @@ require([
 			store.set('veldwerkWorkflowProgress', { webmapid: ''})
 		  });
 		  vCalls = new VeldWerkCalls();
+		  if(vCalls.getUser())
+		  {
+			SetUserName(vCalls.getUser());
+		  }
 
 	  });
+	  
+	  
 	  
 	  /*///////////
 	  //Functions//
 	  ///////////*/
+	  
+	  function SetUserName(loggedInUser)
+	  {
+		var userString = loggedInUser.fullName + " {" + loggedInUser.portal.name + "}";
+		dom.byId('userNameLabel').innerHTML = userString;//setting username in the UI
+	  }
+	  
 	  function GetWebMap()
 	  {
 		  LogMessage("Start getting info");
 
 		  vCalls.signIn().then(function (loggedInUser) {
 			  LogMessage("vCalls.signIn().then");
-			  var userString = loggedInUser.fullName + " {" + loggedInUser.portal.name + "}";
-			  dom.byId('userNameLabel').innerHTML = userString;//setting username in the UI
+			  SetUserName(loggedInUser);
 			  //getting all webmaps for this user and add them to the list
 			  vCalls.getWebMapsForUser().then(function (response) {
 				  LogMessage("Aantal webmaps found: " + response.total);

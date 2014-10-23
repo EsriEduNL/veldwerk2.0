@@ -40,7 +40,6 @@ define([
             }
         },
     
-    
         signIn: function()
         {
 		
@@ -56,6 +55,8 @@ define([
             return def;
 
         },
+		
+		
 		getUser: function()
         {
             return portal.user;
