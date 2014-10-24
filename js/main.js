@@ -26,6 +26,8 @@ require([
 	  var vCalls;
 
 	  ready(function () { 
+	  	  $('input[type=password]').hidePassword(true)
+	  	  
 	      vCalls = new VeldWerkCalls();
 
 		  if(vCalls.signInCheck()){

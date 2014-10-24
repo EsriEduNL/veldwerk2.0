@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="//js.arcgis.com/3.11/dgrid/css/skins/claro.css">
         <link rel="stylesheet" href="//js.arcgis.com/3.11/dijit/themes/claro/claro.css">
         <link rel="stylesheet" href="//js.arcgis.com/3.11/esri/css/esri.css">
+        <link rel="stylesheet" href="css/hideshowpassword.css">
         <link rel="stylesheet" href="css/main.css">
 
         <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
@@ -211,9 +212,134 @@
       <div class="row">
         <div class="col-xs-12">
           <p>In deze stap gaan we bepalen welke leerlingen toegang krijgen tot de webmap van het veldwerk én delen we de leerlingen in groepjes in (tenzij u uiteraard kiest voor een individueel veldwerk).</p>
+          <p>@TODO: duidelijke instructies</p>
+        </div>
+      </div><!-- end row -->
+      
+      <div class="row">
+        <div class="col-xs-12">
+          <p>Zie onderstaande workflow. NB: als wachtwoord veld leegelaten wordt (in tabel of xlsx) dan automatisch genereren in het script en een overzicht van gegenereerde wachtwoorden terug geven + mailen naar docent.</p>
+          <ul>
+            <li>
+              <strong>Keuzes voorleggen aan docent:</strong>
+            </li>
+            <li>
+              1. Hoeveel accounts wilt u aanmaken?
+              <ul>
+                <li>1 -> toon formulier voor enkel account</li>
+                <li>Meerdere -> toon volgende vraag</li>
+              </ul>
+            </li>
+            
+            <li>
+              2. Hebben leerlingen een e-mailadres?
+              <ul><li>Ja -> toon email veld en verberg username veld in (nog verborgen) tabel</li><li>Nee -> verberg email veld en toon username veld in (nog verborgen) tabel</li></ul>
+            </li>
+            <li>
+              3. Hoe wilt u de accounts aanmaken?
+              <ul>
+                <li>Handmatig -> toon tabel</li>
+                <li>Bestand uploaden -> toon upload veld én excel bestand template</li>
+              </ul>
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
+      
+      <div class="row" id="addUserAccount-single">
+        <div class="col-lg-4 col-md-6 col-xs-12">
+          <form role="form" class="with-bg-grey">
+            <div class="form-group">
+              <h3>Nieuw account aanmaken</h3>
+            </div>
+            <div class="form-group">
+              <label for="fullname">Volledige naam</label>
+              <input class="form-control" type="text" name="fullname" placeholder="Naam leerling">
+            </div>
+            <div class="form-group">
+              <label for="username">Gebruikersnaam</label>
+              <input type="text" class="form-control" name="email" placeholder="Gebruikersnaam">
+            </div>
+            <div class="form-group">
+              <label for="email">E-mailadres</label>
+              <input type="email" class="form-control" name="email" placeholder="E-mailadres">
+            </div>
+            <div class="form-group">
+              <label for="password">Wachtwoord</label>
+              <input type="password" class="form-control" id="password" placeholder="Wachtwoord" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="add-to-group">Toevoegen aan bestaande groep</label>
+              <select class="form-control">
+                <option>geen</option>
+                <option>Dh32.6</option>
+                <option>XS28.9</option>
+                <option>Groep 8-1</option>
+              </select>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="inform-student"> Verstuur logingegevens naar leerling
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="inform-teacher"> Verstuur logingegevens naar mijzelf
+              </label>
+            </div>
+              <button type="submit" class="btn btn-primary">Account aanmaken</button>
+          </form>
+        </div>
+      </div><!-- end row -->
+      
+      <div class="row" id="addUserAccounts-multiple-manual">
+        <div class="col-xs-12">
+          
+          <div class="row">
+            <div class="col-xs-12">
+              <p>Om handmatig leerlingen toe te voegen dient u eerst groepen aan te maken. Vervolgens kunt u de gegevens van leerlingen invoeren en aangeven aan welke groep zij toegevoegd moeten worden.</p>
+            </div>
+          </div> 
+          
+          <div class="row row-action-buttons">
+            <div class="col-xs-4"><button type="button" class="btn btn-default pull-left btn-add-row" role="button" data-target="#addUserAccounts-multiple-manual table">Rij toevoegen</button></div>
+            <div class="col-xs-4"><input class="btn btn-primary center-block" type="submit" value="Accounts aanmaken"></div>
+            <div class="col-xs-4"><button type="button" class="btn btn-default pull-right btn-remove-row" data-target="#addUserAccounts-multiple-manual table">Rij verwijderen</button></div>
+          </div> 
+          
+          <table class="table table-bordered table-hover">
+            <thead>
+                <tr class="table-head">
+                    <th class="text-center">#</th>
+                    <th class="text-center">Volledige naam</th>
+                    <th class="text-center email_th">E-mailadres</th>
+                    <th class="text-center username_th" style="display:none;">Gebruikersnaam</th>
+                    <th class="text-center password_th">Wachtwoord</th>
+                    <th class="text-center addtogroupid_th">Voeg toe aan groep</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id='addUserRow1'>
+                    <td>1</td>
+                    <td><input type="text" name='fullname'  placeholder='Volledige naam' class="form-control" spellcheck="false" required="required" aria-required="true" /></td>
+                    <td class="email_td"><input type="text" name='email' placeholder='E-mailadres' class="form-control" spellcheck="false" required="required" aria-required="true" pattern="^(([-\w\d]+)(\.[-\w\d]+)*@([-\w\d]+)(\.[-\w\d]+)*(\.([a-zA-Z]{2,5}|[\d]{1,3})){1,2})$"/></td>
+                    <td class="username_td" style="display:none;"><input type="text" name='username' placeholder='Gebruikersnaam' class="form-control" spellcheck="false"/></td>
+                    <td class="password_td"><input type="text" name='password' placeholder='Wachtwoord' class="form-control" spellcheck="false"/></td>
+                    <td class="addtogroup_td"><input type="hidden" name="addtogroup_id"><input type="text" name="addtogroup" placeholder="Groep" class="form-control" spellcheck="false"></td>
+                </tr>
+            </tbody>
+            </table>
+            
+            <div class="row row-action-buttons">
+            <div class="col-xs-4"><button type="button" class="btn btn-default pull-left btn-add-row" role="button" data-target="#addUserAccounts-multiple-manual table">Rij toevoegen</button></div>
+            <div class="col-xs-4"><input class="btn btn-primary center-block" type="submit" value="Accounts aanmaken"></div>
+            <div class="col-xs-4"><button type="button" class="btn btn-default pull-right btn-remove-row" data-target="#addUserAccounts-multiple-manual table">Rij verwijderen</button></div>
+          </div> 
+          
+        </div><!-- end col-xs-12 -->
+      </div><!-- end row #addUserAccounts-multiple-manual -->
+      
+    </div><!-- end container -->
   </section>
   
   <section id="section-result-review" class="section-blue">
@@ -245,6 +371,9 @@
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
   <script src="js/vendor/jquery.smooth-scroll.js"></script>
   <script src="js/vendor/store-and-json2.min.js"></script>
+  <script src="js/vendor/hideShowPassword.min.js"></script>
+  <script src="js/vendor/xls.core.min.js"></script>
+  <script src="js/vendor/xlsx.core.min.js"></script>
 
   <script src="js/vendor/bootstrap.min.js"></script>
   <script>
