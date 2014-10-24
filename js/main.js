@@ -71,22 +71,22 @@ require([
 	  }
 	  
 	  
-	  function SetUserName(loggedInUser)
+	  function loggedInUI(loggedInUser)
 	  {
-		//var userString = loggedInUser.fullName + " {" + loggedInUser.portal.name + "}";
 		dom.byId('userNameLabel').innerHTML = loggedInUser.fullName;//setting username in the UI
 		dom.byId('userOrgLabel').innerHTML = '<span class="glyphicon glyphicon-briefcase"></span> '+loggedInUser.portal.name;
 		domClass.toggle("login-link-wrap", "hidden");
 		domClass.toggle("user-menu-dropdown-wrap", "hidden");
+		//@TODO: show content that was previously hidden before, as being private
 	  }
 	  
 	  function GetWebMap()
 	  {
-		  LogMessage("Start getting info");
+		  LogMessage("function GetWebMap: Start getting info");
 
 		  vCalls.signIn().then(function (loggedInUser) {
 			  LogMessage("vCalls.signIn().then");
-			  SetUserName(loggedInUser);
+			  loggedInUI(loggedInUser);
 			  //getting all webmaps for this user and add them to the list
 			  vCalls.getWebMapsForUser().then(function (response) {
 				  LogMessage("Aantal webmaps found: " + response.total);
