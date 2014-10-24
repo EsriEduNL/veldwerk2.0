@@ -27,6 +27,10 @@ require([
 
 	  ready(function () { 
 	      vCalls = new VeldWerkCalls();
+
+		  if(vCalls.signInCheck()){
+		  	GetWebMap();
+		  }
 		  
 		  //search when enter key is pressed or button is clicked
 		  on(dom.byId('loginLink'), 'click', GetWebMap); 
@@ -51,12 +55,6 @@ require([
 			$('.webmap-list-container').show();
 			store.set('veldwerkWorkflowProgress', { webmapid: ''})
 		  });
-		 
-		  //!!!! Won't do anything, since user is not logged in on page load, takes couple of seconds
-		  if(vCalls.getUser())
-		  { 
-			SetUserName(vCalls.getUser());
-		  }
 
 	  });
 	  

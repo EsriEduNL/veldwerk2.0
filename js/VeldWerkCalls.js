@@ -28,7 +28,13 @@ define([
 						
 			var idjson = store.get(credStoreKey);
 
-            if (idjson)
+        },
+    	
+		signInCheck: function()
+		{
+			var idjson = store.get(credStoreKey);
+			
+			if (idjson)
             {
                 
              esri.id.initialize(idjson);
@@ -37,12 +43,15 @@ define([
               if (!cred) 
 			  {
 				store.remove("veldwerk_identmanager");//Remove any LS credentials and do nothing; login only on user click
-              }else{ 
-			    portal.signIn(); //We can sign this user in, based on the LS
+				return false;
+              }else{
+			    return true;
 			  }
-            }
-        },
-    
+            }else{
+				return false;
+			}
+		},
+		
         signIn: function()
         {
 		
