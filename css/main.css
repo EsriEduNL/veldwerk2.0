@@ -47,9 +47,31 @@ h1, h2, h3, h4{
 	padding:18px 0;
 	margin:0;
 }
-.sub-header p a.user-toggle-actions{
+.sub-header #login-link-wrap,
+.sub-header div.dropdown{
+	padding:18px 0;
+}
+.sub-header #login-link-wrap a{
+	color:#FFF;
+}
+.sub-header a.user-toggle-actions{
  	color:#FFF;
 	font-size:14px;
+}
+.sub-header div.dropdown:hover{
+	cursor:pointer;
+}
+.sub-header div.dropdown:hover a.user-toggle-actions{
+	text-decoration:none;
+}
+#userOrgLabel{
+	display: block;
+	padding: 3px 20px;
+	clear: both;
+	font-weight: 400;
+	line-height: 1.42857;
+	color: #333;
+	white-space: nowrap;
 }
 
 /*

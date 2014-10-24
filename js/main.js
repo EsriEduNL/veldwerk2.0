@@ -1,6 +1,7 @@
 require([
           
 	"dojo/ready",
+	"dojo/dom-class",
 	"dojo/dom",
 	
 	"dojo/on",
@@ -11,6 +12,7 @@ require([
   ], function (
 	
 	ready,
+	domClass,
 	dom,
 	
 	on,
@@ -20,13 +22,17 @@ require([
   ) {
 	 
 	  var debug = true;
-	  
+
 	  var vCalls;
 
-	  ready(function () {
+	  ready(function () { 
+	      vCalls = new VeldWerkCalls();
+		  
 		  //search when enter key is pressed or button is clicked
-		  store.set('sla','diebla');
-		  on(dom.byId('loginLink'), 'click', GetWebMap);   
+		  on(dom.byId('loginLink'), 'click', GetWebMap); 
+		  on(dom.byId('logoutLink'), 'click', logOut); 
+		  
+		  //Select webmapp 
 		  on(wind.doc, ".btn-select-this-webmap:click", function(e){
 		    //var webmapid = $(this).data('webmapid');
 			$('.webmap-selected-wrap .selected-webmap').html($('.col-webmap-'+$(this).data('webmapid')).html()).show();
@@ -38,14 +44,17 @@ require([
       			scrollTarget: '#findme'
     		});*/
 		  });
+		  
+		  //Select different webmapp
 		  on(wind.doc, ".btn-select-different-webmap:click", function(e){
 		    $('.webmap-selected-wrap').hide();
 			$('.webmap-list-container').show();
 			store.set('veldwerkWorkflowProgress', { webmapid: ''})
 		  });
-		  vCalls = new VeldWerkCalls();
+		 
+		  //!!!! Won't do anything, since user is not logged in on page load, takes couple of seconds
 		  if(vCalls.getUser())
-		  {
+		  { 
 			SetUserName(vCalls.getUser());
 		  }
 
@@ -56,11 +65,21 @@ require([
 	  /*///////////
 	  //Functions//
 	  ///////////*/
+	  function logOut()
+	  {	  LogMessage('Start singout');
+	  	  vCalls.signOut();
+		  domClass.toggle("user-menu-dropdown-wrap", "hidden");
+		  domClass.toggle("login-link-wrap", "hidden");
+	  }
+	  
 	  
 	  function SetUserName(loggedInUser)
 	  {
-		var userString = loggedInUser.fullName + " {" + loggedInUser.portal.name + "}";
-		dom.byId('userNameLabel').innerHTML = userString;//setting username in the UI
+		//var userString = loggedInUser.fullName + " {" + loggedInUser.portal.name + "}";
+		dom.byId('userNameLabel').innerHTML = loggedInUser.fullName;//setting username in the UI
+		dom.byId('userOrgLabel').innerHTML = '<span class="glyphicon glyphicon-briefcase"></span> '+loggedInUser.portal.name;
+		domClass.toggle("login-link-wrap", "hidden");
+		domClass.toggle("user-menu-dropdown-wrap", "hidden");
 	  }
 	  
 	  function GetWebMap()

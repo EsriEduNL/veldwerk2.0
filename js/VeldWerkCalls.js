@@ -23,7 +23,7 @@ define([
             portalUrl = document.location.protocol + '//www.arcgis.com';
             //create the portalObject
             portal = new arcgisPortal.Portal(portalUrl);
-			
+	
 			credStoreKey="veldwerk_identmanager";
 						
 			var idjson = store.get(credStoreKey);
@@ -34,9 +34,12 @@ define([
              esri.id.initialize(idjson);
 
               var cred = esri.id.findCredential(portalUrl)
-              if (!cred) {
-				portal.signin();
-              }
+              if (!cred) 
+			  {
+				store.remove("veldwerk_identmanager");//Remove any LS credentials and do nothing; login only on user click
+              }else{ 
+			    portal.signIn(); //We can sign this user in, based on the LS
+			  }
             }
         },
     
@@ -58,16 +61,17 @@ define([
 		
 		
 		getUser: function()
-        {
+        { 
             return portal.user;
         },
+		
+		
         signOut:function()
         {
             portal.signOut();
             esri.id.destroyCredentials();
             store.remove(credStoreKey);
-        }
-		,
+        },
 
         getWebMapsForUser:function()
         {
@@ -81,9 +85,9 @@ define([
                                 sortOrder: 'desc'}
                 return portal.queryItems(params);
             }
-        }
-        ,
-        getLayersForWebMap: function(webMapId)
+        },
+        
+		getLayersForWebMap: function(webMapId)
         {
             if (portal.user) {
                 var requestUrl = portalUrl + "/sharing/rest/search";
