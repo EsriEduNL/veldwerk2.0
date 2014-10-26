@@ -124,6 +124,11 @@ form label{
 .section-blue{
 	background-color:#e5f1f9;
 }
+.section-public{
+}
+.section-private{
+	display:none;
+}
 
 /*
 //Section workflow

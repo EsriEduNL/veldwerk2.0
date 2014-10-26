@@ -79,6 +79,7 @@ require([
 	  	  vCalls.signOut();
 		  domClass.toggle("user-menu-dropdown-wrap", "hidden");
 		  domClass.toggle("login-link-wrap", "hidden");
+		  $('.section-private').css("display","none");
 	  }
 	  
 	  
@@ -88,6 +89,7 @@ require([
 		dom.byId('userOrgLabel').innerHTML = '<span class="glyphicon glyphicon-briefcase"></span> '+loggedInUser.portal.name;
 		domClass.toggle("login-link-wrap", "hidden");
 		domClass.toggle("user-menu-dropdown-wrap", "hidden");
+		$('.section-private').css("display","block");
 		//@TODO: show content that was previously hidden before, as being private
 	  }
 	  
