@@ -32,11 +32,11 @@ require([
 	      vCalls = new VeldWerkCalls();
 
 		  if(vCalls.signInCheck()){
-		  	GetWebMap();
+			logIn();
 		  }
 		  
 		  //search when enter key is pressed or button is clicked
-		  on(dom.byId('loginLink'), 'click', GetWebMap); 
+		  on(dom.byId('loginLink'), 'click', logIn);
 		  on(dom.byId('logoutLink'), 'click', logOut); 
 		  
 		  //Select webmapp 
@@ -66,6 +66,14 @@ require([
 	  /*///////////
 	  //Functions//
 	  ///////////*/
+	  function logIn()
+	  {
+	  	vCalls.signIn().then(function(loggedInUser){
+			loggedInUI(loggedInUser);
+			GetWebMap();
+		});
+	  }
+	  
 	  function logOut()
 	  {	  LogMessage('Start singout');
 	  	  vCalls.signOut();
@@ -87,11 +95,11 @@ require([
 	  {
 		  LogMessage("function GetWebMap: Start getting info");
 
-		  vCalls.signIn().then(function (loggedInUser) {
+		  //vCalls.signIn().then(function (loggedInUser) {
 			  LogMessage("vCalls.signIn().then");
-			  loggedInUI(loggedInUser);
+			  //loggedInUI(loggedInUser);
 			  //getting all webmaps for this user and add them to the list
-			  vCalls.getWebMapsForUser().then(function (response) {
+			  vCalls.getMapsForTeacher().then(function (response) {
 				  LogMessage("Aantal webmaps found: " + response.total);
 				  if (response.total > 0)
 				  {
@@ -122,7 +130,7 @@ require([
 					//@TODO ERROR: geen webmaps gevonden
 				  }
 
-			  });
+			  //});
 		  });
 
 

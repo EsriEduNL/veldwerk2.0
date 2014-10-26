@@ -32,6 +32,7 @@ define([
     	
 		signInCheck: function()
 		{
+			//Returns true of user can be logged in based on localstorage, false if not
 			var idjson = store.get(credStoreKey);
 			
 			if (idjson)
@@ -69,20 +70,15 @@ define([
         },
 		
 		
-		getUser: function()
-        { 
-            return portal.user;
-        },
-		
-		
-        signOut:function()
+        signOut: function()
         {
             portal.signOut();
             esri.id.destroyCredentials();
             store.remove(credStoreKey);
         },
+		
 
-        getWebMapsForUser:function()
+        getMapsForTeacher: function()
         {
             if(portal.user)
             {
@@ -138,34 +134,39 @@ define([
 		},
 		
 		
-		getUser: function(userid)
+		getStudentUser: function(userid)
 		{
 			//return name, groups, webmapps of leerling
 		},
 		
 		
-		createUser: function(fullname, email, password)
+		createStudentUser: function(fullname, email, password)
 		{
 			//Create new AOL user account
 			//return newuserid
 		},
 		
 		
-		deleteUser: function(userid)
+		deleteStudentUser: function(userid)
 		{
 			//Delete AOL user account with userid
 			return true;//Return true if function has finished succesfully 
 		},
 		
+		getStudentUsersForGroup: function(groupid)
+		{
+			//return jsob object with all users with role=student
+		},
 		
-		addUserToGroup: function(userid, groupid)
+		
+		addStudentUserToGroup: function(userid, groupid)
 		{
 			//Provide user with userid access to group with groupid
 			return true;//Return true if function has finished succesfully 
 		},
 		
 		
-		removeUserFromGroup: function(userid, groupid)
+		removeStudentUserFromGroup: function(userid, groupid)
 		{
 			//Invoke access of user with userid to group with groupid
 			return true;//Return true if function has finished succesfully 
