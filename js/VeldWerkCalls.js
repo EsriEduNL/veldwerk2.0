@@ -109,7 +109,104 @@ define([
                 });
                 return itemRequest;
             }
-        }
+        },
+		
+		
+		getGroupsForOrganisation: function()
+		{
+			//return json object
+		},
+		
+		
+		getGroup: function(id)
+		{
+			//return info about group: group members, group name, group webmapps
+		},
+		
+		
+		createGroup: function(groupName)
+		{
+			//Create a new AOL group
+			//return newgroupid
+		},
+		
+		
+		deleteGroup: function(groupid)
+		{
+			//Delete AOL group
+			return true;//Return true if function has finished succesfully 
+		},
+		
+		
+		getUser: function(userid)
+		{
+			//return name, groups, webmapps of leerling
+		},
+		
+		
+		createUser: function(fullname, email, password)
+		{
+			//Create new AOL user account
+			//return newuserid
+		},
+		
+		
+		deleteUser: function(userid)
+		{
+			//Delete AOL user account with userid
+			return true;//Return true if function has finished succesfully 
+		},
+		
+		
+		addUserToGroup: function(userid, groupid)
+		{
+			//Provide user with userid access to group with groupid
+			return true;//Return true if function has finished succesfully 
+		},
+		
+		
+		removeUserFromGroup: function(userid, groupid)
+		{
+			//Invoke access of user with userid to group with groupid
+			return true;//Return true if function has finished succesfully 
+		},
+		
+		
+		getMapsForGroup: function(groupid)
+		{
+			//Return: list with all maps (id+name+thumb+layers) that the group with groupid has access to
+			//return json object
+		},
+		
+		
+		createMap: function(mastermapid)
+		{
+			//Create a duplicate of mastermapid
+			//return newmapid;
+		},
+		
+		
+		addMapToGroup: function (mapid, groupid)
+		{
+			//Give group with groupid access to map with mapid
+			return true;//Return true if function has finished succesfully 
+		},
+		
+		
+		removeMapForGroup: function(groupid, mapid)
+		{
+			//Remove access to map with mapid for group with groupid
+			return true;//Return true if function has finished succesfully 
+		},
+		
+		
+		deleteMap: function(mapid)
+		{
+			//Delete map with mapid from AOL
+			return true;//Return true if function has finished succesfully 
+		}
+		
+		
 
 
     });
