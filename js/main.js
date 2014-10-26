@@ -26,7 +26,8 @@ require([
 	  var vCalls;
 
 	  ready(function () { 
-	  	  $('input[type=password]').hidePassword(true)
+	  	  $('input[type=password]').hidePassword(true);
+		  $("input.style-as-switch").bootstrapSwitch();
 	  	  
 	      vCalls = new VeldWerkCalls();
 
