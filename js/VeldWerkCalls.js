@@ -107,11 +107,10 @@ define([
             }
         },
 		
-		
-		getGroupsForOrganisation: function()
-		{
-			//return json object
+		getGroupsForMap: function(mapid){
+			//return json object with groupid's
 		},
+		
 		
 		
 		getGroup: function(id)

@@ -6,7 +6,7 @@ body, html{
 	font-family: 'Open Sans', sans-serif;
 	font-style:normal;
 	font-weight:400;
-	padding-top:62px;/*Height of sub-header*/
+	padding-top:56px;/*Height of sub-header*/
     padding-bottom: 20px;
 	color:#4D4D4D;
 }
@@ -37,6 +37,8 @@ form label{
 */
 .navbar{
 	background:#FFF;
+	margin-bottom:0;
+	border:none;
 }
 .navbar-toggle{
 	border-color:#CCC;
@@ -131,6 +133,45 @@ form label{
 }
 
 /*
+//Section carousel
+*/
+.item img {
+	width:100%;
+}
+.carousel-control.left, .carousel-control.right {
+	background-image:none !important;
+	opacity:1;
+}
+ 
+.carousel-control.left {
+	top:40%
+}
+.carousel-control.right {
+	top:40%
+}
+.carousel-caption {
+	top:15%;
+	text-align:left;
+  	height:auto;
+ 
+}
+.carousel-caption h2 { 
+	line-height:160%
+}
+.carousel-caption h2 span {
+	background:#428BCA;
+	padding:10px 20px;
+	color:#fff;
+	border-left:3px solid #fff;
+}
+p.caption {
+	background:#fff;
+	padding:6px;
+	text-shadow:none;
+	color:#428BCA;
+}
+
+/*
 //Section workflow
 */
 .circle-tile {
@@ -178,7 +219,7 @@ form label{
 #section-webmap-selection{
 	background:#F2F3F5;
 }
-.webmap-selected-wrap{
+#row-selected-webmapp{
 	display:none;
 }
 .webmap-selected-wrap img{

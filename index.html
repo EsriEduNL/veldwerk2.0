@@ -107,16 +107,47 @@
         </div>
       </div>
     </div>
-    
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-  <section id="section-introduction" class="section-blue section-public">
-      <div class="container">
-        <h2>Veldwerk kan moderner!</h2>
-        <p>Buiten het klaslokaal valt zo enorm veel te ontdekken. Tijdens een veldwerk gaan leerlingen aan de slag om hun kennis en vaardigheden in de praktijk te brengen. Maar waarom moet daarbij altijd een papieren boekje met route en opgaven mee? Een flink deel van de leerlingen beschikt tegenwoordig over een Smartphone. Daarom is er Esri Veldwerk 2.0! Zonder dat er tijdens het veldwerk een internetverbinding nodig is ontdekken leerlingen hun omgeving met hun eigen telefoon!</p>
-        <p><a class="btn btn-primary btn-lg" role="button">Ontdek meer &raquo;</a></p>
-      </div>
-  </section>
   
+  <div id="intro-carousel" class="carousel slide">  
+      <div class="carousel-inner">
+        <div class="item active">
+          <!--<img src="img/slider/Fotolia_30977559_XS.jpg" alt="slide 1">-->
+          <img src="http://placehold.it/1500x400/cccccc/ffffff" alt="Slide1">
+          <div class="container">
+            <div class="carousel-caption">
+              <h2><span>Veldwerk kan moderner!</span></h2>
+              <p class="caption"><span>Buiten het klaslokaal valt zo enorm veel te ontdekken. Tijdens een veldwerk gaan leerlingen aan de slag om hun kennis en vaardigheden in de praktijk te brengen. Maar waarom moet daarbij altijd een papieren boekje met route en opgaven mee? Een flink deel van de leerlingen beschikt tegenwoordig over een Smartphone. Daarom is er Esri Veldwerk 2.0! Zonder dat er tijdens het veldwerk een internetverbinding nodig is ontdekken leerlingen hun omgeving met hun eigen telefoon!</span></p>
+              <p><a class="btn btn-primary" href="#">Ontdek meer!</a>
+            </p></div>
+          </div>
+        </div>
+        <div class="item">
+          <img src="http://placehold.it/1500x400/999999/cccccc" alt="Slide2">
+          <div class="container">
+            <div class="carousel-caption">
+              <h2><span>Carousel Headline 2</span></h2>
+              <p class="caption"><span>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</span></p>
+              <p><a class="btn btn-danger" href="#">Read More</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img src="http://placehold.it/1500x400/dddddd/333333" alt="Slide3">
+          <div class="container">
+            <div class="carousel-caption">
+              <h2><span>Carousel Headline 3</span></h2>
+              <p class="caption"><span>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</span></p>
+              <p><a class="btn btn-danger" href="#">Read More</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Controls -->
+      <a class="left carousel-control" href="#intro-carousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <a class="right carousel-control" href="#intro-carousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>  
+    </div>
+    <!-- /.carousel -->
+
   <section id="section-workflow" class="section-white section-public">	
     <div class="container">
       <div class="row">
@@ -186,14 +217,42 @@
         </div><!-- end col-xs-12 -->
         <div class="col-xs-12">
           <p>Eerder heeft u een ArcGIS Online webmap gemaakt met daarin (o.a.) de vragen voor uw leerlingen. Selecteer die webmap hieronder en ga door naar de volgende stap.</p>
-          <div class="webmap-selected-wrap">
-            <H4>Geselecteerde webmap: <button type="button" class="btn btn-default btn-xs btn-select-different-webmap">Kies een andere</button></h4>
-            <div class="clearfix"></div>
-            <div class="selected-webmap">
-              <div class="thumbnail"><img src="http://www.arcgis.com/sharing/rest/content/items/8f168bce41b44feb8bb7def0009602dd/info/thumbnail/ago_downloaded.png?token=3pt_LsPqPPGUAuoXgcbR7NhQ4EUofSvqA2V7X-bhI4Hthec7suTzyLsnplu2uW5fXTKh-S46j5QjbTDv-ENjHc8IsQVOPjU6DA6nL-PlIxtRNu7gSq556BgFximi2gS_" alt="Afbeelding voor webmap Samenwerkingsverband VO Noordelijke Drechtsteden" height="133" width="200"><div class="caption"><h3 id="map1Title">Samenwerkingsverband VO Noordelijke Drechtsteden</h3><p>Omschrijving: <em>geen</em></p><ul class="webmap-meta"><li>Gedeeld met: niemand</li><li>Aangemaakt op Invalid Date</li><li>Laatst bewerkt op Invalid Date</li></ul><p><a value="Geselecteerd" href="#" data-webmapid="8f168bce41b44feb8bb7def0009602dd" class="btn btn-select-this-webmap btn-primary" role="button">Selecteer</a></p></div></div>
-            </div>
-          </div>
-        </div>
+          <div class="row" id="row-selected-webmapp">
+            <div class="col-sm-6">
+              <div class="webmap-selected-wrap">
+                <H4>Geselecteerde webmap: <button type="button" class="btn btn-default btn-xs btn-select-different-webmap">Kies een andere</button></h4>
+                <div class="clearfix"></div>
+                <div class="selected-webmap-map"></div>
+              </div>
+            </div><!-- end col-sm-6 -->
+            <div class="col-sm-6">
+              <h4>Groepen en gebruikers van deze webmap</h4>
+              <div class="selected-webmap-groups thumbnail">
+                
+                <ul class="" id="groups-list">
+                  <li> 
+                    <a data-groupid="12" data-toggle="collapse" data-parent="#groups-list" href="#group-12">Groep 12</a>
+                    <ul id="group-12" data-groupid="12" class="collapse">
+                        <li data-studentid="16">Leerling pieter</li>
+                        <li data-studentid="98">Sla</li>
+                        <li data-studentid="19">Diebla</li>
+                    </ul>
+                  </li>
+                  <li> 
+                    <a data-toggle="collapse" data-parent="#groups-list" href="#group-69">Test2</a>
+                    <ul data-groupid="69" id="group-69" class="collapse">
+                        <li>SubTest2</li>
+                        <li>SubTest2</li>
+                        <li>SubTest2</li>
+                        <li>SubTest2</li>
+                    </ul>
+                  </li>
+                  </ul>
+                
+              </div>
+            </div><!-- end col-sm-6 -->
+          </div><!-- end row -->
+        </div><!-- end col-xs-12- -->
         
         <div class="webmap-list-container">
           <!-- JS will place webmapss here after singin -->
