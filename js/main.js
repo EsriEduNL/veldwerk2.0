@@ -43,22 +43,7 @@ require([
 		  
 		  //Select webmapp, show it and scroll to it
 		  on(wind.doc, ".btn-select-this-webmap:click", function(e){
-			$('.webmap-selected-wrap .selected-webmap-map').html($('.col-webmap-'+$(this).data('webmapid')).html());
-		//@TODO: make the function below work
-			/*vCalls.getGroupsForMap( $(this).data('webmapid') ).then(function(groups){
-				dojo.forEach(groups, function(groupid, i){
-				  vCalls.getGroup(groupid).then(function(groepobj){
-					  //write to ul: name of the groups and the li's with users of the group
-				  });
-				});
-			});*/
-			query("#row-selected-webmapp").style('display', 'block');
-			query(".webmap-list-container").style("display", 'none');
-			store.set('veldwerkWorkflowProgress', { webmapid: $(this).data('webmapid'), userdata: 'CSV/XLSX content' })
-			$.smoothScroll({
-      			offset: -220,
-      			scrollTarget: '#row-selected-webmapp'
-    		});
+			  selectWebmap($(this).data('webmapid'));
 		  });
 		  
 		  //Select different webmapp
@@ -66,6 +51,13 @@ require([
 			query('#row-selected-webmapp').style('display', 'none');
 			query('.webmap-list-container').style('display', 'block');
 			store.set('veldwerkWorkflowProgress', { webmapid: ''})
+		  });
+		  
+		  //
+		  //Section add-users
+		  //
+		  $('.single-toggle-email-username').on('click', function(e){ e.preventDefault();
+		    $('.single-toggle-email-username').closest('div.form-group').toggleClass('hidden');
 		  });
 
 	  });
@@ -130,8 +122,14 @@ require([
 					
 					$('.webmap-list-container').append('<div class="col-sm-6 col-md-4 col-lg-3 col-webmap-'+e.id+'"><div class="thumbnail"><img src="'+e.thumbnailUrl+'" width="200" height="133" alt="Afbeelding voor webmap '+e.title+'"><div class="caption"><h3 id="map1Title">'+e.title+'</h3><p>Omschrijving: '+e.description+'</p><ul class="webmap-meta"><li>Gedeeld met: '+access+'</li><li>Aangemaakt op '+created+'</li><li>Laatst bewerkt op '+modified+'</li></ul><p><a href="#" data-webmapid="'+e.id+'" class="btn btn-default btn-select-this-webmap" data-webmapid="'+e.id+'" role="button">Selecteer</a></p></div></div></div>');
 					
-					LogMessage("now using webmap id: " + e.id + " (" + e.title + ")");  
-				  });
+					LogMessage("just added to the UI: webmap with id: " + e.id + " (" + e.title + ")");  
+				  });//End response each
+				  //Let's check if any webmapp has been stored in localstorage
+				  var stored = store.get('veldwerkWorkflowProgress');
+				  if(stored.webmapid)
+				  {
+					  selectWebmap(stored.webmapid);
+				  }//end if storedID
 			  }else{
 				//@TODO ERROR: geen webmaps gevonden
 			  }
@@ -150,7 +148,25 @@ require([
 		  });
 	  }
 
-
+	  function selectWebmap(webmapid)
+	  {
+		  $('.webmap-selected-wrap .selected-webmap-map').html($('.col-webmap-'+webmapid).html());
+		//@TODO: make the function below work
+			/*vCalls.getGroupsForMap( $(this).data('webmapid') ).then(function(groups){
+				dojo.forEach(groups, function(groupid, i){
+				  vCalls.getGroup(groupid).then(function(groepobj){
+					  //write to ul: name of the groups and the li's with users of the group
+				  });
+				});
+			});*/
+			query("#row-selected-webmapp").style('display', 'block');
+			query(".webmap-list-container").style("display", 'none');
+			store.set('veldwerkWorkflowProgress', { webmapid: webmapid, userdata: 'CSV/XLSX content' })
+			$.smoothScroll({
+      			offset: -220,
+      			scrollTarget: '#row-selected-webmapp'
+    		});
+	  }
 
 	  function LogMessage(msg)
 	  {

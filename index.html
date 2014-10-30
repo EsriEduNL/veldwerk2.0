@@ -226,7 +226,7 @@
               </div>
             </div><!-- end col-sm-6 -->
             <div class="col-sm-6">
-              <h4>Groepen en gebruikers van deze webmap</h4>
+              <h4>Groepen en gebruikers van deze webmap <button type="button" class="btn btn-default btn-xs btn-goto-add-users">Toevoegen</button></h4>
               <div class="selected-webmap-groups thumbnail">
                 
                 <ul class="" id="groups-list">
@@ -313,24 +313,35 @@
               <label for="">Hoeveel accounts wilt u aanmaken?</label>
               <div class="radio">
               <label>
-                <input type="radio" class="style-as-switch" name="accountsAmmount" value="one" data-size="large" data-on-text="één" data-off-text="meerdere" checked>
+                <input type="radio" name="accountsAmmount" value="one" checked>
                 één
               </label>
-            </div>
-            <div class="radio">
+              </div>
+              <div class="radio">
               <label>
-                <input type="radio" class="style-as-switch" name="accountsAmmount" value="multiple">
+                <input type="radio" name="accountsAmmount" value="multiple">
                 meerdere
               </label>
+              </div>
             </div>
+            
+            <div class="form-group">
+              <label for="has-email">Beschikken uw leerlingen over een e-mailadres?</label>
+              <div class="radio">
+              <label>
+                <input type="radio" name="accountsHasEmail" value="yes" data-size="medium" checked>Ja
+                <input type="radio" name="accountsHasEmail" value="yes" data-size="medium" checked>Nee
+              </label>
+              </div>
             </div>
+            
           </form>
         </div>
       </div>
       
       <div class="row" id="addUserAccount-single">
         <div class="col-lg-4 col-md-6 col-xs-12">
-          <form role="form" class="with-bg-grey">
+          <form role="form" class="with-bg-grey" id="form-add-single-user">
             <div class="form-group">
               <h3>Nieuw account aanmaken</h3>
             </div>
@@ -338,17 +349,19 @@
               <label for="fullname">Volledige naam</label>
               <input class="form-control" type="text" name="fullname" placeholder="Naam leerling">
             </div>
-            <div class="form-group">
+            <div class="form-group hidden">
               <label for="username">Gebruikersnaam</label>
               <input type="text" class="form-control" name="email" placeholder="Gebruikersnaam">
+              <a href="" class="help-block single-toggle-email-username">De leerling heeft een e-mailadres</a>
             </div>
             <div class="form-group">
               <label for="email">E-mailadres</label>
               <input type="email" class="form-control" name="email" placeholder="E-mailadres">
+              <p class="help-block"><a href="" class="single-toggle-email-username">De leerling heeft geen e-mailadres</a></p>
             </div>
             <div class="form-group">
               <label for="password">Wachtwoord</label>
-              <input type="password" class="form-control" id="password" placeholder="Wachtwoord" autocomplete="off">
+              <input type="password" class="form-control" name="password" id="password" placeholder="Wachtwoord" autocomplete="off">
             </div>
             <div class="form-group">
               <label for="add-to-group">Toevoegen aan bestaande groep</label>
@@ -358,6 +371,7 @@
                 <option>XS28.9</option>
                 <option>Groep 8-1</option>
               </select>
+              <a href="" class="help-block create-group">Nieuwe groep aanmaken</a>
             </div>
             <div class="checkbox">
               <label>

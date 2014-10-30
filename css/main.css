@@ -263,6 +263,15 @@ ul.webmap-meta li{
 }
 
 /*
+//Section define users
+*/
+#form-add-single-user p.help-block a{
+	color:#737373;
+	font-size:14px;
+}
+
+
+/*
 //Login
 */
 .row-login{
