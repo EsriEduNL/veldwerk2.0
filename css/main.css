@@ -287,4 +287,12 @@ ul.webmap-meta li{
 	position: relative;
 }
 
-/**/
+/*////////
+//MODALS//
+////////*/
+#modal-add-group input{
+	display:block;
+}
+#modal-add-group p.help-block{
+	font-size:14px;
+}

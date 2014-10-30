@@ -8,6 +8,8 @@ require([
 	"dojo/on",
 	"dojo/_base/window",
 	
+	"esri/config",
+	
 	"js/VeldWerkCalls",
 
   ], function (
@@ -20,13 +22,17 @@ require([
 	on,
 	wind,
 	
+	esriConfig,
+	
 	VeldWerkCalls
   ) {
 	 
 	  var debug = true;
 
 	  var vCalls;
-
+	
+	esriConfig.defaults.io.proxyUrl = "http://dennishunink.nl/playground/veldwerk/proxy.php";
+	
 	  ready(function () { 
 	  	  $('input[type=password]').hidePassword(true);
 		  $("input.style-as-switch").bootstrapSwitch();
@@ -58,6 +64,20 @@ require([
 		  //
 		  $('.single-toggle-email-username').on('click', function(e){ e.preventDefault();
 		    $('.single-toggle-email-username').closest('div.form-group').toggleClass('hidden');
+		  });
+		  
+		  //
+		  //MODALS
+		  //
+		  $('#modal-add-group .btn-primary').on('click', function(){
+			var name = $('#modal-add-group input[name=groupname]').val();
+			if(name){
+	//@TODO: create a deffered version to handle the response in the UI (eq, close the modal and loading icons)
+		      vCalls.createGroup(name);
+			}else{
+		//@TODO: better UI for the error report
+			  alert('U heeft geen naam ingevoerd');
+			}
 		  });
 
 	  });

@@ -123,6 +123,18 @@ define([
 		{
 			//Create a new AOL group
 			//return newgroupid
+			var requestUrl = portalUrl + "/sharing/rest/community/createGroup";
+			var parameters = "title:" + groupName;
+			var itemRequest = esriRequest({
+            		url: requestUrl,
+                    content: { f: "json", title: groupName},
+                    handleAs: "json",
+					usePost: true
+            }, true);
+            return itemRequest;
+			
+			console.log(groupName);
+			//return 'doneTest';
 		},
 		
 		
