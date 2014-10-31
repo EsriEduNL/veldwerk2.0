@@ -101,7 +101,6 @@ define([
                     url: requestUrl,
                     content: { f: "json", q: query, num: 100 },
                     handleAs: "json"
-
                 });
                 return itemRequest;
             }
@@ -127,14 +126,10 @@ define([
 			var parameters = "title:" + groupName;
 			var itemRequest = esriRequest({
             		url: requestUrl,
-                    content: { f: "json", title: groupName},
-                    handleAs: "json",
-					usePost: true
-            }, true);
+                    content: { f: "json", access: 'private', tags: 'Veldwerk', title: groupName, description: 'Groep aangemaakt tbv Veldwerk'},
+                    handleAs: "json"
+            }, {usePost: true});
             return itemRequest;
-			
-			console.log(groupName);
-			//return 'doneTest';
 		},
 		
 		

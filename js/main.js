@@ -31,7 +31,7 @@ require([
 
 	  var vCalls;
 	
-	esriConfig.defaults.io.proxyUrl = "http://dennishunink.nl/playground/veldwerk/proxy.php";
+	//esriConfig.defaults.io.proxyUrl = "http://dennishunink.nl/playground/veldwerk/proxy.php";
 	
 	  ready(function () { 
 	  	  $('input[type=password]').hidePassword(true);
@@ -70,13 +70,20 @@ require([
 		  //MODALS
 		  //
 		  $('#modal-add-group .btn-primary').on('click', function(){
+			$(this).button('loading');
 			var name = $('#modal-add-group input[name=groupname]').val();
 			if(name){
 	//@TODO: create a deffered version to handle the response in the UI (eq, close the modal and loading icons)
-		      vCalls.createGroup(name);
+		      vCalls.createGroup(name).then(function(response){
+				  $(this).button('reset');
+				  //@TODO:
+				  //add group to the right lists, provide a success message
+				  console.log(response);
+			  });
 			}else{
 		//@TODO: better UI for the error report
 			  alert('U heeft geen naam ingevoerd');
+			  $(this).button('reset');
 			}
 		  });
 
