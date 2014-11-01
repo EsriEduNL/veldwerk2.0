@@ -69,23 +69,30 @@ require([
 		  //
 		  //MODALS
 		  //
+		  //$('#modal-add-group .btn-primary').button("reset");
 		  $('#modal-add-group .btn-primary').on('click', function(){
 			$(this).button('loading');
 			var name = $('#modal-add-group input[name=groupname]').val();
 			if(name){
 	//@TODO: create a deffered version to handle the response in the UI (eq, close the modal and loading icons)
 		      vCalls.createGroup(name).then(function(response){
-				  $(this).button('reset');
-				  //@TODO:
-				  //add group to the right lists, provide a success message
+				  console.log("komt dat antwoord:"); console.log(response);
+				  if(response == 'error')
+				  {
+	//@TODO: create a UI error callback
+				    alert('error');
+				  }else{
+	//@TODO: add group to the right lists, provide a success message
 				  console.log(response);
+				  }
+				  $(this).button('reset');
 			  });
 			}else{
 		//@TODO: better UI for the error report
 			  alert('U heeft geen naam ingevoerd');
 			  $(this).button('reset');
 			}
-		  });
+		  });//End modal-add-group .btn-primary on click
 
 	  });
 	  

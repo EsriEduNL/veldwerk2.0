@@ -129,7 +129,22 @@ define([
                     content: { f: "json", access: 'private', tags: 'Veldwerk', title: groupName, description: 'Groep aangemaakt tbv Veldwerk'},
                     handleAs: "json"
             }, {usePost: true});
-            return itemRequest;
+			
+			function requestSucceeded(data) {
+			  console.log("Data: ", data); // print the data to browser's console
+			  return data;
+			}
+			
+			function requestFailed(error) {
+			  console.log("Error: ", error.message);
+			  return error;
+			}
+			
+			itemRequest.then(requestSucceeded, requestFailed);
+
+			//return itemRequest;
+			
+            
 		},
 		
 		

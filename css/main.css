@@ -10,10 +10,49 @@ body, html{
     padding-bottom: 20px;
 	color:#4D4D4D;
 }
+
+/*////////////////////////
+//Font and text settings//
+////////////////////////*/
 h1, h2, h3, h4{
 	font-weight:300;
 	color: #2A7433;
 }
+/*Spin icon-fonts*/
+.spin-icon {
+  -webkit-animation: spin-icon 1500ms infinite linear;
+  -moz-animation: spin-icon 1500ms infinite linear;
+  -o-animation: spin-icon 1500ms infinite linear;
+  animation: spin-icon 1500ms infinite linear;
+     -webkit-transform-origin: 50% 50%;
+         transform-origin:50% 50%;
+         -ms-transform-origin:50% 50%; /* IE 9 */
+}
+
+@-webkit-keyframes spin-icon {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
+@keyframes spin-icon {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
 
 /*
 //Form styles//
