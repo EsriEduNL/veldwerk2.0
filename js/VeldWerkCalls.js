@@ -130,7 +130,7 @@ define([
                     handleAs: "json"
             }, {usePost: true});
 			
-			function requestSucceeded(data) {
+			/*function requestSucceeded(data) {
 			  console.log("Data: ", data); // print the data to browser's console
 			  return data;
 			}
@@ -140,9 +140,9 @@ define([
 			  return error;
 			}
 			
-			itemRequest.then(requestSucceeded, requestFailed);
+			itemRequest.then(requestSucceeded, requestFailed);*/
 
-			//return itemRequest;
+			return itemRequest;
 			
             
 		},

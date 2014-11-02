@@ -59,6 +59,14 @@ require([
 			store.set('veldwerkWorkflowProgress', { webmapid: ''})
 		  });
 		  
+		  //Scroll to add-users
+		  $('.btn-goto-add-users').on('click', function(e){
+		    $.smoothScroll({
+      			offset: -75,
+      			scrollTarget: '#section-define-users'
+    		});
+		  });
+		  
 		  //
 		  //Section add-users
 		  //
@@ -82,8 +90,9 @@ require([
 	//@TODO: create a UI error callback
 				    alert('error');
 				  }else{
-	//@TODO: add group to the right lists, provide a success message
+	//@TODO: add group to the right lists, provide a success message, close the modal
 				  console.log(response);
+				  $('#groups-list').append('<li><a href="#group-'+response.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+response.group.id+'">'+response.group.title+'</a><ul id="group-'+response.group.id+'" class="collapse" data-groupid="'+response.group.id+'"></ul></li>');
 				  }
 				  $(this).button('reset');
 			  });
