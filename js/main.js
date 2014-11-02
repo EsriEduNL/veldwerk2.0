@@ -82,19 +82,28 @@ require([
 			$(this).button('loading');
 			var name = $('#modal-add-group input[name=groupname]').val();
 			if(name){
-	//@TODO: create a deffered version to handle the response in the UI (eq, close the modal and loading icons)
+	//@TODO: create a deffered version to handle the response in the UI (eq, display error messages etc, see https://github.com/EsriEduNL/veldwerk2.0/issues/13)
 		      vCalls.createGroup(name).then(function(response){
-				  console.log("komt dat antwoord:"); console.log(response);
+				  console.log(response);
 				  if(response == 'error')
 				  {
-	//@TODO: create a UI error callback
+	//@TODO: create a UI error callback, see https://github.com/EsriEduNL/veldwerk2.0/issues/13
 				    alert('error');
 				  }else{
-	//@TODO: add group to the right lists, provide a success message, close the modal
-				  console.log(response);
+	//@TODO: provide a success message
+	
+				  //Add to the list
 				  $('#groups-list').append('<li><a href="#group-'+response.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+response.group.id+'">'+response.group.title+'</a><ul id="group-'+response.group.id+'" class="collapse" data-groupid="'+response.group.id+'"></ul></li>');
+				  
+				  //Add to the dropdown buttons
+				  $('select[name=add-to-group]').append('<option value="'+response.group.id+'">'+response.group.title+'</option>');
 				  }
+				  
+				  //Close the modal
+				  $('#modal-add-group').modal('hide');
+				  
 				  $(this).button('reset');
+				  
 			  });
 			}else{
 		//@TODO: better UI for the error report
@@ -165,6 +174,8 @@ require([
 					
 					$('.webmap-list-container').append('<div class="col-sm-6 col-md-4 col-lg-3 col-webmap-'+e.id+'"><div class="thumbnail"><img src="'+e.thumbnailUrl+'" width="200" height="133" alt="Afbeelding voor webmap '+e.title+'"><div class="caption"><h3 id="map1Title">'+e.title+'</h3><p>Omschrijving: '+e.description+'</p><ul class="webmap-meta"><li>Gedeeld met: '+access+'</li><li>Aangemaakt op '+created+'</li><li>Laatst bewerkt op '+modified+'</li></ul><p><a href="#" data-webmapid="'+e.id+'" class="btn btn-default btn-select-this-webmap" data-webmapid="'+e.id+'" role="button">Selecteer</a></p></div></div></div>');
 					
+	//@TODO: get all groups that hold a copy of this webmapp, add that one to the UI lists, get there members and display those as well
+	
 					LogMessage("just added to the UI: webmap with id: " + e.id + " (" + e.title + ")");  
 				  });//End response each
 				  //Let's check if any webmapp has been stored in localstorage

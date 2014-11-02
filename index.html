@@ -365,11 +365,7 @@
             </div>
             <div class="form-group">
               <label for="add-to-group">Toevoegen aan bestaande groep</label>
-              <select class="form-control">
-                <option>geen</option>
-                <option>Dh32.6</option>
-                <option>XS28.9</option>
-                <option>Groep 8-1</option>
+              <select name="add-to-group" class="form-control">
               </select>
               <a href="" class="help-block create-group" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep aanmaken</a>
             </div>
@@ -411,7 +407,7 @@
                     <th class="text-center email_th">E-mailadres</th>
                     <th class="text-center username_th" style="display:none;">Gebruikersnaam</th>
                     <th class="text-center password_th">Wachtwoord</th>
-                    <th class="text-center addtogroupid_th">Voeg toe aan groep</th>
+                    <th class="text-center addtogroup_th">Voeg toe aan groep</th>
                 </tr>
             </thead>
             <tbody>
@@ -421,7 +417,7 @@
                     <td class="email_td"><input type="text" name='email' placeholder='E-mailadres' class="form-control" spellcheck="false" required="required" aria-required="true" pattern="^(([-\w\d]+)(\.[-\w\d]+)*@([-\w\d]+)(\.[-\w\d]+)*(\.([a-zA-Z]{2,5}|[\d]{1,3})){1,2})$"/></td>
                     <td class="username_td" style="display:none;"><input type="text" name='username' placeholder='Gebruikersnaam' class="form-control" spellcheck="false"/></td>
                     <td class="password_td"><input type="text" name='password' placeholder='Wachtwoord' class="form-control" spellcheck="false"/></td>
-                    <td class="addtogroup_td"><input type="hidden" name="addtogroup_id"><input type="text" name="addtogroup" placeholder="Groep" class="form-control" spellcheck="false"></td>
+                    <td class="add-to-group_td"><select name="add-to-group" class="form-control"></select></td>
                 </tr>
             </tbody>
             </table>
