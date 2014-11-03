@@ -123,7 +123,6 @@ define([
             //Create a new AOL group
             //return newgroupid
             var requestUrl = portalUrl + "/sharing/rest/community/createGroup";
-            var parameters = "title:" + groupName;
             var itemRequest = esriRequest({
                     url: requestUrl,
                     content: { f: "json", access: 'private', tags: 'Veldwerk', title: groupName, description: 'Groep aangemaakt tbv Veldwerk'},
@@ -163,6 +162,19 @@ define([
         
         createStudentUser: function(fullname, email, password)
         {
+			
+//invitationList	{"invitations":[{"username":"dennis_develstein","password":"ssdfsdfsd56464","firstname":"Dennis","lastname":"Test","fullname":"Dennis Test","email":"dennis@testmij.nl","role":"account_user"}]}
+//Looks like a user will be added without recieving a mail, when a password is set
+
+			var requestUrl = portalUrl + "/sharing/rest/portal/self/invite/";
+            var parameters = "title:" + groupName;
+            var itemRequest = esriRequest({
+                    url: requestUrl,
+					content: {f: "json", invitationList:	{"invitations":[{"username":"dennis_develstein","password":"ssdfsdfsd56464","firstname":"Dennis","lastname":"Test","fullname":"Dennis Test","email":"dennis@testmij.nl","role":"account_user"}]}},
+                    //content: { f: "json", username: 'sla', email: 'dieblad@bla.nl', fullname: 'naampje', description: 'Gebruiker aangemaakt tbv Veldwerk', role: 'student'},
+                    handleAs: "json"
+            }, {usePost: true});
+
             //Create new AOL user account
             //return newuserid
         },

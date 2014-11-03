@@ -91,30 +91,33 @@ require([
             $(this).button('loading');
             var name = $('#modal-add-group input[name=groupname]').val();
             if(name){
-    //@TODO: create a deffered version to handle the response in the UI (eq, display error messages etc, see https://github.com/EsriEduNL/veldwerk2.0/issues/13)
               vCalls.createGroup(name).then(function(response){
                   console.log(response);
-     
+	//@TODO: Grant access to the featureservice of the selected webmap
+	
+	//@TODO: create questions for this group
+	
+    //@TODO: copy the webmap for this new group (vCalls.createMap(mastermapid, groupid))
+	
+	//@TODO: grant access to the new webmap for this group
+	 
     //@TODO: provide a success message
-    
                   //Add to the list
                   $('#groups-list').append('<li><a href="#group-'+response.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+response.group.id+'">'+response.group.title+'</a><ul id="group-'+response.group.id+'" class="collapse" data-groupid="'+response.group.id+'"></ul></li>');
                   
                   //Add to the dropdown buttons
                   $('select[name=add-to-group]').append('<option value="'+response.group.id+'">'+response.group.title+'</option>');
                   
-                  
-    //@TODO: copy the webmap for this new group (vCalls.createMap(mastermapid, groupid))
-                  
                   //Close the modal
                   $('#modal-add-group').modal('hide');
-                  
-                  $(this).button('reset');
                   
               }, function (error) {
                   console.log(error);
                   alert('someone f*cked up');
               });
+			  
+			  $(this).button('reset');
+			  
             }else{
         //@TODO: better UI for the error report
               alert('U heeft geen naam ingevoerd');
@@ -143,6 +146,7 @@ require([
           domClass.toggle("user-menu-dropdown-wrap", "hidden");
           domClass.toggle("login-link-wrap", "hidden");
           query(".section-private").style("display", "none");
+		  window.location.reload(true);//Refresh browser to make sure no traces are left in the UI
       }
       
       
