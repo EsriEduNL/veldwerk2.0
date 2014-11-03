@@ -201,7 +201,7 @@ define([
 		},
 		
 		
-		createMap: function(mastermapid)
+		createMap: function(mastermapid, groupid)
 		{
 			//Create a duplicate of mastermapid
 			//return newmapid;

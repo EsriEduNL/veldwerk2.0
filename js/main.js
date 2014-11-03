@@ -74,11 +74,19 @@ require([
 		    $('.single-toggle-email-username').closest('div.form-group').toggleClass('hidden');
 		  });
 		  
+		  $('#form-add-single-user').submit(function(e){
+			  e.preventDefault();
+			  //vCalls.createStudentUser(fullname, email, password);
+			  //vCalls.addStudentUserToGroup(userid, groupid);
+	//@TODO: if 'email me' is selected: email details to teacher
+	//@TODO: if 'email student' is selected: email details to student
+		  });
+		  
 		  //
 		  //MODALS
 		  //
-		  //$('#modal-add-group .btn-primary').button("reset");
 		  $('#modal-add-group .btn-primary').on('click', function(){
+	//@TODO: move all stuff below regarding vCalls.createGroup to a seperate function in main.js (so it can also be triggered by different actions)
 			$(this).button('loading');
 			var name = $('#modal-add-group input[name=groupname]').val();
 			if(name){
@@ -98,6 +106,8 @@ require([
 				  //Add to the dropdown buttons
 				  $('select[name=add-to-group]').append('<option value="'+response.group.id+'">'+response.group.title+'</option>');
 				  }
+				  
+	//@TODO: copy the webmap for this new group (vCalls.createMap(mastermapid, groupid))
 				  
 				  //Close the modal
 				  $('#modal-add-group').modal('hide');
