@@ -34,6 +34,7 @@ require([
     //esriConfig.defaults.io.proxyUrl = "http://dennishunink.nl/playground/veldwerk/proxy.php";
     
       ready(function () { 
+	
           $('input[type=password]').hidePassword(true);
           $("input.style-as-switch").bootstrapSwitch();
           
