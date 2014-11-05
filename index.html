@@ -63,15 +63,18 @@
               <p>Veldwerk 2.0 <span class="label label-default">beta</span></p>
             </div>
             <div class="col-xs-3">
-              <div id="login-link-wrap" class="pull-right"><a href="#" id="loginLink"><span class="glyphicon glyphicon-user hidden-xs"></span> Inloggen</a></div>
+              <div id="login-link-wrap" class="pull-right">
+                <a href="#" id="loginLink" ><span class="glyphicon glyphicon-user hidden-xs"></span> Inloggen</a>
+              </div>
               
               <div class="dropdown pull-right hidden" id="user-menu-dropdown-wrap">  
                 <a class="user-toggle-actions" id="user-menu-dropdown" data-toggle="dropdown">
-                  <span class="glyphicon glyphicon-user"></span> <span class="hidden-xs" id="userNameLabel">Inloggen</span>
-                  <span class="caret"></span>
+                  <span class="hidden-xs userNameLabel" id="userNameLabel">Inloggen</span> <span class="caret hidden-xs"></span>
+                  <span class="glyphicon glyphicon-user visible-xs"><span class="caret"></span></span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-left" role="menu" aria-labelledby="user-menu-dropdown">
-                  <li><span id="userOrgLabel" href="#"></span></li>
+                  <li role="presentation"><span class="userNameLabel"></span></li>
+                  <li role="presentation"><span class="userOrgLabel"></span></li>
                   <li role="presentation" class="divider"></li>
                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="logoutLink">Uitloggen</a></li>
                 </ul>
@@ -115,32 +118,26 @@
       <div class="carousel-inner">
         <div class="item active">
           <!--<img src="img/slider/Fotolia_30977559_XS.jpg" alt="slide 1">-->
-          <img src="img/product-images/iphone/on-the-street-1-large-2500x1669.png" class="img-responsive" alt="Slide1">
+          <img src="img/product-images/iphone/on-the-street-1-2500x1669.jpg" alt="Slide1">
           <div class="container">
             <div class="carousel-caption">
-              <h2><span>Veldwerk kan moderner!</span></h2>
-              <!--<p class="caption"><span>Buiten het klaslokaal valt zo enorm veel te ontdekken. Tijdens een veldwerk gaan leerlingen aan de slag om hun kennis en vaardigheden in de praktijk te brengen. Maar waarom moet daarbij altijd een papieren boekje met route en opgaven mee? Een flink deel van de leerlingen beschikt tegenwoordig over een Smartphone. Daarom is er Esri Veldwerk 2.0! Zonder dat er tijdens het veldwerk een internetverbinding nodig is ontdekken leerlingen hun omgeving met hun eigen telefoon!</span></p>-->
-              <!-- <p><a class="btn btn-primary" href="#">Ontdek meer!</a>-->
+              <h2>Veldwerk kan moderner!</h2>
             </p></div>
           </div>
         </div>
         <div class="item">
-          <img src="img/veldwerk-develstein/docent-instructie-2225x1669.png" class="img-responsive" alt="Slide2">
+          <img src="img/veldwerk-develstein/docent-instructie-2225x1669.png" alt="Slide2">
           <div class="container">
             <div class="carousel-caption">
-              <h2><span>Carousel Headline 2</span></h2>
-              <!--<p class="caption"><span>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</span></p>-->
-              <!-- <p><a class="btn btn-danger" href="#">Read More</a></p>-->
+              <h2>Carousel Headline 2</h2>
             </div>
           </div>
         </div>
         <div class="item">
-          <img src="img/product-images/iphone/on-the-streets-2-large-2500x1669.png" class="img-responsive" alt="Slide3">
+          <img src="img/product-images/iphone/on-the-streets-2-2500x1669.jpg" alt="Slide3">
           <div class="container">
             <div class="carousel-caption">
-              <h2><span>Carousel Headline 3</span></h2>
-              <!--<p class="caption"><span>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</span></p>-->
-              <!--<p><a class="btn btn-danger" href="#">Read More</a></p>-->
+              <h2>Carousel Headline 3</h2>
             </div>
           </div>
         </div>
@@ -229,9 +226,9 @@
               </div>
             </div><!-- end col-sm-6 -->
             <div class="col-sm-6">
-              <h4>Groepen en gebruikers van deze webmap <button type="button" class="btn btn-default btn-xs btn-goto-add-users">Toevoegen</button></h4>
+              <h4>Groepen en gebruikers van deze webmap </h4>
               <div class="selected-webmap-groups thumbnail">
-                
+                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep</button><button type="button" class="btn btn-default btn-xs btn-goto-add-users">Nieuwe gebruiker</button>
                 <ul class="" id="groups-list">
                   <li> 
                     <a data-groupid="12" data-toggle="collapse" data-parent="#groups-list" href="#group-12">TESTGroep 12</a>

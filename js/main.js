@@ -34,7 +34,14 @@ require([
     //esriConfig.defaults.io.proxyUrl = "http://dennishunink.nl/playground/veldwerk/proxy.php";
     
       ready(function () { 
-	
+		  $("#intro-carousel, #intro-carousel .item").css('height', (0.6 * window.innerHeight));
+		  resizeCarouselImages();
+		  
+		  $( window ).resize(function() {
+			$("#intro-carousel, #intro-carousel .item").css('height', (0.6 * window.innerHeight));
+		    resizeCarouselImages();
+		  });
+		  
           $('input[type=password]').hidePassword(true);
           $("input.style-as-switch").bootstrapSwitch();
           
@@ -133,6 +140,35 @@ require([
       /*///////////
       //Functions//
       ///////////*/
+	  function resizeCarouselImages(){
+		var cW = $('#intro-carousel').outerWidth();
+		var cH = $('#intro-carousel').outerHeight();
+		var cA = cW / cH;
+		
+		$("#intro-carousel img").each(function()
+		{
+    	  var imgW = $(this).width();
+		  var imgH = $(this).height();
+		  var imgA = imgW / imgH;
+		  
+		  if ( cA < imgA ){
+			$(this).css({
+              width: 'auto',
+              height: cH,
+              top:0,
+			  left: ( cW - cH / imgH * imgW ) / 2
+            });
+		  }else{
+			$(this).css({
+              width: cW,
+              height: 'auto',
+              top: ( cH - cW / imgW * imgH ) / 2,
+              left:0
+            });
+		  }	  
+		});
+	  }
+	  
       function logIn()
       {
         vCalls.signIn().then(function(loggedInUser){
@@ -153,8 +189,11 @@ require([
       
       function loggedInUI(loggedInUser)
       {
-        dom.byId('userNameLabel').innerHTML = loggedInUser.fullName;//setting username in the UI
-        dom.byId('userOrgLabel').innerHTML = '<span class="glyphicon glyphicon-briefcase"></span> '+loggedInUser.portal.name;
+        //dom.byId('userNameLabel').innerHTML = '<span class="glyphicon glyphicon-user"></span> '+loggedInUser.fullName;//setting username in the UI
+		//query('.userNameLabel').innerHTML = '<span class="glyphicon glyphicon-user"></span> '+loggedInUser.fullName;//setting username in the UI
+		$('.userNameLabel').html('<span class="glyphicon glyphicon-user"></span> '+loggedInUser.fullName);
+        //dom.byId('userOrgLabel').innerHTML = loggedInUser.portal.name;
+		$('.userOrgLabel').html('<span class="glyphicon glyphicon-briefcase"></span> '+loggedInUser.portal.name);
         domClass.toggle("login-link-wrap", "hidden");
         domClass.toggle("user-menu-dropdown-wrap", "hidden");
         query(".section-private").style("display", "block");
