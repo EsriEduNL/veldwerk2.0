@@ -187,6 +187,7 @@ form label{
 	/*height:60vh;*/
 }
 .carousel .item img{
+	position:absolute;
 /*FOR TESTING*/
 	
 }

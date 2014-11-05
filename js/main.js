@@ -34,10 +34,15 @@ require([
     //esriConfig.defaults.io.proxyUrl = "http://dennishunink.nl/playground/veldwerk/proxy.php";
     
       ready(function () { 
+	  	  $('#intro-carousel').on('slide.bs.carousel', function () {
+		    resizeCarouselImages();
+		  });
+	  
 		  $("#intro-carousel, #intro-carousel .item").css('height', (0.6 * window.innerHeight));
 		  resizeCarouselImages();
 		  
 		  $( window ).resize(function() {
+			LogMessage("resize container naar 0.6*"+window.innerHeight);
 			$("#intro-carousel, #intro-carousel .item").css('height', (0.6 * window.innerHeight));
 		    resizeCarouselImages();
 		  });
@@ -158,6 +163,7 @@ require([
               top:0,
 			  left: ( cW - cH / imgH * imgW ) / 2
             });
+			LogMessage("containerRatio < imgRatio, nieuwe w=aut0, h="+cH+', top=0, left='+( cW - cH / imgH * imgW ) / 2);
 		  }else{
 			$(this).css({
               width: cW,
@@ -165,9 +171,10 @@ require([
               top: ( cH - cW / imgW * imgH ) / 2,
               left:0
             });
-		  }	  
-		});
-	  }
+			LogMessage("containerRatio < imgRatio, nieuwe w="+cW+", h=auto, top="+( cH - cW / imgW * imgH ) / 2+", left=0");
+		  }//end if else
+		});//end for each
+	  }//end function
 	  
       function logIn()
       {
