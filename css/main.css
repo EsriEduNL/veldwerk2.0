@@ -7,7 +7,7 @@ body, html{
 	font-style:normal;
 	font-weight:400;
 	padding-top:56px;/*Height of sub-header*/
-    padding-bottom: 20px;
+    padding-bottom: 0;
 	color:#4D4D4D;
 }
 
@@ -263,21 +263,21 @@ form label{
 #row-selected-webmapp{
 	display:none;
 }
-.webmap-selected-wrap img{
-	display:inline;
-}
-.webmap-selected-wrap .caption{
-	display:inline;
-   	margin:10px;
-}
-.webmap-selected-wrap .caption .btn{
-	display:none;
-}
 #section-webmap-selection .thumbnail{
     margin-bottom:15px;
 }
 #section-webmap-selection .thumbnail h3{
 	word-wrap: break-word;
+}
+.selected-webmap-map img{
+	display:inline;
+}
+.selected-webmap-map .caption{
+	display:inline;
+   	margin:10px;
+}
+.selected-webmap-map .caption .btn{
+	display:none;
 }
 ul.webmap-meta{
 	list-style:none;
@@ -288,8 +288,6 @@ ul.webmap-meta li{
 	color:#5F5F5F;
 	font-size:12px;
 }
-
-
 /*Adjust heights when not vertical stacked (>768px)*/
 @media (min-width: 768px) {
 	div[class*='col-webmap']{
@@ -303,6 +301,14 @@ ul.webmap-meta li{
 	}
 }
 
+/*Groups and users for selected webmap*/
+.selected-webmap-groups button{
+	margin:10px 10px 10px 0;
+}
+.selected-webmap-groups hr{
+	margin-top:10px;
+}
+
 /*
 //Section define users
 */
@@ -311,21 +317,11 @@ ul.webmap-meta li{
 	font-size:14px;
 }
 
-
 /*
-//Login (bootstrap)
+//Section contact//
 */
-.row-login{
-  
-}
-.col-login{
-	background:#fbfbfb;
-	border: 1px solid rgb(237, 237, 237);
-	border-radius: 0px;
-	font-size: 14px;
-	margin: 20px 0px;
-	padding: 20px;
-	position: relative;
+#section-footer{
+	
 }
 
 /*

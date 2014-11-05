@@ -42,9 +42,9 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li class="dropdown">
+            <li><a href="#section-contact">Over ons</a></li>
+            <li><a href="#section-contact">Contact</a></li>
+            <!--<li class="dropdown section-private">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li><a href="#">Action</a></li>
@@ -52,7 +52,7 @@
                 <li><a href="#">Something else here</a></li>
               </ul>
             </li>
-          </ul>
+          </ul>-->
         </div><!--/.navbar-collapse -->
       </div><!-- end container -->
       
@@ -88,30 +88,6 @@
       </div><!-- end row sub-header -->
     
     </div><!-- end navbar -->
-	
-    
-    <div class="container container-login" style="display:none;">
-      <div class="row row-login">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-8 col-login">
-          <h3>Login</h3>
-          <p>Deze Veldwerk 2.0 applicatie is bedoelt voor docenten die deelnemen aan het <a href="">ArcGIS Veldwerk</a> programma.</p>
-          <form role="form">
-            <div class="form-group">
-              <label for="username">Gebruikersnaam</label>
-              <input type="text" name="username" class="form-control"/>
-            </div>
-            
-            <div class="form-group">
-              <label for="password">Wachtwoord</label>
-              <input type="password" name="password"class="form-control" />
-            </div>
-            <button type="submit" class="btn btn-primary">Inloggen</button>
-          </form>
-        </div>
-      </div>
-    </div>
-
   
   <section id="section-intro-carousel">
     <div id="intro-carousel" class="carousel slide">  
@@ -228,7 +204,7 @@
             <div class="col-sm-6">
               <h4>Groepen en gebruikers van deze webmap </h4>
               <div class="selected-webmap-groups thumbnail">
-                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep</button><button type="button" class="btn btn-default btn-xs btn-goto-add-users">Nieuwe gebruiker</button>
+                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep</button><button type="button" class="btn btn-default btn-xs btn-goto-add-users">Nieuwe gebruiker</button><hr/>
                 <ul class="" id="groups-list">
                   <li> 
                     <a data-groupid="12" data-toggle="collapse" data-parent="#groups-list" href="#group-12">TESTGroep 12</a>
@@ -440,7 +416,42 @@
     </div>
   </section>
   
-  <section id="section-footer">  
+  <section id="section-contact" class="section-white">
+   	<div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h3>Contact</h3>
+          <form role="form">
+            <div class="form-group">
+              <label for="name">Naam</label>
+              <input type="text" name="name" class="form-control" placeholder="Uw naam"/>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">E-mailadres</label>
+              <input type="email" name="email" class="form-control" placeholder="Waar mag onze reactie naartoe?"/>
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Bericht</label>
+              <textarea class="form-control" name="message" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-default">Verstuur</button>
+          </form>
+        </div><!-- end col-md-6 -->
+        <div class="col-md-6">
+          <h3>Wie maken Veldwerk 2.0?</h3>
+          <p>Het concept voor Veldwerk 2.0 is tot stand gekomen door een samenwerking tussen Esri Nederland en een enthiousaste aardrijkskunde docent.</p>
+          <h3>Esri Nederland</h3>
+          <p>Esri Nederland is een dynamisch IT-bedrijf en marktleider in geografische informatiesystemen (GIS). Organisaties en bedrijven kunnen succesvoller zijn als ze informatie geografisch benaderen. Onskwalitatief hoogwaardige GIS-product leveren we in combinatie met een uitgebreide tak dienstverlening. Uiteraard bieden we support aan, verzorgen we een breed scala aan opleidingen en organiseren we jaarlijks twee grote GIS-evenementen. Onze organisatie beschikt over een wereldwijd netwerk aan kennis en ervaring op GIS-gebied!</p>
+          <h3>De docent</h3>
+          <p>Dennis Hunink is werkzaam als aardrijkskunde docent op een middelbare school in Zwijndrecht. Naast passie voor zijn vak in het algemeen heeft hij een voorliefde voor GIS. Eerder ontwikkelde hij de website <a href="https://topografieindeklas.nl">topografieindeklas.nl</a>, waar leerlingen gratis gemakkelijk topografie kunnen leren. </p>
+        </div><!-- end col-md-6 -->
+      </div><!-- end row -->
+    </div><!-- end container
+  </section><!-- end section-contact -->
+  
+  <section id="section-footer" class="section-blue">  
     <div class="container">
       <hr>
 
