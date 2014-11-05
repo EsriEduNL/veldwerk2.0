@@ -78,6 +78,7 @@ form label{
 	background:#FFF;
 	margin-bottom:0;
 	border:none;
+	z-index:949;/*AOL Login widget has z-index 950*/
 }
 .navbar-toggle{
 	border-color:#CCC;
@@ -312,7 +313,7 @@ ul.webmap-meta li{
 
 
 /*
-//Login
+//Login (bootstrap)
 */
 .row-login{
   
@@ -325,6 +326,29 @@ ul.webmap-meta li{
 	margin: 20px 0px;
 	padding: 20px;
 	position: relative;
+}
+
+/*
+//Login (AOL widget
+)*/
+/*Error color*/
+.claro .dijitSelectError, .claro .dijitSelectError .dijitButtonContents, .claro .dijitTextBoxError, .claro .dijitTextBoxError .dijitButtonNode{
+    border-color:#c12e2a;
+}
+/*Title*/
+.claro .dijitDialogTitleBar{
+	background-color:#007ac2;
+	background-image:none;
+	border:none;
+}
+.claro .dijitDialogTitle{
+	color:#FFF;
+}
+/*buttons*/
+.claro .dijitButton .dijitButtonNode, .claro .dijitDropDownButton .dijitButtonNode, .claro .dijitComboButton .dijitButtonNode, .claro .dijitToggleButton .dijitButtonNode{
+	border:1px solid #CCC;
+	background-color:#FFF;
+	background-image:none;
 }
 
 /*////////
