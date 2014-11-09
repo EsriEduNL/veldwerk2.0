@@ -93,8 +93,17 @@
     <div id="intro-carousel" class="carousel slide">  
       <div class="carousel-inner">
         <div class="item active">
-          <!--<img src="img/slider/Fotolia_30977559_XS.jpg" alt="slide 1">-->
-          <img src="img/product-images/iphone/on-the-street-1-2500x1669.jpg" alt="Slide1">
+          <!--<img src="img/product-images/iphone/on-the-street-1-2500x1669.jpg" alt="Slide1">-->
+          <img
+          srcset="img/product-images/iphone/on-the-street-1-2500x1669.jpg 2500w, 
+                  img/product-images/iphone/on-the-street-1-1200x801.jpg 1200w,
+                  img/product-images/iphone/on-the-street-1-1024x684.jpg 1024w,
+                  img/product-images/iphone/on-the-street-1-992x662.jpg 992w,
+                  img/product-images/iphone/on-the-street-1-640x427.jpg 640w,
+                  img/product-images/iphone/on-the-street-1-320x214.jpg 320w"
+          src="img/product-images/iphone/on-the-street-1-992x662.jpg"
+          alt="Veldwerk kan moderner!">
+          
           <div class="container">
             <div class="carousel-caption">
               <h2>Veldwerk kan moderner!</h2>
@@ -102,7 +111,15 @@
           </div>
         </div>
         <div class="item">
-          <img src="img/veldwerk-develstein/docent-instructie-2225x1669.png" alt="Slide2">
+          <img 
+          srcset="img/veldwerk-develstein/docent-instructie-2225x1669.jpg 2225w,
+          		  img/veldwerk-develstein/docent-instructie-1200x900.jpg 1200w,
+                  img/veldwerk-develstein/docent-instructie-1024x768.jpg 1024w,
+                  img/veldwerk-develstein/docent-instructie-992x744.jpg 992w,
+                  img/veldwerk-develstein/docent-instructie-640x480.jpg 640w,
+                  img/veldwerk-develstein/docent-instructie-320x240.jpg 320w"
+          src="img/veldwerk-develstein/docent-instructie-992x744.jpg" 
+          alt="Voor Iedereen!">
           <div class="container">
             <div class="carousel-caption">
               <h2>Voor iedereen!</h2>
@@ -110,7 +127,16 @@
           </div>
         </div>
         <div class="item">
-          <img src="img/product-images/iphone/on-the-streets-2-2500x1669.jpg" alt="Slide3">
+          <img
+          srcset="img/product-images/iphone/on-the-street-2-2500x1669.jpg 2500w, 
+                  img/product-images/iphone/on-the-street-2-1200x801.jpg 1200w,
+                  img/product-images/iphone/on-the-street-2-1024x684.jpg 1024w,
+                  img/product-images/iphone/on-the-street-2-992x662.jpg 992w,
+                  img/product-images/iphone/on-the-street-2-640x427.jpg 640w,
+                  img/product-images/iphone/on-the-street-2-320x214.jpg 320w"
+          src="img/product-images/iphone/on-the-street-2-992x662.jpg"
+          alt="Helemaal van nu!">
+          
           <div class="container">
             <div class="carousel-caption">
               <h2>Helemaal van nu</h2>
@@ -482,7 +508,7 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->     
-            
+  <script src="js/vendor/picturefill.min.js"></script>          
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
   <script src="js/vendor/jquery.smooth-scroll.js"></script>
