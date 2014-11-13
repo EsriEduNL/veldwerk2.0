@@ -4,6 +4,7 @@ require([
     "dojo/dom-class",
     "dojo/dom",
     "dojo/query",
+	"dojo/dom-form",
     
     "dojo/on",
     "dojo/_base/window",
@@ -18,6 +19,7 @@ require([
     domClass,
     dom,
     query,
+	domForm,
     
     on,
     wind,
@@ -51,9 +53,10 @@ require([
             });
 		  });
 		  
-          $('input[type=password]').hidePassword(true);
+		  /*Initialize some UI stuff*/
           $("input.style-as-switch").bootstrapSwitch();
           
+		  
           vCalls = new VeldWerkCalls();
 
           if(vCalls.signInCheck()) {
@@ -88,17 +91,22 @@ require([
           //
           //Section add-users
           //
-          $('.single-toggle-email-username').on('click', function(e){ e.preventDefault();
+         /* $('.single-toggle-email-username').on('click', function(e){ e.preventDefault();
             $('.single-toggle-email-username').closest('div.form-group').toggleClass('hidden');
-          });
+          });*/
           
-          $('#form-add-single-user').submit(function(e){
-              e.preventDefault();
-              //vCalls.createStudentUser(fullname, email, password);
-              //vCalls.addStudentUserToGroup(userid, groupid);
+		  dojo.connect(dom.byId("form-add-single-user"), "onsubmit", function(event){
+			  event.preventDefault();
+			  var formObj = domForm.toObject(this);
+			  console.log(formObj);
+	//@TODO: form validation
+	//@TODO: if password empty, generate one AND force amils to teacher and user to be send
+			  vCalls.createStudentUser(formObj);
+			  //vCalls.addStudentUserToGroup(userid, groupid);
     //@TODO: if 'email me' is selected: email details to teacher
     //@TODO: if 'email student' is selected: email details to student
-          });
+		  });
+
           
           //
           //MODALS

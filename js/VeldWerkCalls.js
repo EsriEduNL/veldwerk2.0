@@ -160,18 +160,19 @@ define([
         },
         
         
-        createStudentUser: function(fullname, email, password)
+        createStudentUser: function(data)
         {
-			
 //invitationList	{"invitations":[{"username":"dennis_develstein","password":"ssdfsdfsd56464","firstname":"Dennis","lastname":"Test","fullname":"Dennis Test","email":"dennis@testmij.nl","role":"account_user"}]}
 //Looks like a user will be added without recieving a mail, when a password is set
-
-			var requestUrl = portalUrl + "/sharing/rest/portal/self/invite/";
-            var parameters = "title:" + groupName;
+			var requestUrl = portalUrl + "/sharing/rest/portal/self/invite";
             var itemRequest = esriRequest({
                     url: requestUrl,
-					content: {f: "json", invitationList:	{"invitations":[{"username":"dennis_develstein","password":"ssdfsdfsd56464","firstname":"Dennis","lastname":"Test","fullname":"Dennis Test","email":"dennis@testmij.nl","role":"account_user"}]}},
-                    //content: { f: "json", username: 'sla', email: 'dieblad@bla.nl', fullname: 'naampje', description: 'Gebruiker aangemaakt tbv Veldwerk', role: 'student'},
+					conent: {
+						f: "json", 
+						invitationList: {"invitations": [
+						  {"username": data.username, "password": data.password, "firstname": "", "lastname": "", "fullname": data.fullname, "email": data.email, "role":"account_user"}
+						] } 
+					},
                     handleAs: "json"
             }, {usePost: true});
 

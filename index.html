@@ -17,16 +17,15 @@
         <link rel="stylesheet" href="//js.arcgis.com/3.11/dgrid/css/skins/claro.css">
         <link rel="stylesheet" href="//js.arcgis.com/3.11/dijit/themes/claro/claro.css">
         <link rel="stylesheet" href="//js.arcgis.com/3.11/esri/css/esri.css">
-        <link rel="stylesheet" href="css/hideshowpassword.css">
         <link rel="stylesheet" href="css/bootstrap-switch.min.css">
         <link rel="stylesheet" href="css/main.css">
 
         <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
     <body class="claro">
-        <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+    <!--[if lt IE 7]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
     
     <div class="navbar navbar-fixed-top" role="navigation">
       <div class="container">
@@ -336,7 +335,7 @@
       
       <div class="row" id="addUserAccount-single">
         <div class="col-lg-4 col-md-6 col-xs-12">
-          <form role="form" class="with-bg-grey" id="form-add-single-user">
+          <form role="form" class="with-bg-grey" id="form-add-single-user" data-init-psswrd>
             <div class="form-group">
               <h3>Nieuw account aanmaken</h3>
             </div>
@@ -344,23 +343,27 @@
               <label for="fullname">Volledige naam</label>
               <input class="form-control" type="text" name="fullname" placeholder="Naam leerling">
             </div>
-            <div class="form-group hidden">
+            <div class="form-group">
               <label for="username">Gebruikersnaam</label>
-              <input type="text" class="form-control" name="email" placeholder="Gebruikersnaam">
-              <a href="" class="help-block single-toggle-email-username">De leerling heeft een e-mailadres</a>
+              <input type="text" class="form-control" name="username" placeholder="Gebruikersnaam">
+              <!--<a href="" class="help-block single-toggle-email-username">De leerling heeft een e-mailadres</a>-->
             </div>
             <div class="form-group">
-              <label for="email">E-mailadres (check http://www.labor.ny.gov/ux/code-form-show-hide-password.html)</label>
+              <label for="email">E-mailadres</label>
               <input type="email" class="form-control" name="email" placeholder="E-mailadres">
-              <p class="help-block"><a href="" class="single-toggle-email-username">De leerling heeft geen e-mailadres</a></p>
+              <!--<p class="help-block"><a href="" class="single-toggle-email-username">De leerling heeft geen e-mailadres</a></p>-->
             </div>
             <div class="form-group">
               <label for="password">Wachtwoord</label>
-              <input type="password" class="form-control" name="password" id="password" placeholder="Wachtwoord" autocomplete="off">
+              <div class="input-group">
+                <input type="password" class="form-control" name="password" id="password" placeholder="Wachtwoord" autocomplete="off" data-psswrd-toggle>
+                <span class="input-group-addon">genereer</span>
+              </div>
             </div>
             <div class="form-group">
               <label for="add-to-group">Toevoegen aan bestaande groep</label>
               <select name="add-to-group" class="form-control">
+                <option value="1234">Om te testen</option>
               </select>
               <a href="" class="help-block create-group" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep aanmaken</a>
             </div>
@@ -509,25 +512,37 @@
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->     
-  <script src="js/vendor/picturefill.min.js"></script>          
+  </div><!-- /.modal -->   
+  
+  <!-- Default JS Stuff -->  
+  <script src="js/vendor/psswrd.min.js"></script>
+  <script src="js/vendor/picturefill.min.js"></script>
+  
+  <!-- jQuery JS stuff -->          
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
   <script src="js/vendor/jquery.smooth-scroll.js"></script>
   <script src="js/vendor/store-and-json2.min.js"></script>
   <script src="js/vendor/hideShowPassword.min.js"></script>
-  <script src="js/vendor/bootstrap-switch.min.js"></script>
   <script src="js/vendor/xls.core.min.js"></script>
   <script src="js/vendor/xlsx.core.min.js"></script>
 
+  <!-- Bootstrap JS stuff -->
   <script src="js/vendor/bootstrap.min.js"></script>
+  <script src="js/vendor/bootstrap-switch.min.js"></script>
+  
+  <!-- DOJO Config -->
   <script>
         //async is a new dojoConfig option. The default value of false will load all the Dojo base modules
         //here we set it to true to take advantage of the asynchronous nature of dojo and the the base modules
         //are not automatically loaded.
         var dojoConfig = { async: true, paths: { js: location.pathname.replace(/\/[^/]+$/, "") + "\/js" } };
   </script>
+  
+  <!-- Esri JS Stuff -->
   <script src="//js.arcgis.com/3.11/"></script>
+  
+  <!-- Own JS Stuff -->
   <script src="js/main.js"></script>
     
   <!-- google web font -->
