@@ -164,16 +164,22 @@ define([
         {
 //invitationList	{"invitations":[{"username":"dennis_develstein","password":"ssdfsdfsd56464","firstname":"Dennis","lastname":"Test","fullname":"Dennis Test","email":"dennis@testmij.nl","role":"account_user"}]}
 //Looks like a user will be added without recieving a mail, when a password is set
+			var contentStr = JSON.stringify({
+				f: "json", 
+				invitationList: {"invitations": [
+				  {"username": data.username, "password": data.password, "firstname": "", "lastname": "", "fullname": data.fullname, "email": data.email, "role":"account_user"}
+				] }
+			});
+			
+			var contentStr = "f=json&invitationList={invitations=[{username=dennis_develstein&password=sssdasadasdadja&firstname=Dennis&lastname}]}";
+			
+			console.log(contentStr);
 			var requestUrl = portalUrl + "/sharing/rest/portal/self/invite";
             var itemRequest = esriRequest({
                     url: requestUrl,
-					conent: {
-						f: "json", 
-						invitationList: {"invitations": [
-						  {"username": data.username, "password": data.password, "firstname": "", "lastname": "", "fullname": data.fullname, "email": data.email, "role":"account_user"}
-						] } 
-					},
-                    handleAs: "json"
+					conent: {f:"json"},
+                    handleAs: "json",
+					usePost: true
             }, {usePost: true});
 
             //Create new AOL user account
