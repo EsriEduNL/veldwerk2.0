@@ -177,7 +177,7 @@ define([
 			var requestUrl = portalUrl + "/sharing/rest/portal/self/invite";
             var itemRequest = esriRequest({
                     url: requestUrl,
-					conent: {f:"json"},
+					content: contentStr,
                     handleAs: "json",
 					usePost: true
             }, {usePost: true});
