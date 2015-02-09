@@ -106,7 +106,9 @@ define([
             }
         },
         
-        getGroupsForMap: function(mapid){
+        getGroupsForMap: function (mapid) {
+            //TODO: impossible to detect
+            //Also, would you want to?
             //return json object with groupid's
         },
         
@@ -115,6 +117,14 @@ define([
         getGroup: function(id)
         {
             //return info about group: group members, group name, group webmapps
+            requestUrl = portalUrl+"/sharing/rest/community/groups/" + id
+            var itemRequest = esriRequest({
+                url: requestUrl,
+                content: { f: "json"},
+                handleAs: "json"
+            });
+            //TODO: do something with the request?
+            return itemRequest;
         },
         
         
@@ -149,13 +159,15 @@ define([
         
         deleteGroup: function(groupid)
         {
+            requestUrl = portalUrl + "/sharing/rest/community/groups/"+groupid+"/delete"
             //Delete AOL group
             return true;//Return true if function has finished succesfully 
         },
         
         
-        getStudentUser: function(userid)
+        getStudentUser: function(username)
         {
+            requestUrl = portalUrl + "/sharing/rest/community/users/" + username;
             //return name, groups, webmapps of leerling
         },
         
@@ -181,7 +193,7 @@ define([
                     handleAs: "json",
 					usePost: true
             }, {usePost: true});
-
+            //TODO: do something with the request
             //Create new AOL user account
             //return newuserid
         },
@@ -196,25 +208,48 @@ define([
         getStudentUsersForGroup: function(groupid)
         {
             //return jsob object with all users with role=student
+            requestUrl = portalUrl + "/sharing/rest/community/groups/" + groupid+ "/users";
+            var itemRequest = esriRequest({
+                url: requestUrl,
+                content: { f: "json" },
+                handleAs: "json"
+            });
+            //TODO: do something with the request?
+            return itemRequest;
         },
         
         
-        addStudentUserToGroup: function(userid, groupid)
+        addStudentUserToGroup: function(username, groupid)
         {
+            requestUrl = portalUrl + "/sharing/rest/community/groups/" + groupid + "/addUsers"
+            contentStr = { users: username };
+            var itemRequest = esriRequest({
+                url: requestUrl,
+                content: contentStr,
+                handleAs: "json",
+                usePost: true
+            }, { usePost: true });
+
+            //TODO: do something with the request
             //Provide user with userid access to group with groupid
             return true;//Return true if function has finished succesfully 
         },
         
         
-        removeStudentUserFromGroup: function(userid, groupid)
+        removeStudentUserFromGroup: function(username, groupid)
         {
-            //Invoke access of user with userid to group with groupid
+            requestUrl = portalUrl + "/sharing/rest/community/groups/" + groupid + "/removeUsers"
+            contentString = { users: username }
+            //TODO: request
+            //revoce access of user with userid to group with groupid
             return true;//Return true if function has finished succesfully 
         },
         
         
         getMapsForGroup: function(groupid)
         {
+            
+            requestUrl = portalUrl + "/sharing/rest/content/groups/" + groupid;
             //Return: list with all maps (id+name+thumb+layers) that the group with groupid has access to
             //return json object
         },
@@ -223,12 +258,34 @@ define([
         createMap: function(mastermapid, groupid)
         {
             //Create a duplicate of mastermapid
+            
+            //download description of the mastermap
+            descriptionUrl = portalUrl + "/sharing/rest/content/items/" + mastermapid
+
+            //download data of the mastermap
+            dataUrl = descriptionUrl + "/data"
+
+            //change descriptions to match group stuff
+
+            
+
+            //change datacontent to match group 
+
+            //check if map already exists for group
+            //if already exists: update
+
+            //else: create
+
+
             //return newmapid;
         },
         
         
         addMapToGroup: function (mapid, groupid)
         {
+            shareurl = portalUrl + "/sharing/rest/content/users/" + username + "/items/" + mapid + "/share";
+
+            content = { groups: groupid };
             //Give group with groupid access to map with mapid
             return true;//Return true if function has finished succesfully 
         },
@@ -236,6 +293,9 @@ define([
         
         removeMapForGroup: function(groupid, mapid)
         {
+            shareurl = portalUrl + "/sharing/rest/content/users/" + username + "/unshareItems";
+
+            content = { items: mapid, groups: groupid };
             //Remove access to map with mapid for group with groupid
             return true;//Return true if function has finished succesfully 
         },
@@ -243,6 +303,8 @@ define([
         
         deleteMap: function(mapid)
         {
+            requestUrl = portalUrl+"/sharing/rest/content/users/" + username + "/items/"+mapid +"/delete"
+
             //Delete map with mapid from AOL
             return true;//Return true if function has finished succesfully 
         }
