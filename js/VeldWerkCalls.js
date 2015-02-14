@@ -1,6 +1,8 @@
 define([
   "dojo/_base/declare",
   "dojo/_base/lang",
+  
+  "dojo/Deferred",
 
   "esri/request",
   "esri/arcgis/Portal",
@@ -8,6 +10,8 @@ define([
 ], function (
   declare,
   lang,
+  
+  Deferred,
 
   esriRequest,
   arcgisPortal,
@@ -130,6 +134,7 @@ define([
         
         createGroup: function(groupName)
         {
+			var deferred = new Deferred();
             //Create a new AOL group
             //return newgroupid
             var requestUrl = portalUrl + "/sharing/rest/community/createGroup";
@@ -139,21 +144,11 @@ define([
                     handleAs: "json"
             }, {usePost: true});
             
-            /**/
-            
-            //itemRequest.then(function(data) {
-            //  console.log("Data: ", data); // print the data to browser's console
-            //  return data;
-            //}
-            //,
-            //function (error) {
-            //  console.log("Error: ", error.message);
-            //  return error;
-            //});
+			return itemRequest;
+			deferred.resolve;
 
-            return itemRequest;
-            
-            
+            //return itemRequest;
+			return deferred.promise;
         },
         
         
@@ -257,29 +252,69 @@ define([
         },
         
         
-        createMap: function(mastermapid, groupid)
+        createMap: function(mastermapid, groupid, groupname)
         {
-            //Create a duplicate of mastermapid
+			var deferred = new Deferred();
             
             //download description of the mastermap
-            descriptionUrl = portalUrl + "/sharing/rest/content/items/" + mastermapid
-
-            //download data of the mastermap
+            descriptionUrl = portalUrl + "/sharing/rest/content/items/" + mastermapid;
+            var itemRequestDesc = esriRequest({
+                url: descriptionUrl,
+                content: { f: "json"},
+                handleAs: "json"
+            });
+       //TODO: do something with the request?
+            //return itemRequestDesc;
+			
+            //download (meta)data of the mastermap
             dataUrl = descriptionUrl + "/data"
+			var itemRequestData = esriRequest({
+                url: dataUrl,
+                content: { f: "json"},
+                handleAs: "json"
+            });
+			
+        //TODO: do something with the request?
+		
+		//check if questions already exists for group
+			//if already exists: do nothing
+			//if not: duplicate
+			
 
-            //change descriptions to match group stuff
-
-            
-
-            //change datacontent to match group 
-
-            //check if map already exists for group
-            //if already exists: update
-
+        //check if map already exists for group
+			
+            //if already exists: figure out the id and update
+			
             //else: create
-
+			for (var opLayer in itemRequestData["operationalLayers"]) {
+				console.log("opLayer:"+opLayer["id"]);
+   				//var obj = itemRequestData["url"];
+				
+			//TODO: IF layer = vragen -> add filter
+			};
+	
+			//copyList = {"name","title","type","description","tags","snippet","thumbnail","documentation","extent","culture"}
+			
+			//newItemObj["typeKeywords"] = 'ArcGIS Online,Collector,Data Editing,Explorer Web Map,Map,Offline,Online Map,Web Map';
+			console.log(itemRequestDesc["description"]);
+			console.log(itemRequestData);
+			
+			var contentObj = {f: "json", title: groupname+"_map", text: JSON.stringify(itemRequestData)};
+			
+			addItemUrl = portalUrl + "/sharing/rest/content/users/dhunink/additem";
+            var itemRequestAddItem = esriRequest({
+                url: addItemUrl,
+                //content: { f: "json", title: "testmij", type: "Web Map", text: itemRequestData, title: "groupname_test" },
+				content: contentObj,
+                usePost: true
+            }, { usePost: true });
+			
+			return itemRequestAddItem;
+		
 
             //return newmapid;
+			return deferred.promise;
+	
         },
         
         

@@ -241,7 +241,7 @@
     </div><!-- end container webmap-selection -->
   </section><!-- end section webmap-selection -->  
   
-  <sction id="section-poc">
+  <sction id="section-poc" class="section-white section-private">
     <div class="container">
       <div class="row">
         <div class="col-xs-12" id="poc-buttons">
@@ -252,7 +252,7 @@
           <button class="btn btn-default btn-xs" >Gebruiker verwijderen van AOL</button>
           <br/>
           <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep aanmaken</button>
-          <button class="btn btn-default btn-xs">Groep verwijderen</button>
+          <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-delete-group">Groep verwijderen</button>
         </div><!-- end #poc-buttons -->
       </div><!-- end row -->
     </div><!-- end container -->
@@ -513,6 +513,9 @@
   </section>  
   
   <!-- MODALS -->
+  <!--
+  START MODAL ADD GROUP
+  -->
   <div class="modal fade" id="modal-add-group" tabindex="-1" role="dialog" aria-labelledby="Groep toevoegen" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -529,6 +532,29 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
           <button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Aanmaken</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->   
+  
+  <!-- 
+  START MODAL DELETE GROUP
+  -->
+  <div class="modal fade" id="modal-delete-group" tabindex="-1" role="dialog" aria-labelledby="Groep verwijderen" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Sluit</span></button>
+          <h4 class="modal-title">Groep verwijderen</h4>
+        </div>
+        <div class="modal-body">
+          
+          <label>Groep om te verwijderen</label>
+          <select name="group-to-delete"></select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+          <button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Verwijderen</button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

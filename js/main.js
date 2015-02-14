@@ -1,6 +1,7 @@
 require([
           
     "dojo/ready",
+	"dojo/Deferred",
     "dojo/dom-class",
     "dojo/dom",
     "dojo/query",
@@ -17,6 +18,7 @@ require([
   ], function (
     
     ready,
+	deferred,
     domClass,
     dom,
     query,
@@ -138,44 +140,93 @@ require([
     //@TODO: move all stuff below regarding vCalls.createGroup to a seperate function in main.js (so it can also be triggered by different actions)
             $(this).button('loading');
             var name = $('#modal-add-group input[name=groupname]').val();
-            if(name){
-              vCalls.createGroup(name).then(function(response){
-                  console.log(response);
-	//@TODO: Grant access to the featureservice of the selected webmap
-	
-	//@TODO: create questions for this group
-	
-    //@TODO: copy the webmap for this new group (vCalls.createMap(mastermapid, groupid))
-	
-	//@TODO: grant access to the new webmap for this group
-	 
-    //@TODO: provide a success message
-                  //Add to the list
-                  $('#groups-list').append('<li><a href="#group-'+response.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+response.group.id+'">'+response.group.title+'</a><ul id="group-'+response.group.id+'" class="collapse" data-groupid="'+response.group.id+'"></ul></li>');
-                  
-                  //Add to the dropdown buttons
-                  $('select[name=add-to-group]').append('<option value="'+response.group.id+'">'+response.group.title+'</option>');
-                  
-                  //Close the modal
-                  $('#modal-add-group').modal('hide');
-                  
-              }, function (error) {
-                  console.log(error);
-                  alert('someone f*cked up');
-              });
-			  
-			  $(this).button('reset');
-			  
-            }else{
-        //@TODO: better UI for the error report
-              alert('U heeft geen naam ingevoerd');
+			
+			if(!name){
+			  alert('U heeft geen naam ingevoerd');
               $(this).button('reset');
-            }
+			}
+			
+			var stored = store.get('veldwerkWorkflowProgress');
+			
+			vCalls.createGroup(name)
+			.then(function(results) { 
+				console.log('createGroup done'); console.log(results); 
+				return vCalls.createMap(stored.webmapid, results.group.id, resuluts.group.title); 
+				
+				$('#groups-list').append('<li><a href="#group-'+results.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+results.group.id+'">'+results.group.title+'</a><ul id="group-'+results.group.id+'" class="collapse" data-groupid="'+results.group.id+'"></ul></li>');
+				
+				//Add to the dropdown buttons
+				$('select[name=add-to-group]').append('<option value="'+results.group.id+'">'+results.group.title+'</option>');
+				$('select[name=group-to-delete]').append('<option value="'+results.group.id+'">'+results.group.title+'</option>');
+			})
+			.then(function(results2) { 
+				console.log('createMap done'); console.log(results2); 
+				
+				//Close the modal
+				$('#modal-add-group').modal('hide');
+			}, 
+			function (error) {
+				console.log(error);
+				if(error.messageCode == 'COM_0044'){
+					alert('Fout: er bestaat al een groep met deze naam. Kies een andere naam.');
+				}else{
+					alert('Er is een fout opgetreden. Details: '+error.details);
+				}
+			});
+			
+	
+			
+			
+			/*vCalls.createGroup(name).then(function(crGroupResp){
+				console.log(crGroupResp.group);
+				
+				//@TODO: copy the webmap for this new group 
+				//(vCalls.createMap(mastermapid, groupid))
+				var stored = store.get('veldwerkWorkflowProgress');
+				vCalls.createMap(stored.webmapid, crGroupResp.group.id).then(function(crMapResp){
+					console.log(crMapResp);
+				});//end createhMap then
+				
+				//@TODO: grant access to the new webmap for this group
+				//addMapToGroup: function (mapid, groupid)
+				
+  //@TODO(??): Grant access to the featureservice of the selected webmap
+  
+  //@TODO(??): create questions for this group
+
+  //@TODO: provide a success message
+				//Add to the list
+				$('#groups-list').append('<li><a href="#group-'+crGroupResp.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+crGroupResp.group.id+'">'+crGroupResp.group.title+'</a><ul id="group-'+crGroupResp.group.id+'" class="collapse" data-groupid="'+crGroupResp.group.id+'"></ul></li>');
+				
+				//Add to the dropdown buttons
+				$('select[name=add-to-group]').append('<option value="'+crGroupResp.group.id+'">'+crGroupResp.group.title+'</option>');
+				$('select[name=group-to-delete]').append('<option value="'+crGroupResp.group.id+'">'+crGroupResp.group.title+'</option>');
+				
+				//Close the modal
+				$('#modal-add-group').modal('hide');
+				
+			}, 
+			function (error) {
+				console.log(error);
+				if(error.messageCode == 'COM_0044'){
+					alert('Fout: er bestaat al een groep met deze naam. Kies een andere naam.');
+				}else{
+					alert('Er is een fout opgetreden. Details: '+error.details);
+				}
+			});
+			*/
+			
+			$(this).button('reset');
+
           });//End modal-add-group .btn-primary .on click
 		  
-		  
+		  //////////////////////
+		  //Modal delete group//
+		  $('#modal-add-group .btn-primary').on('click', function(){
+			  
+		  });//End #modal-add-group on click
 
-      });
+      });//End ready
       
       
       
@@ -277,7 +328,7 @@ require([
                     
     //@TODO: get all groups that hold a copy of this webmapp, add that one to the UI lists, get there members and display those as well
     
-                    LogMessage("just added to the UI: webmap with id: " + e.id + " (" + e.title + ")");  
+                    //LogMessage("just added to the UI: webmap with id: " + e.id + " (" + e.title + ")");  
                   });//End response each
                   //Let's check if any webmapp has been stored in localstorage
                   var stored = store.get('veldwerkWorkflowProgress');
