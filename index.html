@@ -215,42 +215,28 @@
    <section id="section-webmap-selection" class="section-grey section-private"> 
     <div class="container container-webmap-selection">
       <div class="row">
+        
         <div class="col-xs-12">
-          <h3>Webmap selecteren</h3>
+          <h3>Veldwerk Webmap</h3>
         </div><!-- end col-xs-12 -->
+        
         <div class="col-xs-12">
-          <p>Eerder heeft u een ArcGIS Online webmap gemaakt met daarin (o.a.) de vragen voor uw leerlingen. Selecteer die webmap hieronder en ga door naar de volgende stap.</p>
-          <div class="row" id="row-selected-webmapp">
-            <div class="col-sm-6">
-              <div class="webmap-selected-wrap">
-                <H4>Geselecteerde webmap: <button type="button" class="btn btn-default btn-xs btn-select-different-webmap">Kies een andere</button></h4>
-                <div class="clearfix"></div>
-                <div class="selected-webmap-map"></div>
-              </div>
-            </div><!-- end col-sm-6 -->
-            <div class="col-sm-6">
-              <h4>Groepen en gebruikers van deze webmap </h4>
-              <div class="selected-webmap-groups thumbnail">
-                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep</button><button type="button" class="btn btn-default btn-xs btn-goto-add-users" data-toggle="modal" data-target="#modal-add-users">Nieuwe gebruiker</button><hr/>
-                <ul class="" id="groups-list">
-                  <li> 
-                    <a data-groupid="12" data-toggle="collapse" data-parent="#groups-list" href="#group-12">TESTGroep 12</a>
-                    <ul id="group-12" data-groupid="12" class="collapse">
-                        <li data-studentid="16">Leerling pieter</li>
-                        <li data-studentid="98">Sla</li>
-                        <li data-studentid="19">Diebla</li>
-                    </ul>
-                  </li>
-                  </ul>
-                
-              </div>
-            </div><!-- end col-sm-6 -->
-          </div><!-- end row -->
-        </div><!-- end col-xs-12- -->
+          <p>Geselecteerde webmap voor dit veldwerk: <strong><span class="selected-webmap-title"></span></strong>. <button type="button" class="btn btn-default btn-xs btn-toggle-webmap-details">Details</button> <button type="button" class="btn btn-default btn-xs btn-select-different-webmap">Kies een andere</button></p>
+        </div>
         
         <div class="webmap-list-container">
-          <!-- JS will place webmapss here after singin -->
+          <!-- JS will place all webmaps's from the portal here after singin -->
         </div><!-- end webmap-list-container -->
+        
+        <div class="col-sm-12" id="col-selected-webmapp">
+          <div class="webmap-selected-wrap">
+            <div class="selected-webmap-map"><!-- JS will place the details of a user-selected webmap here --></div>
+          </div>
+        </div><!-- end col-sm-6 #selected-webmapp -->
+        
+        
+        
+        
       </div><!-- end row -->
     </div><!-- end container webmap-selection -->
   </section><!-- end section webmap-selection -->  
@@ -298,6 +284,24 @@
             </li>
           </ul>
         </div>
+        
+        <div class="col-xs-12">
+              <h4>Groepen en gebruikers voor dit veldwerk</h4>
+              <div class="selected-webmap-groups thumbnail">
+                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep</button><button type="button" class="btn btn-default btn-xs btn-goto-add-users" data-toggle="modal" data-target="#modal-add-users">Nieuwe gebruiker</button><hr/>
+                <ul class="" id="groups-list">
+                  <li> 
+                    <a data-groupid="12" data-toggle="collapse" data-parent="#groups-list" href="#group-12">TESTGroep 12</a>
+                    <ul id="group-12" data-groupid="12" class="collapse">
+                        <li data-studentid="16">Leerling pieter</li>
+                        <li data-studentid="98">Sla</li>
+                        <li data-studentid="19">Diebla</li>
+                    </ul>
+                  </li>
+                  </ul>
+              </div><!-- end selected-webmap-groups thumbnail -->
+            </div><!-- end col-xs-12 -->
+            
       </div>
       
       <div class="row" id="addUserAccounts-settings">

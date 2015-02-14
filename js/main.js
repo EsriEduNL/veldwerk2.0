@@ -5,6 +5,7 @@ require([
     "dojo/dom",
     "dojo/query",
 	"dojo/dom-form",
+	"dojo/dom-style",
     
     "dojo/on",
     "dojo/_base/window",
@@ -20,6 +21,7 @@ require([
     dom,
     query,
 	domForm,
+	domStyle,
     
     on,
     wind,
@@ -71,14 +73,22 @@ require([
           //Select webmapp, show it and scroll to it
           on(wind.doc, ".btn-select-this-webmap:click", function(e){
               selectWebmap($(this).data('webmapid'));
+			  store.set('veldwerkWorkflowProgress', { webmapid: $(this).data('webmapid')});
           });
           
           //Select different webmapp
-          on(wind.doc, ".btn-select-different-webmap:click", function(e){
-            query('#row-selected-webmapp').style('display', 'none');
+          /*on(wind.doc, ".btn-select-different-webmap:click", function(e){
+			query('#col-selected-webmapp').style('display', 'none');
             query('.webmap-list-container').style('display', 'block');
             store.set('veldwerkWorkflowProgress', { webmapid: ''})
-          });
+          });*/
+		  $('.btn-toggle-webmap-details').click(function(){
+		    $('#col-selected-webmapp').toggle();
+		  });
+		  
+		  $('.btn-select-different-webmap').click(function(){
+			$('.webmap-list-container').toggle();
+		  });
           
           //Scroll to add-users
           $('.btn-goto-add-users').on('click', function(e){
@@ -286,6 +296,7 @@ require([
       function selectWebmap(webmapid)
       {
           $('.webmap-selected-wrap .selected-webmap-map').html($('.col-webmap-'+webmapid).html());
+		  $('.selected-webmap-title').html( $('.col-webmap-'+webmapid+' h3').html() );
         //@TODO: make the function below work
             /*vCalls.getGroupsForMap( $(this).data('webmapid') ).then(function(groups){
                 dojo.forEach(groups, function(groupid, i){
@@ -294,12 +305,11 @@ require([
                   });
                 });
             });*/
-            query("#row-selected-webmapp").style('display', 'block');
             query(".webmap-list-container").style("display", 'none');
             store.set('veldwerkWorkflowProgress', { webmapid: webmapid, userdata: 'CSV/XLSX content' })
             $.smoothScroll({
                 offset: -220,
-                scrollTarget: '#row-selected-webmapp'
+                scrollTarget: '#col-selected-webmapp'
             });
       }
 

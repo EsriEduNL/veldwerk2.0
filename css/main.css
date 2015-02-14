@@ -260,7 +260,7 @@ form label{
 #section-webmap-selection{
 	background:#F2F3F5;
 }
-#row-selected-webmapp{
+#col-selected-webmapp{
 	display:none;
 }
 #section-webmap-selection .thumbnail{
