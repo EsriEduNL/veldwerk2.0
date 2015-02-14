@@ -88,29 +88,13 @@ require([
             });
           });
           
-          //
-          //Section add-users
-          //
-         /* $('.single-toggle-email-username').on('click', function(e){ e.preventDefault();
-            $('.single-toggle-email-username').closest('div.form-group').toggleClass('hidden');
-          });*/
           
-		  dojo.connect(dom.byId("form-add-single-user"), "onsubmit", function(event){
-			  event.preventDefault();
-			  var formObj = domForm.toObject(this);
-			  console.log(formObj);
-	//@TODO: form validation
-	//@TODO: if password empty, generate one AND force amils to teacher and user to be send
-			  vCalls.createStudentUser(formObj);
-			  //vCalls.addStudentUserToGroup(userid, groupid);
-    //@TODO: if 'email me' is selected: email details to teacher
-    //@TODO: if 'email student' is selected: email details to student
-		  });
 
           
           //
           //MODALS
           //
+		  //Modal: add-group
           $('#modal-add-group .btn-primary').on('click', function(){
     //@TODO: move all stuff below regarding vCalls.createGroup to a seperate function in main.js (so it can also be triggered by different actions)
             $(this).button('loading');
@@ -148,7 +132,28 @@ require([
               alert('U heeft geen naam ingevoerd');
               $(this).button('reset');
             }
-          });//End modal-add-group .btn-primary on click
+          });//End modal-add-group .btn-primary .on click
+		  
+		  //
+          //Section add-users
+          //
+          $('.add-users-single-toggle-email').on('click', function(e){ e.preventDefault();
+            $('.add-users-single-toggle-email-text, input[type=email]').toggleClass('hidden');
+			$(this).toggleClass('hidden');
+          });
+          
+	//@TODO: function below doens't respond on submit
+		  dojo.connect(dom.byId("form-add-single-user"), "onsubmit", function(event){
+			  event.preventDefault();
+			  var formObj = domForm.toObject(this);
+			  console.log(formObj);
+	//@TODO: form validation
+	//@TODO: if password empty, generate one AND force amils to teacher and user to be send
+			  vCalls.createStudentUser(formObj);
+			  //vCalls.addStudentUserToGroup(userid, groupid);
+    //@TODO: if 'email me' is selected: email details to teacher
+    //@TODO: if 'email student' is selected: email details to student
+		  });
 
       });
       
@@ -203,6 +208,7 @@ require([
           domClass.toggle("user-menu-dropdown-wrap", "hidden");
           domClass.toggle("login-link-wrap", "hidden");
           query(".section-private").style("display", "none");
+		  query(".section-public-only").style("display", "block");
 		  window.location.reload(true);//Refresh browser to make sure no traces are left in the UI
       }
       
@@ -217,6 +223,7 @@ require([
         domClass.toggle("login-link-wrap", "hidden");
         domClass.toggle("user-menu-dropdown-wrap", "hidden");
         query(".section-private").style("display", "block");
+		query(".section-public-only").style("display", "none");
       }
       
       function GetWebMaps()

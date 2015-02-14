@@ -90,7 +90,7 @@
     
     </div><!-- end navbar -->
   
-  <section id="section-intro-carousel">
+  <section id="section-intro-carousel" class="section-public-only">
     <div id="intro-carousel" class="carousel slide">  
       <div class="carousel-inner">
         <div class="item active">
@@ -151,7 +151,7 @@
     </div><!-- /.carousel -->
   </section><!-- end section-intro-carousel -->
 
-  <section id="section-workflow" class="section-white section-public">	
+  <section id="section-workflow" class="section-white section-public section-public-only">	
     <div class="container">
       <div class="row">
         <div class="col-xs-12">
@@ -231,7 +231,7 @@
             <div class="col-sm-6">
               <h4>Groepen en gebruikers van deze webmap </h4>
               <div class="selected-webmap-groups thumbnail">
-                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep</button><button type="button" class="btn btn-default btn-xs btn-goto-add-users">Nieuwe gebruiker</button><hr/>
+                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep</button><button type="button" class="btn btn-default btn-xs btn-goto-add-users" data-toggle="modal" data-target="#modal-add-users">Nieuwe gebruiker</button><hr/>
                 <ul class="" id="groups-list">
                   <li> 
                     <a data-groupid="12" data-toggle="collapse" data-parent="#groups-list" href="#group-12">TESTGroep 12</a>
@@ -513,6 +513,125 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->   
+  
+  <!-- 
+  START MODAL ADD USERS
+  -->
+  <div class="modal fade" id="modal-add-users" tabindex="-1" role="dialog" aria-labelledby="Gebruiker(s) toevoegen" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Sluit</span></button>
+          <h4 class="modal-title">Nieuwe gebruiker(s) aanmaken</h4>
+        </div>
+        <div class="modal-body">
+ 
+          <div role="tabpanel">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#tab-users-single" aria-controls="home" role="tab" data-toggle="tab">Enkele gebruiker</a></li>
+              <li role="presentation"><a href="#tab-users-multiple" aria-controls="profile" role="tab" data-toggle="tab">Meerdere gebruikers</a></li>
+            </ul>
+          
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="tab-users-single">
+                <form role="form" class="with-bg-grey" id="form-add-single-user" data-init-psswrd>
+
+                  <div class="form-group">
+                    <label for="fullname">Volledige naam</label>
+                    <input class="form-control" type="text" name="fullname" placeholder="Naam leerling"/>
+                  </div>
+                  <div class="form-group">
+                    <label for="username">Gebruikersnaam</label>
+                    <input type="text" class="form-control" name="username" placeholder="Gebruikersnaam"/>
+                    <!--<a href="" class="help-block single-toggle-email-username">De leerling heeft een e-mailadres</a>-->
+                  </div>
+                  <div class="form-group">
+                    <label for="email">E-mailadres</label>
+                    <input type="email" class="form-control" name="email" placeholder="E-mailadres"/>
+                    <p class="help-block"><a href="" class="add-users-single-toggle-email">De leerling heeft geen e-mailadres</a></p>
+                    <p class="help-block add-users-single-toggle-email-text hidden">Uw e-mailadres wordt gebruikt voor de registratie. Wanneer de leerling zijn/haar wachtwoord is vergeten en zijn gebruikersnaam invult ontvangt u daarover bericht.</p><p><a href="" class="add-users-single-toggle-email">De leerling heeft wel een e-mailadres</a></p>
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Wachtwoord</label>
+                    <div class="input-group">
+                      <input type="password" class="form-control" name="password" id="password" placeholder="Wachtwoord" autocomplete="off" data-psswrd-toggle/>
+                      <span class="input-group-addon">genereer</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="add-to-group">Toevoegen aan bestaande groep</label>
+                    <select name="add-to-group" class="form-control">
+                      <option value="1234">Om te testen</option>
+                    </select>
+                    <a href="" class="help-block create-group" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep aanmaken</a>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="inform-student"/> Verstuur logingegevens naar leerling
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="inform-teacher"/> Verstuur logingegevens naar mijzelf
+                    </label>
+                  </div>
+                    <button type="submit" class="btn btn-primary">Account aanmaken</button>
+                </form>
+              </div><!-- end #tab-users-single -->
+              
+              <div role="tabpanel" class="tab-pane" id="tab-users-multiple">
+                  <div class="row row-action-buttons">
+                	<div class="col-xs-4"><button type="button" class="btn btn-default pull-left btn-add-row" role="button" data-target="#addUserAccounts-multiple-manual table">Rij toevoegen</button></div>
+                	<div class="col-xs-4"><input class="btn btn-primary center-block" type="submit" value="Accounts aanmaken"></div>
+                	<div class="col-xs-4"><button type="button" class="btn btn-default pull-right btn-remove-row" data-target="#addUserAccounts-multiple-manual table">Rij verwijderen</button></div>
+              	</div> <!-- end div.row-action-buttons -->
+              
+                <table class="table table-bordered table-hover">
+                  <thead>
+                      <tr class="table-head">
+                          <th class="text-center">#</th>
+                          <th class="text-center">Volledige naam</th>
+                          <th class="text-center email_th">E-mailadres</th>
+                          <th class="text-center username_th" style="display:none;">Gebruikersnaam</th>
+                          <th class="text-center password_th">Wachtwoord</th>
+                          <th class="text-center addtogroup_th">Voeg toe aan groep</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr id='addUserRow1'>
+                          <td>1</td>
+                          <td><input type="text" name='fullname'  placeholder='Volledige naam' class="form-control" spellcheck="false" required="required" aria-required="true" /></td>
+                          <td class="email_td"><input type="text" name='email' placeholder='E-mailadres' class="form-control" spellcheck="false" required="required" aria-required="true" pattern="^(([-\w\d]+)(\.[-\w\d]+)*@([-\w\d]+)(\.[-\w\d]+)*(\.([a-zA-Z]{2,5}|[\d]{1,3})){1,2})$"/></td>
+                          <td class="username_td" style="display:none;"><input type="text" name='username' placeholder='Gebruikersnaam' class="form-control" spellcheck="false"/></td>
+                          <td class="password_td"><input type="text" name='password' placeholder='Wachtwoord' class="form-control" spellcheck="false"/></td>
+                          <td class="add-to-group_td"><select name="add-to-group" class="form-control"></select></td>
+                      </tr>
+                  </tbody>
+                  </table>
+                
+                  <div class="row row-action-buttons">
+                  <div class="col-xs-4"><button type="button" class="btn btn-default pull-left btn-add-row" role="button" data-target="#addUserAccounts-multiple-manual table">Rij toevoegen</button></div>
+                  <div class="col-xs-4"><input class="btn btn-primary center-block" type="submit" value="Accounts aanmaken"></div>
+                  <div class="col-xs-4"><button type="button" class="btn btn-default pull-right btn-remove-row" data-target="#addUserAccounts-multiple-manual table">Rij verwijderen</button></div>
+                </div><!-- end div.row-action-buttons -->
+                
+              </div><!-- end #tab-users-multiple -->
+              
+            </div><!-- end div .tab-content -->
+
+		  </div><!-- end tabpanel -->
+        </div><!-- end #modal-body -->
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+          <button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Aanmaken</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal --> 
+  
   
   <!-- Default JS Stuff -->  
   <script src="js/vendor/psswrd.min.js"></script>

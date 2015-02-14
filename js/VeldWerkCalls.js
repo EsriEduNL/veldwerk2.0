@@ -178,12 +178,12 @@ define([
 //Looks like a user will be added without recieving a mail, when a password is set
 			var contentStr = {
 				f: "json", 
-				invitationList: {"invitations": [
+				invitationList: JSON.stringify({"invitations": [
 				  {"username": data.username, "password": data.password, "firstname": "", "lastname": "", "fullname": data.fullname, "email": data.email, "role":"account_user"}
-				] }
+				] })
 			};
 			
-			//var contentStr = "f=json&invitationList={invitations=[{username=dennis_develstein&password=sssdasadasdadja&firstname=Dennis&lastname}]}";
+			//var contentStr = "f=json&invitationList={invitations=[{username=dennis_develstein&password=sssdasadasdadja&firstname=Dennis&lastname}]}";//For testing
 			
 			//console.log(contentStr);
 			var requestUrl = portalUrl + "/sharing/rest/portal/self/invite";
