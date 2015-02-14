@@ -174,18 +174,20 @@ define([
         
         createStudentUser: function(data)
         {
-//invitationList	{"invitations":[{"username":"dennis_develstein","password":"ssdfsdfsd56464","firstname":"Dennis","lastname":"Test","fullname":"Dennis Test","email":"dennis@testmij.nl","role":"account_user"}]}
 //Looks like a user will be added without recieving a mail, when a password is set
+			
+			var dataObj = { };
+			$.each($(data), function() {
+				dataObj[this.name] = this.value;
+			});
+		
 			var contentStr = {
 				f: "json", 
 				invitationList: JSON.stringify({"invitations": [
-				  {"username": data.username, "password": data.password, "firstname": "", "lastname": "", "fullname": data.fullname, "email": data.email, "role":"account_user"}
+				  {"username": data.username, "password": data.password, "firstname": dataObj.firstname, "lastname": dataObj.lastname, "fullname": dataObj.firstname+' '+dataObj.lastname, "email": dataObj.email, "role":"account_user"}
 				] })
 			};
 			
-			//var contentStr = "f=json&invitationList={invitations=[{username=dennis_develstein&password=sssdasadasdadja&firstname=Dennis&lastname}]}";//For testing
-			
-			//console.log(contentStr);
 			var requestUrl = portalUrl + "/sharing/rest/portal/self/invite";
             var itemRequest = esriRequest({
                     url: requestUrl,
