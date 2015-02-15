@@ -152,7 +152,12 @@ require([
 			.then(function(results) { 
 				console.log('createGroup done, proceeding to createMap');
 				
+		//TODO: check if a map exists for this group	
+		  //if not, create one:	
 				return vCalls.createMap(stored.webmapid, results.group.id, results.group.title); 
+		
+		//TODO: check if questions exsist for this group
+		  //if not, duplicate for this group
 				
 				$('#groups-list').append('<li><a href="#group-'+results.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+results.group.id+'">'+results.group.title+'</a><ul id="group-'+results.group.id+'" class="collapse" data-groupid="'+results.group.id+'"></ul></li>');
 				

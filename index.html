@@ -568,6 +568,22 @@
           
           <label>Groep om te verwijderen</label>
           <select name="group-to-delete"></select>
+          <p><strong>LET OP!</strong> Ook eventuele beantwoorden vragen van deze groep worden verwijderd!</p>
+          
+          <label>Gebruikers verwijderen</label>
+          <div class="radio">
+            <label>
+              <input type="radio" name="delete-users" id="donot-delete-users" value="no" checked>
+              Nee
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="delete-users" id="do-delete-users" value="yes">
+              Ja, verwijder de gebruikers van deze groep
+            </label>
+          </div>
+          
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>

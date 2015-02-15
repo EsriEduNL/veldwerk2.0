@@ -258,18 +258,7 @@ define([
         createMap: function(mastermapid, groupid, groupname)
         {
 			var deferred = new Deferred();
-			
-			//check if questions already exists for group
-			//if already exists: do nothing
-			//if not: duplicate
-			
 
-        	//check if map already exists for group
-			
-            //if already exists: figure out the id and update
-			
-            //else: create
-			
             itemUrl = portalUrl + "/sharing/rest/content/items/" + mastermapid;
             var itemRequestItem = esriRequest({
                 url: itemUrl,
@@ -292,33 +281,31 @@ define([
 				var itemRequestItemResp = results[0],
 				itemRequestDataResp = results[1]
 			
-				console.log("itemRequestItemResp:", itemRequestItemResp);
-				console.log("itemRequestDataResp:", itemRequestDataResp);
+				//console.log("itemRequestItemResp:", itemRequestItemResp);
+				//console.log("itemRequestDataResp:", itemRequestDataResp);
 	 
 				if(!results[0] || !results[1]){
 					console.log('error');
 					return;
 				}
-
+//TODO: IF layer = vragen -> add filter
 				for (var opLayer in itemRequestDataResp["operationalLayers"]) {
 					//console.log("opLayer:"+opLayer["id"]);
-   					//var obj = itemRequestData["url"];
 				
-					//TODO: IF layer = vragen -> add filter
+					//if opLayer["url"]== settings.FeatureServiceLayerUrl:
+            		/*var newWhere = "GROUPID = '"+groupname+"'";
+            		var layerDef = opLayer["layerDefinition"];
+            		layerDef["definitionExpression"] = newWhere;
+					console.log(opLayer);*/
 				};
-		//@TODO: do we really want text: JSON.stringify(itemRequestDataResp) ?
-				/*var contentObj = {
-					 
-					title: groupname+"_map", name: itemRequestItemResp.name, text: JSON.stringify(itemRequestDataResp), tags: itemRequestItemResp.tags.push("veldwerk-childmap", "veldwerk-mastermap-for-this-map-ID-"+mastermapid), 
-					type: itemRequestItemResp.type, description: itemRequestItemResp.description, snippet: itemRequestItemResp.snippet, thumbnail: itemRequestItemResp.thumbnail, documentation: itemRequestItemResp.documentation, extent: itemRequestItemResp.extent, culture: itemRequestItemResp.culture
-				};*/
 				
 				var contentObj = itemRequestItemResp;//Copy the values
 				//Now, let's edit/add several:
 				contentObj.f = "json";
 				contentObj.title = groupname+"_map";
 				contentObj.tags.push("veldwerk-childmap", "veldwerk-mastermap-for-this-map-ID-"+mastermapid); 
-				console.log(contentObj.tags);
+				contentObj.tags = (contentObj.tags).join(",");
+				contentObj.text = JSON.stringify(itemRequestDataResp);
 				
 				username = portal.user.username;
 				addItemUrl = portalUrl + "/sharing/rest/content/users/" + username + "/additem";
@@ -328,23 +315,57 @@ define([
 					usePost: true
 				}, { usePost: true });
 				
-				itemRequestAddItem.then(function(res){console.log(res);});
+				//itemRequestAddItem.then(function(res){console.log(res);});
+				return itemRequestAddItem;
 				
 			  },
 			  function error(err){
 			    console.log('error', err);
+				deferred.resolve(error);
 			  }
 			  
-			).then(function(resp){
-				console.log('resp:', resp);
+			).then(
+			  function(itemRequestAddItemResp){
+				//console.log('itemRequestAddItemResp:', itemRequestAddItemResp);
+	//TODO: share the featureservice with the group
+	//TODO: share the tracking layer with the group
+				//let's share the newly created map with the group
+				username = portal.user.username;
+				shareItemUrl = portalUrl + "/sharing/rest/content/users/" + username + "/items/" + itemRequestAddItemResp.id + "/share";
+				var itemRequestShareItem = esriRequest({
+					url: shareItemUrl,
+					content: { f:"json", everyone: false, org: false, groups: groupid},
+					usePost: true
+				}, { usePost: true });
+				
+				return itemRequestShareItem;
+				
+			  },
+			  function error(err){
+			    console.log('error', err);
+				deferred.resolve(error);
+			  }
+			).then(
+			  function(itemRequestShareItemResp){
+				//console.log("itemRequestShareItem:", itemRequestShareItemResp);
 				deferred.resolve('Klaar.');
-			});
+			  },
+			  function error(err){
+			    console.log('error', err);
+				deferred.resolve(error);
+			  }
+			);
 			
 			return deferred.promise;
 	
         },
         
         
+		duplicateQuestions: function(groupname)
+		{
+			//duplicate questions
+		},
+		
         addMapToGroup: function (mapid, groupid)
         {
 			username = portal.user.username;
