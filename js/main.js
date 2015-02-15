@@ -151,7 +151,7 @@ require([
 			vCalls.createGroup(name)
 			.then(function(results) { 
 				console.log('createGroup done'); console.log(results); 
-				return vCalls.createMap(stored.webmapid, results.group.id, resuluts.group.title); 
+				return vCalls.createMap(stored.webmapid, results.group.id, results.group.title); 
 				
 				$('#groups-list').append('<li><a href="#group-'+results.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+results.group.id+'">'+results.group.title+'</a><ul id="group-'+results.group.id+'" class="collapse" data-groupid="'+results.group.id+'"></ul></li>');
 				
@@ -223,6 +223,37 @@ require([
 		  //////////////////////
 		  //Modal delete group//
 		  $('#modal-add-group .btn-primary').on('click', function(){
+			  
+		  });//End #modal-add-group on click
+		  
+		  //////////////////////
+		  //Modal export layer//
+		  $('#modal-export-item .btn-primary').on('click', function(){
+			  $(this).button('loading');
+			  
+			  $("#modal-export-item p.msg-job-success, #modal-export-item p.msg-job-failed").addClass('hidden');
+			  $("#modal-export-item p.msg-job-working").removeClass('hidden');
+			  
+			  var stored = store.get('veldwerkWorkflowProgress');
+              if(stored.webmapid)
+              {
+				  
+              	vCalls.exportItem(stored.webmapid)
+				.then(function(response){
+				  	console.log(response);
+				  	$("#modal-export-item p.msg-job-working").addClass('hidden');
+				  	$("#modal-export-item p.msg-job-success").removeClass('hidden');
+				},
+				function(err){
+					$("#modal-export-item p.msg-job-working").addClass('hidden');
+					$("#modal-export-item p.msg-job-failed").removeClass('hidden');
+				});
+				
+              }else{
+			  	alert("Er is geen webmap geselecteerd");
+			  }
+			  
+			  $(this).button('reset');
 			  
 		  });//End #modal-add-group on click
 

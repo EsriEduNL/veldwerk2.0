@@ -344,7 +344,53 @@ define([
 
             //Delete map with mapid from AOL
             return true;//Return true if function has finished succesfully 
-        }
+        },
+		
+		
+		exportItem: function(webmapid)
+		{
+			var deferred = new Deferred();
+			
+		//@TODO: get username of logged in user
+			identMang = store.get("veldwerk_identmanager");
+			//console.log(identMang.credentials);
+			//Fails: console.log(identMang.credentials.userId);
+			
+			username = 'dhunink';
+			
+            //download (meta)data of the mastermap so we can discover the right itemid
+            dataUrl = portalUrl + "/sharing/rest/content/items/" + webmapid + "/data"
+			var itemRequestData = esriRequest({
+                url: dataUrl,
+                content: { f: "json"},
+                handleAs: "json"
+            });
+			
+			itemRequestData
+			.then(
+				function (data) {
+					itemid = data["operationalLayers"][0]["itemId"];
+					requestUrl = portalUrl+"/sharing/rest/content/users/" + username + "/export";
+		
+				//@TODO: set the exportParameters to only include the layer 'vragen': exportParameters: {"layers" : [ { "id" : 0 } ] }
+					var itemRequestExportItem = esriRequest({
+						url: requestUrl,
+						content: { f: "json", itemId: itemid, exportFormat: "CSV" },
+						usePost: true
+					}, { usePost: true });
+					return itemRequestExportItem;
+				},
+				function (error) {
+					console.log("Error: ", error.message);
+					deferred.resolve(error);
+				}
+			).then(function(exportResult){
+				deferred.resolve(exportResult);
+			});
+			
+			return deferred.promise;
+			
+		}
         
         
 

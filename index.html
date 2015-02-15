@@ -42,7 +42,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
             <li><a href="#section-webmap-selection">Configureren</a></li>
-            <li><a href="#section-result-review">Evalueren</a></li>
+            <li><a href="#section-tools">Tools</a></li>
             <li><a href="#col-section-about">Over ons</a></li>
             <li><a href="#col-section-contact">Contact</a></li>
             <!--<li class="dropdown section-private">
@@ -253,6 +253,8 @@
           <br/>
           <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep aanmaken</button>
           <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-delete-group">Groep verwijderen</button>
+          <br/>
+          <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-export-item">Featureservice naar CSV</button>
         </div><!-- end #poc-buttons -->
       </div><!-- end row -->
     </div><!-- end container -->
@@ -452,21 +454,35 @@
     </div><!-- end container -->
   </section>
   
-  <section id="section-result-review" class="section-blue section-private">
+<!-- start section-tools -->  
+  <section id="section-tools" class="section-blue section-private">
     <div class="container">
+      
       <div class="row">
         <div class="col-xs-12">
-          <h3>Evalueren</h3>
+          <h3>Tools</h3>
         </div><!-- end col-xs-12 -->
       </div><!-- end row -->
+      
       <div class="row">
-        <div class="col-xs-12">
-          <p>Bekijk en beoordeel resultaten van een uitgevoerd veldwerk. Wel eerst een webmap selecteren.</p>
-        </div>
-      </div>
-    </div>
+        
+        <div class="col-sm-6 col-md-4">
+          <div class="thumbnail">
+            <div class="caption">
+              <h3><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Exporteer CSV</h3>
+              <p>Hebben uw leerlingen vragen beantwoord? Gebruik deze tool om alle kaartlagen van de webmap te exporteren naar een CSV bestand en de antwoorden te bekijken.</p>
+              <p><button class="btn btn-primary" data-toggle="modal" data-target="#modal-export-item">Tool openen</button></p>
+            </div><!-- end caption -->
+          </div><!-- end thumbnail -->
+        </div><!-- end col-sm-6 col-md-4 -->
+      
+      </div><!-- end row -->
+
+    </div><!-- end container -->
   </section>
-  
+<!-- end section-tools -->
+
+<!-- start section-contact-and-about -->
   <section id="section-contact-and-about" class="section-white">
    	<div class="container">
       <div class="row">
@@ -511,6 +527,7 @@
       </footer>
     </div> <!-- /container --> 
   </section>  
+<!-- end section-contact-and-about -->
   
   <!-- MODALS -->
   <!--
@@ -684,6 +701,32 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal --> 
+  
+  <!-- 
+  //START #modal-export-item//
+  -->
+  <div class="modal fade" id="modal-export-item" tabindex="-1" role="dialog" aria-labelledby="Exporteren" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Sluit</span></button>
+          <h4 class="modal-title">Exporteren</h4>
+        </div>
+        <div class="modal-body">
+          
+          <p><button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Start exporteren</button></p>
+          <p class="msg-job-working hidden"><span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig...</p>
+          <p class="msg-job-success hidden">Exporteren is geslaagd! Het CSV bestand is beschikbaar in uw ArcGIS Online Account op de pagina <strong>Mijn Content</strong>.<br/><br/>
+          <strong>TIP!</strong> Lees <a href="https://support.office.com/en-za/article/Import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba" target="_blank">hier</a> hoe u een CSV bestand kunt converteren naar een Microsoft Excel bestand.</p>
+          <p class="msg-job-failed hidden"><strong>Mislukt</strong> Er is iets misgegaan bij het exporteren. Probeer opnieuw.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Sluit venster</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal --> 
+  
   
   
   <!-- Default JS Stuff -->  
