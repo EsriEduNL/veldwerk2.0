@@ -113,10 +113,11 @@ define([
         },
         
         getGroupsForMap: function (mapid) {
-            //TODO: impossible to detect
-            //Also, would you want to?
-            //return json object with groupid's
-			//maybe a fix? https://developers.arcgis.com/javascript/jsapi/portal-amd.html#querygroups
+            //Search all groups that have a tag in which the mapid is included
+			var params = {
+			  q: 'tags:"veldwerk-mastermap-'+mapid+'"'
+			};
+			return portal.queryGroups(params)
         },
         
         
@@ -138,12 +139,12 @@ define([
         createGroup: function(groupName)
         {
 			var deferred = new Deferred();
-            //Create a new AOL group
-            //return newgroupid
+            
+			//Create a new AOL group
             var requestUrl = portalUrl + "/sharing/rest/community/createGroup";
             var itemRequest = esriRequest({
                     url: requestUrl,
-                    content: { f: "json", access: 'private', tags: 'Veldwerk', title: groupName, description: 'Groep aangemaakt tbv Veldwerk'},
+                    content: { f: "json", access: 'private', tags: 'veldwerk', title: groupName, description: 'Groep aangemaakt tbv Veldwerk'},
                     handleAs: "json"
             }, {usePost: true});
             
@@ -197,6 +198,19 @@ define([
             //Create new AOL user account
             //return newuserid
         },
+		
+		
+		getUserByUsername: function(username)
+		{
+			var requestUrl = portalUrl + "/sharing/rest/community/users/"+username;
+            var itemRequest = esriRequest({
+                    url: requestUrl,
+					content: {f:"json"},
+                    handleAs: "json",
+					usePost: true
+            }, {usePost: true});
+			return itemRequest;
+		},
         
         
         deleteStudentUser: function(userid)
@@ -329,7 +343,16 @@ define([
 				//console.log('itemRequestAddItemResp:', itemRequestAddItemResp);
 	//TODO: share the featureservice with the group
 	//TODO: share the tracking layer with the group
-				//let's share the newly created map with the group
+	
+				//Add label refering to the masterwebmap to the group (can run asynch so not deferred)
+				var updateGroupRequestUrl = portalUrl + "/sharing/rest/community/groups/" + groupid + "/update";
+				var updateGroupRequest = esriRequest({
+						url: updateGroupRequestUrl,
+						content: { f: "json", tags: 'veldwerk, veldwerk-mastermap-'+mastermapid},
+						handleAs: "json"
+				}, {usePost: true});
+				
+				//Share the newly created map with the group
 				username = portal.user.username;
 				shareItemUrl = portalUrl + "/sharing/rest/content/users/" + username + "/items/" + itemRequestAddItemResp.id + "/share";
 				var itemRequestShareItem = esriRequest({

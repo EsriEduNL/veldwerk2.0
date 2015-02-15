@@ -78,12 +78,6 @@ require([
 			  store.set('veldwerkWorkflowProgress', { webmapid: $(this).data('webmapid')});
           });
           
-          //Select different webmapp
-          /*on(wind.doc, ".btn-select-different-webmap:click", function(e){
-			query('#col-selected-webmapp').style('display', 'none');
-            query('.webmap-list-container').style('display', 'block');
-            store.set('veldwerkWorkflowProgress', { webmapid: ''})
-          });*/
 		  $('.btn-toggle-webmap-details').click(function(){
 		    $('#col-selected-webmapp').toggle();
 		  });
@@ -99,8 +93,44 @@ require([
                 scrollTarget: '#section-define-users'
             });
           });
-          
-          
+		  
+		  //Handle getting group details
+		  $('#groups-list').on('show.bs.collapse', function (el) 
+		  {
+			var groupid = (el.target.id).replace(/group-/, '');
+			vCalls.getStudentUsersForGroup(groupid)
+			.then(
+			  function(response)
+			  { 
+	
+				var nUsers = (response.users).length;
+				if(nUsers > 0)
+				{
+					for (var i = 0; i < nUsers; i++) 
+					{
+						vCalls.getUserByUsername(response.users[i])
+						.then(
+						  function(userDetails)
+						  { 
+						    console.log(userDetails); 
+							var userString = '<li data-username="'+userDetails.username+'">'+userDetails.fullName+' ('+userDetails.username+')</li>';
+							if(i == 1)
+							  $('ul#group-'+groupid).html(userString);
+							else
+							  $('ul#group-'+groupid).append(userString);
+							
+						  }
+						);
+					}
+				}else
+				{
+					$('ul#group-'+groupid).html('<li><strong>Geen</strong> gebruikers gevonden voor deze groep</li>');
+				}
+
+			  }
+			);
+
+		  })
 
           
           //
@@ -119,19 +149,6 @@ require([
 			console.log( $(this).serializeArray() );
 			vCalls.createStudentUser( $( this ).serializeArray() );
 		  });
-		  
-	//@TODO: function below doens't respond on submit
-		  /*dojo.connect(dom.byId("form-add-single-user"), "onsubmit", function(event){
-			  event.preventDefault();
-			  var formObj = domForm.toObject(this);
-			  console.log(formObj);
-	//@TODO: form validation
-	//@TODO: if password empty, generate one AND force amils to teacher and user to be send
-			  vCalls.createStudentUser(formObj);
-			  //vCalls.addStudentUserToGroup(userid, groupid);
-    //@TODO: if 'email me' is selected: email details to teacher
-    //@TODO: if 'email student' is selected: email details to student
-		  });*/
 		  
 		  
 		  ////////////////////
@@ -179,48 +196,6 @@ require([
 					alert('Er is een fout opgetreden. Details: '+error.details);
 				}
 			});
-			
-	
-			
-			
-			/*vCalls.createGroup(name).then(function(crGroupResp){
-				console.log(crGroupResp.group);
-				
-				//@TODO: copy the webmap for this new group 
-				//(vCalls.createMap(mastermapid, groupid))
-				var stored = store.get('veldwerkWorkflowProgress');
-				vCalls.createMap(stored.webmapid, crGroupResp.group.id).then(function(crMapResp){
-					console.log(crMapResp);
-				});//end createhMap then
-				
-				//@TODO: grant access to the new webmap for this group
-				//addMapToGroup: function (mapid, groupid)
-				
-  //@TODO(??): Grant access to the featureservice of the selected webmap
-  
-  //@TODO(??): create questions for this group
-
-  //@TODO: provide a success message
-				//Add to the list
-				$('#groups-list').append('<li><a href="#group-'+crGroupResp.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+crGroupResp.group.id+'">'+crGroupResp.group.title+'</a><ul id="group-'+crGroupResp.group.id+'" class="collapse" data-groupid="'+crGroupResp.group.id+'"></ul></li>');
-				
-				//Add to the dropdown buttons
-				$('select[name=add-to-group]').append('<option value="'+crGroupResp.group.id+'">'+crGroupResp.group.title+'</option>');
-				$('select[name=group-to-delete]').append('<option value="'+crGroupResp.group.id+'">'+crGroupResp.group.title+'</option>');
-				
-				//Close the modal
-				$('#modal-add-group').modal('hide');
-				
-			}, 
-			function (error) {
-				console.log(error);
-				if(error.messageCode == 'COM_0044'){
-					alert('Fout: er bestaat al een groep met deze naam. Kies een andere naam.');
-				}else{
-					alert('Er is een fout opgetreden. Details: '+error.details);
-				}
-			});
-			*/
 			
 			$(this).button('reset');
 
@@ -396,13 +371,22 @@ require([
           $('.webmap-selected-wrap .selected-webmap-map').html($('.col-webmap-'+webmapid).html());
 		  $('.selected-webmap-title').html( $('.col-webmap-'+webmapid+' h3').html() );
         //@TODO: make the function below work
-            /*vCalls.getGroupsForMap( $(this).data('webmapid') ).then(function(groups){
-                dojo.forEach(groups, function(groupid, i){
-                  vCalls.getGroup(groupid).then(function(groepobj){
-                      //write to ul: name of the groups and the li's with users of the group
-                  });
-                });
-            });*/
+		
+		  vCalls.getGroupsForMap(webmapid)
+		  .then(
+		    function(response){ 
+			  if(response.total == 0){
+				  $('ul#groups-list').html("<li><strong>Geen</strong> groepen gevonden voor deze webmap</li>");
+			  }else{
+				  var list = '';
+				  $(response.results).each(function(i, e) {
+					  list += '<li><a href="#group-'+e.id+'" data-parent="groups-list" data-toggle="collapse" data-groupid="'+e.id+'">'+e.title+'</a><ul id="group-'+e.id+'" class="collapse" data-groupid="'+e.id+'"><li><span class="glyphicon glyphicon-repeat spin-icon"></span> Bezig...</li></ul></li>';
+				  });
+				  $('ul#groups-list').html(list);
+			  }
+			}
+		  );
+
             query(".webmap-list-container").style("display", 'none');
             store.set('veldwerkWorkflowProgress', { webmapid: webmapid, userdata: 'CSV/XLSX content' })
             $.smoothScroll({
