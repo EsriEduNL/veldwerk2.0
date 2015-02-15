@@ -317,6 +317,34 @@ ul.webmap-meta li{
 	font-size:14px;
 }
 
+div.selected-webmap-groups{
+  	padding:10px;
+}
+#groups-list,
+#groups-list ul{
+	list-style:none;
+	padding:0;
+}
+#groups-list .glyphicon{
+	cursor:pointer;
+}
+#groups-list .glyphicon:hover{
+	color:#e16b17;
+}
+
+#groups-list{
+	
+}
+#groups-list li{
+	padding:10px 0;
+	border-bottom:1px solid #eee;
+}
+#groups-list li ul{
+	padding-left:10px;
+}
+#groups-list li ul li{
+}
+
 /*
 //Section contact//
 */

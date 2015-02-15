@@ -113,7 +113,7 @@ require([
 						  function(userDetails)
 						  { 
 						    console.log(userDetails); 
-							var userString = '<li data-username="'+userDetails.username+'">'+userDetails.fullName+' ('+userDetails.username+')</li>';
+							var userString = '<li data-username="'+userDetails.username+'">'+userDetails.fullName+' ('+userDetails.username+') <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></li>';
 							if(i == 1)
 							  $('ul#group-'+groupid).html(userString);
 							else
@@ -131,6 +131,12 @@ require([
 			);
 
 		  })
+		  
+		  //On opening edit group modal: copy group name
+		  $('#modal-edit-group').on('show.bs.modal', function(e){
+			  var groupname = $(e.relatedTarget).attr('data-groupname');
+			  $('#modal-edit-group input[name=groupname]').val(groupname);
+		  });
 
           
           //
@@ -176,7 +182,7 @@ require([
 		//TODO: check if questions exsist for this group
 		  //if not, duplicate for this group
 				
-				$('#groups-list').append('<li><a href="#group-'+results.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+results.group.id+'">'+results.group.title+'</a><ul id="group-'+results.group.id+'" class="collapse" data-groupid="'+results.group.id+'"></ul></li>');
+				$('#groups-list').append('<li><a href="#group-'+results.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+results.group.id+'">'+results.group.title+' <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group" data-groupname="'+results.group.id+'></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span></a><ul id="group-'+results.group.id+'" class="collapse" data-groupid="'+results.group.id+'"></ul></li>');
 				
 				//Add to the dropdown buttons
 				$('select[name=add-to-group]').append('<option value="'+results.group.id+'">'+results.group.title+'</option>');
@@ -380,7 +386,7 @@ require([
 			  }else{
 				  var list = '';
 				  $(response.results).each(function(i, e) {
-					  list += '<li><a href="#group-'+e.id+'" data-parent="groups-list" data-toggle="collapse" data-groupid="'+e.id+'">'+e.title+'</a><ul id="group-'+e.id+'" class="collapse" data-groupid="'+e.id+'"><li><span class="glyphicon glyphicon-repeat spin-icon"></span> Bezig...</li></ul></li>';
+					  list += '<li><a href="#group-'+e.id+'" data-parent="groups-list" data-toggle="collapse" data-groupid="'+e.id+'">'+e.title+'</a> <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group" data-groupname="'+e.title+'"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span><ul id="group-'+e.id+'" class="collapse" data-groupid="'+e.id+'"><li><span class="glyphicon glyphicon-repeat spin-icon"></span> Bezig...</li></ul></li>';
 				  });
 				  $('ul#groups-list').html(list);
 			  }
