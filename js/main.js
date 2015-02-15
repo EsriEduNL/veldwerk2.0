@@ -150,7 +150,8 @@ require([
 			
 			vCalls.createGroup(name)
 			.then(function(results) { 
-				console.log('createGroup done'); console.log(results); 
+				console.log('createGroup done, proceeding to createMap');
+				
 				return vCalls.createMap(stored.webmapid, results.group.id, results.group.title); 
 				
 				$('#groups-list').append('<li><a href="#group-'+results.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+results.group.id+'">'+results.group.title+'</a><ul id="group-'+results.group.id+'" class="collapse" data-groupid="'+results.group.id+'"></ul></li>');

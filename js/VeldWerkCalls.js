@@ -2,6 +2,7 @@ define([
   "dojo/_base/declare",
   "dojo/_base/lang",
   
+  "dojo/promise/all",
   "dojo/Deferred",
 
   "esri/request",
@@ -11,6 +12,7 @@ define([
   declare,
   lang,
   
+  All,
   Deferred,
 
   esriRequest,
@@ -114,6 +116,7 @@ define([
             //TODO: impossible to detect
             //Also, would you want to?
             //return json object with groupid's
+			//maybe a fix? https://developers.arcgis.com/javascript/jsapi/portal-amd.html#querygroups
         },
         
         
@@ -255,64 +258,88 @@ define([
         createMap: function(mastermapid, groupid, groupname)
         {
 			var deferred = new Deferred();
-            
-            //download description of the mastermap
-            descriptionUrl = portalUrl + "/sharing/rest/content/items/" + mastermapid;
-            var itemRequestDesc = esriRequest({
-                url: descriptionUrl,
-                content: { f: "json"},
-                handleAs: "json"
-            });
-       //TODO: do something with the request?
-            //return itemRequestDesc;
 			
-            //download (meta)data of the mastermap
-            dataUrl = descriptionUrl + "/data"
-			var itemRequestData = esriRequest({
-                url: dataUrl,
-                content: { f: "json"},
-                handleAs: "json"
-            });
-			
-        //TODO: do something with the request?
-		
-		//check if questions already exists for group
+			//check if questions already exists for group
 			//if already exists: do nothing
 			//if not: duplicate
 			
 
-        //check if map already exists for group
+        	//check if map already exists for group
 			
             //if already exists: figure out the id and update
 			
             //else: create
-			for (var opLayer in itemRequestData["operationalLayers"]) {
-				console.log("opLayer:"+opLayer["id"]);
-   				//var obj = itemRequestData["url"];
+			
+            itemUrl = portalUrl + "/sharing/rest/content/items/" + mastermapid;
+            var itemRequestItem = esriRequest({
+                url: itemUrl,
+                content: { f: "json"},
+                handleAs: "json"
+            });
+			
+			dataUrl = itemUrl + "/data"
+			var itemRequestData = esriRequest({
+				url: dataUrl,
+				content: { f: "json"},
+				handleAs: "json"
+			});
+			
+			All([itemRequestItem, itemRequestData])
+			.then(
+			  function(results){
+				console.log(results);
 				
-			//TODO: IF layer = vragen -> add filter
-			};
-	
-			//copyList = {"name","title","type","description","tags","snippet","thumbnail","documentation","extent","culture"}
+				var itemRequestItemResp = results[0],
+				itemRequestDataResp = results[1]
 			
-			//newItemObj["typeKeywords"] = 'ArcGIS Online,Collector,Data Editing,Explorer Web Map,Map,Offline,Online Map,Web Map';
-			console.log(itemRequestDesc["description"]);
-			console.log(itemRequestData);
-			
-			var contentObj = {f: "json", title: groupname+"_map", text: JSON.stringify(itemRequestData)};
-			
-			addItemUrl = portalUrl + "/sharing/rest/content/users/dhunink/additem";
-            var itemRequestAddItem = esriRequest({
-                url: addItemUrl,
-                //content: { f: "json", title: "testmij", type: "Web Map", text: itemRequestData, title: "groupname_test" },
-				content: contentObj,
-                usePost: true
-            }, { usePost: true });
-			
-			return itemRequestAddItem;
-		
+				console.log("itemRequestItemResp:", itemRequestItemResp);
+				console.log("itemRequestDataResp:", itemRequestDataResp);
+	 
+				if(!results[0] || !results[1]){
+					console.log('error');
+					return;
+				}
 
-            //return newmapid;
+				for (var opLayer in itemRequestDataResp["operationalLayers"]) {
+					//console.log("opLayer:"+opLayer["id"]);
+   					//var obj = itemRequestData["url"];
+				
+					//TODO: IF layer = vragen -> add filter
+				};
+		//@TODO: do we really want text: JSON.stringify(itemRequestDataResp) ?
+				/*var contentObj = {
+					 
+					title: groupname+"_map", name: itemRequestItemResp.name, text: JSON.stringify(itemRequestDataResp), tags: itemRequestItemResp.tags.push("veldwerk-childmap", "veldwerk-mastermap-for-this-map-ID-"+mastermapid), 
+					type: itemRequestItemResp.type, description: itemRequestItemResp.description, snippet: itemRequestItemResp.snippet, thumbnail: itemRequestItemResp.thumbnail, documentation: itemRequestItemResp.documentation, extent: itemRequestItemResp.extent, culture: itemRequestItemResp.culture
+				};*/
+				
+				var contentObj = itemRequestItemResp;//Copy the values
+				//Now, let's edit/add several:
+				contentObj.f = "json";
+				contentObj.title = groupname+"_map";
+				contentObj.tags.push("veldwerk-childmap", "veldwerk-mastermap-for-this-map-ID-"+mastermapid); 
+				console.log(contentObj.tags);
+				
+				username = portal.user.username;
+				addItemUrl = portalUrl + "/sharing/rest/content/users/" + username + "/additem";
+				var itemRequestAddItem = esriRequest({
+					url: addItemUrl,
+					content: contentObj,
+					usePost: true
+				}, { usePost: true });
+				
+				itemRequestAddItem.then(function(res){console.log(res);});
+				
+			  },
+			  function error(err){
+			    console.log('error', err);
+			  }
+			  
+			).then(function(resp){
+				console.log('resp:', resp);
+				deferred.resolve('Klaar.');
+			});
+			
 			return deferred.promise;
 	
         },
@@ -320,6 +347,7 @@ define([
         
         addMapToGroup: function (mapid, groupid)
         {
+			username = portal.user.username;
             shareurl = portalUrl + "/sharing/rest/content/users/" + username + "/items/" + mapid + "/share";
 
             content = { groups: groupid };
@@ -330,6 +358,7 @@ define([
         
         removeMapForGroup: function(groupid, mapid)
         {
+			username = portal.user.username;
             shareurl = portalUrl + "/sharing/rest/content/users/" + username + "/unshareItems";
 
             content = { items: mapid, groups: groupid };
@@ -340,6 +369,7 @@ define([
         
         deleteMap: function(mapid)
         {
+			username = portal.user.username;
             requestUrl = portalUrl+"/sharing/rest/content/users/" + username + "/items/"+mapid +"/delete"
 
             //Delete map with mapid from AOL
@@ -350,16 +380,9 @@ define([
 		exportItem: function(webmapid)
 		{
 			var deferred = new Deferred();
-			
-		//@TODO: get username of logged in user
-			identMang = store.get("veldwerk_identmanager");
-			//console.log(identMang.credentials);
-			//Fails: console.log(identMang.credentials.userId);
-			
-			username = 'dhunink';
-			
-            //download (meta)data of the mastermap so we can discover the right itemid
-            dataUrl = portalUrl + "/sharing/rest/content/items/" + webmapid + "/data"
+            
+			//download (meta)data of the mastermap so we can discover the right itemid
+            dataUrl = portalUrl + "/sharing/rest/content/items/" + webmapid + "/data";
 			var itemRequestData = esriRequest({
                 url: dataUrl,
                 content: { f: "json"},
@@ -369,10 +392,10 @@ define([
 			itemRequestData
 			.then(
 				function (data) {
-					itemid = data["operationalLayers"][0]["itemId"];
-					requestUrl = portalUrl+"/sharing/rest/content/users/" + username + "/export";
-		
 				//@TODO: set the exportParameters to only include the layer 'vragen': exportParameters: {"layers" : [ { "id" : 0 } ] }
+					username = portal.user.username;
+					requestUrl = portalUrl+"/sharing/rest/content/users/" + username + "/export";
+					itemid = data["operationalLayers"][0]["itemId"];
 					var itemRequestExportItem = esriRequest({
 						url: requestUrl,
 						content: { f: "json", itemId: itemid, exportFormat: "CSV" },
