@@ -155,7 +155,26 @@ define([
 			return deferred.promise;
         },
         
-        
+        updateGroup: function(groupid, groupname){
+			
+			var deferred = new Deferred();
+            
+			//Update existing group
+            var requestUrl = portalUrl + "/sharing/rest/community/groups/"+groupid+"/update";
+            var itemRequest = esriRequest({
+                    url: requestUrl,
+                    content: { f: "json", title: groupname},
+                    handleAs: "json"
+            }, {usePost: true});
+            
+			return itemRequest;
+			deferred.resolve;
+
+            //return itemRequest;
+			return deferred.promise;
+			
+		},
+		
         deleteGroup: function(groupid)
         {
             requestUrl = portalUrl + "/sharing/rest/community/groups/"+groupid+"/delete"

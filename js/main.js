@@ -134,8 +134,11 @@ require([
 		  
 		  //On opening edit group modal: copy group name
 		  $('#modal-edit-group').on('show.bs.modal', function(e){
-			  var groupname = $(e.relatedTarget).attr('data-groupname');
+			  var groupname = $(e.relatedTarget).parent('li').data('groupname');
+			  var groupid = $(e.relatedTarget).parent('li').data('groupid');
+	
 			  $('#modal-edit-group input[name=groupname]').val(groupname);
+			  $('#modal-edit-group input[name=groupid]').val(groupid);
 		  });
 
           
@@ -182,7 +185,7 @@ require([
 		//TODO: check if questions exsist for this group
 		  //if not, duplicate for this group
 				
-				$('#groups-list').append('<li><a href="#group-'+results.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+results.group.id+'">'+results.group.title+' <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group" data-groupname="'+results.group.id+'></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span></a><ul id="group-'+results.group.id+'" class="collapse" data-groupid="'+results.group.id+'"></ul></li>');
+				$('#groups-list').append('<li data-groupid="'+results.group.id+'" data-groupname="'+results.group.title+'><a href="#group-'+results.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+results.group.id+'">'+results.group.title+' <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span></a><ul id="group-'+results.group.id+'" class="collapse" data-groupid="'+results.group.id+'"></ul></li>');
 				
 				//Add to the dropdown buttons
 				$('select[name=add-to-group]').append('<option value="'+results.group.id+'">'+results.group.title+'</option>');
@@ -206,6 +209,21 @@ require([
 			$(this).button('reset');
 
           });//End modal-add-group .btn-primary .on click
+		  
+		  ////////////////////
+		  //Modal edit group//
+		  $('#modal-edit-group .btn-primary').on('click', function(){
+			var newGroupName = $('#modal-edit-group input[name=groupname]').val();
+			var groupid = $('#modal-edit-group input[name=groupid]').val();
+			
+			vCalls.updateGroup(groupid, newGroupName)
+			.then(
+			  function(result){ 
+			    $('li[data-groupid='+groupid+'] a').text(newGroupName);
+				$('#modal-edit-group').modal('hide');
+			  }
+			);  
+		  });//End #modal-edit-group on click
 		  
 		  //////////////////////
 		  //Modal delete group//
@@ -386,7 +404,7 @@ require([
 			  }else{
 				  var list = '';
 				  $(response.results).each(function(i, e) {
-					  list += '<li><a href="#group-'+e.id+'" data-parent="groups-list" data-toggle="collapse" data-groupid="'+e.id+'">'+e.title+'</a> <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group" data-groupname="'+e.title+'"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span><ul id="group-'+e.id+'" class="collapse" data-groupid="'+e.id+'"><li><span class="glyphicon glyphicon-repeat spin-icon"></span> Bezig...</li></ul></li>';
+					  list += '<li data-groupid="'+e.id+'" data-groupname="'+e.title+'"><a href="#group-'+e.id+'" data-parent="groups-list" data-toggle="collapse" >'+e.title+'</a> <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span><ul id="group-'+e.id+'" class="collapse" data-groupid="'+e.id+'"><li><span class="glyphicon glyphicon-repeat spin-icon"></span> Bezig...</li></ul></li>';
 				  });
 				  $('ul#groups-list').html(list);
 			  }
