@@ -183,6 +183,23 @@ define([
         },
         
         
+		getPortalUsers: function()
+		{
+			var deferred = new Deferred();
+			
+			var requestUrl = portalUrl + "/sharing/rest/portals/"+portal.id+"/users";
+            var itemRequest = esriRequest({
+                    url: requestUrl,
+                    content: { f: "json"},
+                    handleAs: "json"
+            }, {usePost: true});
+
+			return itemRequest;
+			
+			deferred.resolve;
+			return deferred.promise;
+		},
+		
         getStudentUser: function(username)
         {
             requestUrl = portalUrl + "/sharing/rest/community/users/" + username;
@@ -254,18 +271,20 @@ define([
         
         addStudentUserToGroup: function(username, groupid)
         {
+			var deferred = new Deferred();
+			
             requestUrl = portalUrl + "/sharing/rest/community/groups/" + groupid + "/addUsers"
-            contentStr = { users: username };
+            contentStr = { f:"json", users: username };
             var itemRequest = esriRequest({
                 url: requestUrl,
                 content: contentStr,
-                handleAs: "json",
                 usePost: true
             }, { usePost: true });
 
-            //TODO: do something with the request
-            //Provide user with userid access to group with groupid
-            return true;//Return true if function has finished succesfully 
+            return itemRequest;
+			
+			deferred.resolve;
+			return deferred.promise;
         },
         
         

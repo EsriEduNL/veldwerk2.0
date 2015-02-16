@@ -64,7 +64,7 @@ require([
           vCalls = new VeldWerkCalls();
 
           if(vCalls.signInCheck()) {
-              logIn();
+              logIn();/*Handels login, get webmaps, get users*/
           };
           
           
@@ -140,6 +140,9 @@ require([
 			  $('#modal-edit-group input[name=groupname]').val(groupname);
 			  $('#modal-edit-group input[name=groupid]').val(groupid);
 		  });
+		  
+		  
+		  
 
           
           //
@@ -159,6 +162,54 @@ require([
 			vCalls.createStudentUser( $( this ).serializeArray() );
 		  });
 		  
+		  //AOL users search
+		  $('#users-aol-search input').on('keyup', null, function() {
+			var rex = new RegExp($(this).val(), 'i');
+			$('#users-aol-all li').hide();
+			$('#users-aol-all li').filter(function() {
+				return rex.test($(this).text());
+			}).show();
+		  });
+		  
+		  //AOL users add to selection
+		  $("#users-aol-all").on('click', 'li a', function(event){
+			event.preventDefault();
+		    var parent = $(this).parent('li');
+			$(this).children('small').text('annuleer');
+			$('#users-aol-selected').append(parent);
+		  });
+		  
+		  //AOL users remove from selection
+		  $("#users-aol-selected").on('click', 'li a', function(event){
+			event.preventDefault();
+		    var parent = $(this).parent('li');
+			$(this).children('small').text('toevoegen');
+			$('#users-aol-all').append(parent);
+		  });
+		  
+		  //AOL users form submit
+		  $('#modal-add-users #tab-users-aol .btn-primary').on('click', function(){
+			  var groupid = $('#tab-users-aol select[name=add-to-group]').val();
+			  var listItems = $("#users-aol-selected li");
+			  var usernamesToAdd = [];
+	
+			  listItems.each(function(index,li) {
+				  var username = $(li).children('a').attr('data-username');
+				  var fullname = $(li).children('a').attr('data-fullname');
+				  usernamesToAdd.push({username: username, fullname: fullname});
+			  });
+			  var i = 0;
+			  usernamesToAdd.forEach(function(user, index, usernamesToAdd){
+				  vCalls.addStudentUserToGroup(user.username, groupid)
+				  .then(function(){ 
+				  	$('ul#group-'+groupid).append('<li data-username="'+user.username+'">'+user.fullname+' ('+user.username+') <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></li>');
+					 if (index === usernamesToAdd.length - 1) {
+						 $('#users-aol-selected').html('');
+						 $('#modal-add-users').modal('hide');
+					 }
+				})
+			});
+		  });
 		  
 		  ////////////////////
 		  //Modal: add-group//
@@ -306,6 +357,7 @@ require([
         vCalls.signIn().then(function(loggedInUser){
             loggedInUI(loggedInUser);
             GetWebMaps();
+			getPortalUsers();
         });
       }
       
@@ -378,7 +430,25 @@ require([
 
           });
       }
-
+	  
+	  function getPortalUsers()
+	  {  
+		  vCalls.getPortalUsers()
+		  .then(
+		    function(response)
+			{
+				//construct the user-list in the modal-add-users -> tab users-aol
+				var userList = '';
+				$(response.users).each(function(i, e) {
+					userList += '<li class="list-group-item">' + e.fullName + ' <a href="#" class="pull-right" data-username="' + e.username + '" data-user-fullname="' + e.fullName + '"><small>toevoegen</small></a></li>';
+				});
+				if(!userList)
+				  userList = 'Geen AOL gebruikers gevonden';
+				  
+				$('#users-aol-all').html(userList);
+			}
+		  );
+	  }
 
       function GetLayer()
       {
@@ -402,22 +472,39 @@ require([
 			  if(response.total == 0){
 				  $('ul#groups-list').html("<li><strong>Geen</strong> groepen gevonden voor deze webmap</li>");
 			  }else{
-				  var list = '';
+				  var objForUI = {};
 				  $(response.results).each(function(i, e) {
-					  list += '<li data-groupid="'+e.id+'" data-groupname="'+e.title+'"><a href="#group-'+e.id+'" data-parent="groups-list" data-toggle="collapse" >'+e.title+'</a> <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span><ul id="group-'+e.id+'" class="collapse" data-groupid="'+e.id+'"><li><span class="glyphicon glyphicon-repeat spin-icon"></span> Bezig...</li></ul></li>';
+					  objForUI[i] = {groupid: e.id, groupname: e.title};
 				  });
-				  $('ul#groups-list').html(list);
+				  addGroupsToUI(objForUI);
 			  }
 			}
 		  );
 
-            query(".webmap-list-container").style("display", 'none');
-            store.set('veldwerkWorkflowProgress', { webmapid: webmapid, userdata: 'CSV/XLSX content' })
-            $.smoothScroll({
-                offset: -220,
-                scrollTarget: '#col-selected-webmapp'
-            });
+          query(".webmap-list-container").style("display", 'none');
+          store.set('veldwerkWorkflowProgress', { webmapid: webmapid, userdata: 'CSV/XLSX content' })
+          $.smoothScroll({
+              offset: -220,
+              scrollTarget: '#col-selected-webmapp'
+          });
       }
+	  
+	  function addGroupsToUI(obj)
+	  {
+		  //Each sub-object need at least has variables: groupid and groupname
+		  var listForCollapseView = ''; var listForAddAOLusers = '';
+		  for (var key in obj) 
+		  {
+			if (obj.hasOwnProperty(key)) 
+			{
+			  listForCollapseView += '<li data-groupid="'+obj[key].groupid+'" data-groupname="'+obj[key].groupname+'"><a href="#group-'+obj[key].groupid+'" data-parent="groups-list" data-toggle="collapse" > '+obj[key].groupname+'</a> <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span><ul id="group-'+obj[key].groupid+'" class="collapse" data-groupid="'+obj[key].groupid+'"><li><span class="glyphicon glyphicon-repeat spin-icon"></span> Bezig...</li></ul></li>';
+			  listForAddAOLusers += '<option value="' + obj[key].groupid + '">' + obj[key].groupname + '</option>';
+			}
+		  }
+		  
+		  $('ul#groups-list').html(listForCollapseView);
+		  $('select[name=add-to-group]').html(listForAddAOLusers);
+	  }
 
       function LogMessage(msg)
       {

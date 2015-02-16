@@ -325,6 +325,8 @@ div.selected-webmap-groups{
 	list-style:none;
 	padding:0;
 }
+
+
 #groups-list .glyphicon{
 	cursor:pointer;
 }
@@ -378,9 +380,22 @@ div.selected-webmap-groups{
 /*////////
 //MODALS//
 ////////*/
+
+/*//////////////////
+//Modal add-group*/
 #modal-add-group input{
 	display:block;
 }
 #modal-add-group p.help-block{
 	font-size:14px;
+}
+
+/*/////////////////
+//Modal add-users*/
+#modal-add-users .tab-pane{
+	padding-top:10px;
+}
+/*AOL*/
+#modal-add-users #users-aol-search{
+	margin-bottom:10px;
 }

@@ -264,64 +264,28 @@
     <div class="container">
       <div class="row">
         <div class="col-xs-12">
-          <h3>Leerlingen indelen</h3>
+          <h3>Groepen en gebruikers beheren</h3>
         </div><!-- end col-xs-12 -->
       </div><!-- end row -->
       <div class="row">
         <div class="col-xs-12">
-          <p>In deze stap gaan we bepalen welke leerlingen toegang krijgen tot de webmap van het veldwerk én delen we de leerlingen in groepjes in (tenzij u uiteraard kiest voor een individueel veldwerk).</p>
-          <p>@TODO: duidelijke instructies</p>
+          <p>Voor aangemaakte groepen worden automatisch nieuwe webmaps met de juiste filters aangemaakt.</p>
         </div>
       </div><!-- end row -->
       
       <div class="row">
-        <div class="col-xs-12 hidden">
-          <p>Zie onderstaande workflow. NB: als wachtwoord veld leegelaten wordt (in tabel of xlsx) dan automatisch genereren in het script en een overzicht van gegenereerde wachtwoorden terug geven + mailen naar docent.</p>
-          <ul>
-            <li>
-              <strong>Keuzes voorleggen aan docent:</strong>
-            </li>
-            <li>
-              1. Hoeveel accounts wilt u aanmaken?
-              <ul>
-                <li>1 -> toon formulier voor enkel account</li>
-                <li>Meerdere -> toon volgende vraag</li>
-              </ul>
-            </li>
-            
-            <li>
-              2. Hebben leerlingen een e-mailadres?
-              <ul><li>Ja -> toon email veld en verberg username veld in (nog verborgen) tabel</li><li>Nee -> verberg email veld en toon username veld in (nog verborgen) tabel</li></ul>
-            </li>
-            <li>
-              3. Hoe wilt u de accounts aanmaken?
-              <ul>
-                <li>Handmatig -> toon tabel</li>
-                <li>Bestand uploaden -> toon upload veld én excel bestand template</li>
-              </ul>
-            </li>
-          </ul>
-        </div>
         
         <div class="col-xs-12">
           <h4>Groepen en gebruikers voor dit veldwerk</h4>
           <div class="selected-webmap-groups thumbnail">
-            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep</button><button type="button" class="btn btn-default btn-goto-add-users" data-toggle="modal" data-target="#modal-add-users">Nieuwe gebruiker</button><hr/>
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-add-group">Groep toevoegen</button><button type="button" class="btn btn-default btn-goto-add-users" data-toggle="modal" data-target="#modal-add-users">Gebruiker(s) toevoegen</button><hr/>
             <ul class="" id="groups-list">
-              <li> 
-                <a data-groupid="12" data-toggle="collapse" data-parent="#groups-list" href="#group-12">TESTGroep 12</a>
-                <ul id="group-12" data-groupid="12" class="collapse">
-                    <li data-studentid="16">Leerling pieter</li>
-                    <li data-studentid="98">Sla</li>
-                    <li data-studentid="19">Diebla</li>
-                </ul>
-              </li>
-              </ul>
+            </ul>
           </div><!-- end selected-webmap-groups thumbnail -->
         </div><!-- end col-xs-12 -->
             
       </div>
-      
+     <!-- MOVED TO MODAL __> 
       <div class="row" id="addUserAccounts-settings">
         <div class="col-xs-12">
           <form role="form" class="with-bg-grey">
@@ -354,7 +318,9 @@
           </form>
         </div>
       </div>
+      -->
       
+      <!-- MOVED TO MODAL
       <div class="row" id="addUserAccount-single">
         <div class="col-lg-4 col-md-6 col-xs-12">
           <form role="form" class="with-bg-grey" id="form-add-single-user" data-init-psswrd>
@@ -368,12 +334,10 @@
             <div class="form-group">
               <label for="username">Gebruikersnaam</label>
               <input type="text" class="form-control" name="username" placeholder="Gebruikersnaam">
-              <!--<a href="" class="help-block single-toggle-email-username">De leerling heeft een e-mailadres</a>-->
             </div>
             <div class="form-group">
               <label for="email">E-mailadres</label>
               <input type="email" class="form-control" name="email" placeholder="E-mailadres">
-              <!--<p class="help-block"><a href="" class="single-toggle-email-username">De leerling heeft geen e-mailadres</a></p>-->
             </div>
             <div class="form-group">
               <label for="password">Wachtwoord</label>
@@ -403,7 +367,9 @@
           </form>
         </div>
       </div><!-- end row -->
+      <!-- -->
       
+      <!-- MOVED TO MODAL
       <div class="row" id="addUserAccounts-multiple-manual">
         <div class="col-xs-12">
           
@@ -449,7 +415,8 @@
           </div> 
           
         </div><!-- end col-xs-12 -->
-      </div><!-- end row #addUserAccounts-multiple-manual -->
+      <!--</div><!-- end row #addUserAccounts-multiple-manual 
+      -->
       
     </div><!-- end container -->
   </section>
@@ -628,15 +595,16 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Sluit</span></button>
-          <h4 class="modal-title">Nieuwe gebruiker(s) aanmaken</h4>
+          <h4 class="modal-title">Nieuwe gebruiker(s) toevoegen</h4>
         </div>
         <div class="modal-body">
  
           <div role="tabpanel">
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
-              <li role="presentation" class="active"><a href="#tab-users-single" aria-controls="home" role="tab" data-toggle="tab">Enkele gebruiker</a></li>
-              <li role="presentation"><a href="#tab-users-multiple" aria-controls="profile" role="tab" data-toggle="tab">Meerdere gebruikers</a></li>
+              <li role="presentation" class="active"><a href="#tab-users-single" aria-controls="home" role="tab" data-toggle="tab">Eén nieuwe gebruiker</a></li>
+              <li role="presentation"><a href="#tab-users-multiple" aria-controls="profile" role="tab" data-toggle="tab">Meerdere nieuwe gebruikers</a></li>
+              <li role="presentation"><a href="#tab-users-aol" aria-controls="profile" role="tab" data-toggle="tab">Bestaande AOL gebruiker</a></li>
             </ul>
           
             <!-- Tab panes -->
@@ -690,7 +658,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
           			<button type="submit" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Aanmaken</button>
                 </form>
-              </div><!-- end #tab-users-single -->
+              </div><!-- end tabpanel #tab-users-single -->
               
               <div role="tabpanel" class="tab-pane" id="tab-users-multiple">
                   <div class="row row-action-buttons">
@@ -733,9 +701,56 @@
           
               </div><!-- end #tab-users-multiple -->
               
+              <div role="tabpanel" class="tab-pane" id="tab-users-aol">
+                <p>In onderstaand overzicht worden alle bestaande ArcGIS Online gebruikers weergegeven.</p>
+                <div class="row">
+                <div class="col-xs-6">
+                <form role="form" class="with-bg-grey" id="form-add-aol-user">
+				  <div class="form-group">
+                    <label>Gebruiker(s)</label>
+                    <p>Nog geen gebruikers geselecteerd</p>
+                    <ul class="list-group" id="users-aol-selected">
+                    </ul>
+                  </div>
+                  <div class="form-group">
+                    <label for="firstname">Toevoegen aan groep</label>
+                    <select name="add-to-group" class="form-control">
+                    </select>
+                  </div>
+                  
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+          		  <button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Geselecteerde gebruikers toevoegen</button>
+                    
+                </form>
+                </div><!-- end col-xs-6 -->
+                <div class="col-xs-6 with-bg-grey">
+                  <label>Alle gebruikers</label>
+                  <div class="input-group custom-search-form" id="users-aol-search">
+                    <input type="text" class="form-control">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">
+                        <span class="glyphicon glyphicon-search"></span>
+                      </button>
+                    </span>
+                  </div><!-- /input-group -->
+                   
+                  <ul class="list-group" id="users-aol-all">
+                    <li class="list-group-item">Cras justo odio <a href="#" class="pull-right" data-user-id="" data-user-fullname=""><small>toevoegen</small></a></li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                    <li class="list-group-item">Morbi leo risus</li>
+                    <li class="list-group-item">Porta ac consectetur ac</li>
+                    <li class="list-group-item">Vestibulum at eros</li>
+                  </ul>
+        
+                </div><!-- end col-xs-6 -->
+                </div><!-- end row -->
+
+              </div><!-- end tabpane #tab-users-aol -->
+              
             </div><!-- end div .tab-content -->
 
-		  </div><!-- end tabpanel -->
+		  </div><!-- end tabpanel warp-->
+          
         </div><!-- end #modal-body -->
         
         <div class="modal-footer">
