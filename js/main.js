@@ -38,7 +38,7 @@ require([
       var vCalls;
     
       ready(function () { 
-	  	  
+	
 		  $("#intro-carousel, #intro-carousel .item").css('height', (0.6 * window.innerHeight));
 		  resizeCarouselImages();
 		  
@@ -200,6 +200,7 @@ require([
     //@TODO: move all stuff below regarding vCalls.createGroup to a seperate function in main.js (so it can also be triggered by different actions)
             $(this).button('loading');
             var name = $('#modal-add-group input[name=groupname]').val();
+			var groupid = '';
 			
 			if(!name){
 			  alert('U heeft geen naam ingevoerd');
@@ -209,36 +210,47 @@ require([
 			var stored = store.get('veldwerkWorkflowProgress');
 			
 			vCalls.createGroup(name)
-			.then(function(results) { 
+			.then(
+			  function(createGroupResults) 
+			  { 
+			    groupid = createGroupResults.group.id
 				console.log('createGroup done, proceeding to createMap');
 				
-		//TODO: check if a map exists for this group	
-		  //if not, create one:	
-				return vCalls.createMap(stored.webmapid, results.group.id, results.group.title); 
-		
-		//TODO: check if questions exsist for this group
-		  //if not, duplicate for this group
+		//TODO: check if a map exists that has a title which refers to this groups tile
 				
-				$('#groups-list').append('<li data-groupid="'+results.group.id+'" data-groupname="'+results.group.title+'><a href="#group-'+results.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+results.group.id+'">'+results.group.title+' <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span></a><ul id="group-'+results.group.id+'" class="collapse" data-groupid="'+results.group.id+'"></ul></li>');
+				
+					
+		  //if not, create one:	
+				return vCalls.createMap(stored.webmapid, createGroupResults.group.id, createGroupResults.group.title); 
+				
+				$('#groups-list').append('<li data-groupid="'+createGroupResults.group.id+'" data-groupname="'+createGroupResults.group.title+'><a href="#group-'+createGroupResults.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+createGroupResults.group.id+'">'+createGroupResults.group.title+' <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span></a><ul id="group-'+createGroupResults.group.id+'" class="collapse" data-groupid="'+createGroupResults.group.id+'"></ul></li>');
 				
 				//Add to the dropdown buttons
-				$('select[name=add-to-group]').append('<option value="'+results.group.id+'">'+results.group.title+'</option>');
-				$('select[name=group-to-delete]').append('<option value="'+results.group.id+'">'+results.group.title+'</option>');
-			})
-			.then(function(results2) { 
-				console.log('createMap done'); console.log(results2); 
+				$('select[name=add-to-group]').append('<option value="'+createGroupResults.group.id+'">'+createGroupResults.group.title+'</option>');
+				$('select[name=group-to-delete]').append('<option value="'+createGroupResults.group.id+'">'+createGroupResults.group.title+'</option>');
+			  }
+			).then(
+			  function(createMapResult) 
+			  {  
+				return vCalls.duplicateQuestions(groupid, stored.webmapid);//groupname, mastermapid
 				
-				//Close the modal
-				$('#modal-add-group').modal('hide');
-			}, 
-			function (error) {
-				console.log(error);
+			  }, 
+			  function (error) 
+			  {
 				if(error.messageCode == 'COM_0044'){
 					alert('Fout: er bestaat al een groep met deze naam. Kies een andere naam.');
 				}else{
 					alert('Er is een fout opgetreden. Details: '+error.details);
 				}
-			});
+			  }
+			).then(
+			  function(duplicateQuestionsResult)
+			  {
+				  console.log('duplicateQuestionsResult:', duplicateQuestionsResult);
+				  //Close the modal
+				$('#modal-add-group').modal('hide');
+			  }
+			);
 			
 			$(this).button('reset');
 

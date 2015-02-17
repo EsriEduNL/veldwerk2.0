@@ -422,9 +422,77 @@ define([
         },
         
         
-		duplicateQuestions: function(groupname)
+		duplicateQuestions: function(groupid, mastermapid)
 		{
+			var deferred = new Deferred();
+			
+			var vragenLayerURL = '';
+			
+			//determine the questions layer
+			itemUrl = portalUrl + "/sharing/rest/content/items/" + mastermapid+"/data";
+            var itemRequestItem = esriRequest({
+                url: itemUrl,
+                content: { f: "json"},
+                handleAs: "json"
+            });
+			
+			itemRequestItem
+			.then(
+			  function(itemRequestItemResult)
+			  {
+				  opLayers = itemRequestItemResult.operationalLayers;
+				  
+				  var vragenLayer = itemRequestItemResult.operationalLayers.filter(function ( obj ) {
+					return (obj.title.match(/vragen/i) || obj.title.match(/opgaven/i) || obj.title.match(/opdrachten/i) )
+				  })[0];
+				  vragenLayerURL = vragenLayer.url;
+				  
+				  fsQueryUrl = vragenLayer.url+"/query";
+				  var fsRequestQuery = esriRequest({
+					url: fsQueryUrl,
+					content: { f: "json", outFields : "*", where : "GROUPID IS NULL"},
+					handleAs: "json"
+				 });
+				 return fsRequestQuery;
+			  },
+			  function(err)
+			  {
+				  deferred.resolve(err);
+			  }
+			).then(
+			  function(fsRequestQueryResult)
+			  {
+				  console.log(fsRequestQueryResult);
+				  var features = fsRequestQueryResult.features;
+				  features.forEach( function (feature)
+				  {
+					delete feature.attributes.OBJECTID;
+					delete feature.attributes.GlobalID;
+					feature.attributes.GROUPID = groupid;
+				  });
+				  
+				  fsAddUrl = vragenLayerURL+"/addFeatures";
+				  console.log(features);
+				  var fsRequestAddFeatures = esriRequest({
+					url: fsAddUrl,
+					content: { f: "json", features: JSON.stringify(features)},
+					handleAs: "json"
+				  }, { usePost: true });
+				  return fsRequestAddFeatures;
+				  
+			  }
+			).then(
+			  function(fsRequestAddFeaturesResponse)
+			  {
+				  console.log(fsRequestAddFeaturesResponse);
+				  deferred.resolve('vragen zijn gekopieerd');
+			  }
+			);
+			
 			//duplicate questions
+			
+			
+			return deferred.promise;
 		},
 		
         addMapToGroup: function (mapid, groupid)
