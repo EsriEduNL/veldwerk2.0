@@ -389,12 +389,19 @@ require([
       {
           LogMessage("function GetWebMaps: Start getting info");
           //getting all webmaps for this user and add them to the list
-          vCalls.getMapsForTeacher().then(function (response) {
+          vCalls.getMapsForTeacher()
+		  .then(function (response) 
+		  {
             LogMessage("Aantal webmaps found: " + response.total);
             if (response.total > 0)
             {
                 $(response.results).each(function(i, e) {
-                    if(!e.thumbnailUrl)
+
+					if($.inArray('veldwerk-childmap', e.tags) > -1){
+					  return true; //If childmap, don't show this
+					}
+					
+					if(!e.thumbnailUrl)
                       e.thumbnailUrl = ''
                         
                     if(!e.description)
@@ -413,17 +420,17 @@ require([
                     modified = new Date(parseInt(e.modified));
                     
                     $('.webmap-list-container').append('<div class="col-sm-6 col-md-4 col-lg-3 col-webmap-'+e.id+'"><div class="thumbnail"><img src="'+e.thumbnailUrl+'" width="200" height="133" alt="Afbeelding voor webmap '+e.title+'"><div class="caption"><h3 id="map1Title">'+e.title+'</h3><p>Omschrijving: '+e.description+'</p><ul class="webmap-meta"><li>Gedeeld met: '+access+'</li><li>Aangemaakt op '+created+'</li><li>Laatst bewerkt op '+modified+'</li></ul><p><a href="#" data-webmapid="'+e.id+'" class="btn btn-default btn-select-this-webmap" data-webmapid="'+e.id+'" role="button">Selecteer</a></p></div></div></div>');
-                    
-    //@TODO: get all groups that hold a copy of this webmapp, add that one to the UI lists, get there members and display those as well
     
                     //LogMessage("just added to the UI: webmap with id: " + e.id + " (" + e.title + ")");  
                   });//End response each
+				  
                   //Let's check if any webmapp has been stored in localstorage
                   var stored = store.get('veldwerkWorkflowProgress');
                   if(stored.webmapid)
                   {
                       selectWebmap(stored.webmapid);
                   }//end if storedID
+				  
               }else{
                 //@TODO ERROR: geen webmaps gevonden
               }
@@ -464,7 +471,8 @@ require([
       {
           $('.webmap-selected-wrap .selected-webmap-map').html($('.col-webmap-'+webmapid).html());
 		  $('.selected-webmap-title').html( $('.col-webmap-'+webmapid+' h3').html() );
-        //@TODO: make the function below work
+    
+//@TODO: create a check: each webmap needs to have 1 layer with the word 'vragen' in it's title
 		
 		  vCalls.getGroupsForMap(webmapid)
 		  .then(
