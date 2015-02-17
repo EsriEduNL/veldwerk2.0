@@ -102,31 +102,14 @@ require([
 			.then(
 			  function(response)
 			  { 
-	
 				var nUsers = (response.users).length;
 				if(nUsers > 0)
 				{
-					for (var i = 0; i < nUsers; i++) 
-					{
-						vCalls.getUserByUsername(response.users[i])
-						.then(
-						  function(userDetails)
-						  { 
-						    console.log(userDetails); 
-							var userString = '<li data-username="'+userDetails.username+'">'+userDetails.fullName+' ('+userDetails.username+') <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></li>';
-							if(i == 1)
-							  $('ul#group-'+groupid).html(userString);
-							else
-							  $('ul#group-'+groupid).append(userString);
-							
-						  }
-						);
-					}
+					addGroupUsersToUI(response.users, groupid);
 				}else
 				{
 					$('ul#group-'+groupid).html('<li><strong>Geen</strong> gebruikers gevonden voor deze groep</li>');
 				}
-
 			  }
 			);
 
@@ -512,6 +495,29 @@ require([
 		  
 		  $('ul#groups-list').html(listForCollapseView);
 		  $('select[name=add-to-group]').html(listForAddAOLusers);
+	  }
+	  
+	  function addGroupUsersToUI(users, groupid)
+	  {
+		  var nUsers = (users).length;
+		  $('ul#group-'+groupid+' li span.glyphicon-repeat').parent('li').show();
+		  for (var i = 0; i < nUsers; i++) 
+		  {
+			  //only do this if a li element with data-username="username" doesn't exist
+			  if($("ul#group-"+groupid+" li[data-username="+users[i]+"]").length == 0) 
+			  {
+				vCalls.getUserByUsername(users[i])
+				.then(
+				  function(userDetails)
+				  {  
+					var userString = '<li data-username="'+userDetails.username+'">'+userDetails.fullName+' ('+userDetails.username+') <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></li>';
+					  $('ul#group-'+groupid).append(userString);
+					
+				  }
+				);
+			  }
+		  }
+		  $('ul#group-'+groupid+' li span.glyphicon-repeat').parent('li').hide();
 	  }
 
       function LogMessage(msg)
