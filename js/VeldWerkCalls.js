@@ -199,13 +199,6 @@ define([
 			deferred.resolve;
 			return deferred.promise;
 		},
-		
-        getStudentUser: function(username)
-        {
-            requestUrl = portalUrl + "/sharing/rest/community/users/" + username;
-            //return name, groups, webmapps of leerling
-        },
-        
         
         createStudentUser: function(data)
         {
