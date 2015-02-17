@@ -462,13 +462,14 @@ define([
 			).then(
 			  function(fsRequestQueryResult)
 			  {
-				  console.log(fsRequestQueryResult);
+
 				  var features = fsRequestQueryResult.features;
 				  features.forEach( function (feature)
 				  {
 					delete feature.attributes.OBJECTID;
 					delete feature.attributes.GlobalID;
 					feature.attributes.GROUPID = groupid;
+					//feature.attributes.DOCENTID = docentid;
 				  });
 				  
 				  fsAddUrl = vragenLayerURL+"/addFeatures";

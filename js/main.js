@@ -115,13 +115,22 @@ require([
 
 		  })
 		  
-		  //On opening edit group modal: copy group name
+		  //On opening edit group modal: copy group name and groupid
 		  $('#modal-edit-group').on('show.bs.modal', function(e){
 			  var groupname = $(e.relatedTarget).parent('li').data('groupname');
 			  var groupid = $(e.relatedTarget).parent('li').data('groupid');
 	
 			  $('#modal-edit-group input[name=groupname]').val(groupname);
 			  $('#modal-edit-group input[name=groupid]').val(groupid);
+		  });
+		  
+		  //On opening delete group modal: copy group name and groupid
+		  $('#modal-delete-group').on('show.bs.modal', function(e){
+			  var groupname = $(e.relatedTarget).parent('li').data('groupname');
+			  var groupid = $(e.relatedTarget).parent('li').data('groupid');
+	
+			  $('#modal-delete-group span.groupname').text(groupname);
+			  $('#modal-delete-group input[name=groupid]').val(groupid);
 		  });
 		  
 		  
