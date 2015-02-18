@@ -95,22 +95,40 @@ define([
                                 sortField: 'modified',
                                 sortOrder: 'desc'}
                 return portal.queryItems(params);
+
             }
         },
-        
-        getLayersForWebMap: function(webMapId)
-        {
-            if (portal.user) {
-                var requestUrl = portalUrl + "/sharing/rest/search";
-                var query = 'owner:' + portal.user.username + ' AND type:"Web Map"'
-                var itemRequest = esriRequest({
-                    url: requestUrl,
-                    content: { f: "json", q: query, num: 100 },
-                    handleAs: "json"
-                });
-                return itemRequest;
-            }
-        },
+		
+		getVragenLayer: function(mapid)
+		{
+			var deferred = new Deferred();
+			
+			itemUrl = portalUrl + "/sharing/rest/content/items/" + mapid + "/data";
+            var itemRequestItem = esriRequest({
+                url: itemUrl,
+                content: { f: "json"},
+                handleAs: "json"
+            });
+			
+			itemRequestItem
+			.then(
+			  function(itemRequestItemResult)
+			  {
+				  opLayers = itemRequestItemResult.operationalLayers;
+				  var vragenLayer = itemRequestItemResult.operationalLayers.filter(function ( obj ) {
+					return (obj.title.match(/vragen/i) || obj.title.match(/opgaven/i) || obj.title.match(/opdrachten/i) )
+				  })[0];
+				  if(vragenLayer)
+				    deferred.resolve(vragenLayer.url);
+				  else
+				    deferred.resolve(false)
+				  
+					
+				  deferred.resolve;
+			  }
+			);
+			return deferred.promise;
+		},
         
         getGroupsForMap: function (mapid) {
             //Search all groups that have a tag in which the mapid is included
@@ -119,8 +137,6 @@ define([
 			};
 			return portal.queryGroups(params)
         },
-        
-        
         
         getGroup: function(id)
         {
@@ -215,8 +231,8 @@ define([
 				  {"username": data.username, "password": data.password, "firstname": dataObj.firstname, "lastname": dataObj.lastname, "fullname": dataObj.firstname+' '+dataObj.lastname, "email": dataObj.email, "role":"account_user"}
 				] })
 			};
-			
-			var requestUrl = portalUrl + "/sharing/rest/portal/self/invite";
+
+			var requestUrl = portalUrl + "/sharing/rest/portals/" + portal.id + "/users";
             var itemRequest = esriRequest({
                     url: requestUrl,
 					content: contentStr,

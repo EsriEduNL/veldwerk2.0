@@ -405,6 +405,8 @@ require([
 					  return true; //If childmap, don't show this
 					}
 					
+					
+					
 					if(!e.thumbnailUrl)
                       e.thumbnailUrl = ''
                         
@@ -461,31 +463,37 @@ require([
 		  );
 	  }
 
-      function GetLayer()
-      {
-          logMessage('start GetLayer');
-          var webMapID = dom.byId('txtWebMapId').value;
-          vCalls.getLayersForWebMap(webMapID).then(function (resonse) {
-
-
-          });
-      }
-
       function selectWebmap(webmapid)
       {
-          $('.webmap-selected-wrap .selected-webmap-map').html($('.col-webmap-'+webmapid).html());
-		  $('.selected-webmap-title').html( $('.col-webmap-'+webmapid+' h3').html() );
-    
+          
 //@TODO: create a check: each webmap needs to have 1 layer with the word 'vragen' in it's title
-		
-		  vCalls.getGroupsForMap(webmapid)
+		  vCalls.getVragenLayer(webmapid)
 		  .then(
-		    function(response){ 
-			  if(response.total == 0){
+		    function(getVragenLayerResponse)
+			{
+				console.log(getVragenLayerResponse);
+				if(!getVragenLayerResponse){
+				  alert('De geselecteerde webmap bevat geen laag met het woord \'vragen\' in de titel. Selecteer een andere webmap of pas de gekozen webmap aan in ArcGIS Online.');
+				  throw 'No questions layer found, cancelling deferred chain';
+				}else{
+				  return vCalls.getGroupsForMap(webmapid);
+				}
+			},
+			function(err)
+			{
+				alert('Er is een fout opgetreden');
+			}
+		  ).then(
+		    function(response)
+			{ 
+			  if(response.total == 0)
+			  {
 				  $('ul#groups-list').html("<li><strong>Geen</strong> groepen gevonden voor deze webmap</li>");
-			  }else{
+			  }else
+			  {
 				  var objForUI = {};
-				  $(response.results).each(function(i, e) {
+				  $(response.results).each(function(i, e) 
+				  {
 					  objForUI[i] = {groupid: e.id, groupname: e.title};
 				  });
 				  addGroupsToUI(objForUI);
@@ -499,6 +507,9 @@ require([
               offset: -220,
               scrollTarget: '#col-selected-webmapp'
           });
+		  
+		  $('.webmap-selected-wrap .selected-webmap-map').html( $('.col-webmap-'+webmapid).html() );
+		  $('.selected-webmap-title').html( $('.col-webmap-'+webmapid+' h3').html() );
       }
 	  
 	  function addGroupsToUI(obj)
