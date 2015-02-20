@@ -75,7 +75,6 @@ require([
           //Select webmapp, show it and scroll to it
           on(wind.doc, ".btn-select-this-webmap:click", function(e){
               selectWebmap($(this).data('webmapid'));
-			  store.set('veldwerkWorkflowProgress', { webmapid: $(this).data('webmapid')});
           });
           
 		  $('.btn-toggle-webmap-details').click(function(){
@@ -208,6 +207,7 @@ require([
           $('#modal-add-group .btn-primary').on('click', function(){
     //@TODO: move all stuff below regarding vCalls.createGroup to a seperate function in main.js (so it can also be triggered by different actions)
             $(this).button('loading');
+			
             var name = $('#modal-add-group input[name=groupname]').val();
 			var groupid = '';
 			
@@ -282,7 +282,39 @@ require([
 		  
 		  //////////////////////
 		  //Modal delete group//
-		  $('#modal-add-group .btn-primary').on('click', function(){
+		  $('#modal-delete-group .btn-primary').on('click', function(){
+			  
+			  if('#modal-delete-group input[name=delete-users]')
+			  {
+				  vCalls.getStudentUsersForGroup(groupid)
+				  .then(
+				    function (getStudentUsersForGroupResult){
+					  $.each(getStudentUsersForGroupResult, u)
+					  {
+					    vCalls.deleteStudentUser(u)
+					  }
+					}
+				  );
+			  }
+			  
+//@TODO: wait on the functions above to finish before really deleting the question
+			  
+			  //Delete the map
+			  vCalls.deleteMap()
+			  .then(
+			    function(deleteMapResponse)
+			    {
+					return vCalls.deleteQuestionsForGroup(groupid);
+			    },
+				function(err){
+					//do something
+				}
+			  ).then(
+			    function(deleteQuestionsForGroupResponse)
+				{
+				}
+			  );
+
 			  
 		  });//End #modal-add-group on click
 		  
@@ -498,18 +530,19 @@ require([
 				  });
 				  addGroupsToUI(objForUI);
 			  }
+			  query(".webmap-list-container").style("display", 'none');
+			  store.set('veldwerkWorkflowProgress', { webmapid: webmapid, userdata: 'CSV/XLSX content' })
+			  $.smoothScroll({
+				  offset: -220,
+				  scrollTarget: '#col-selected-webmapp'
+			  });
+			  
+			  $('.webmap-selected-wrap .selected-webmap-map').html( $('.col-webmap-'+webmapid).html() );
+			  $('.selected-webmap-title').html( $('.col-webmap-'+webmapid+' h3').html() );
 			}
 		  );
 
-          query(".webmap-list-container").style("display", 'none');
-          store.set('veldwerkWorkflowProgress', { webmapid: webmapid, userdata: 'CSV/XLSX content' })
-          $.smoothScroll({
-              offset: -220,
-              scrollTarget: '#col-selected-webmapp'
-          });
-		  
-		  $('.webmap-selected-wrap .selected-webmap-map').html( $('.col-webmap-'+webmapid).html() );
-		  $('.selected-webmap-title').html( $('.col-webmap-'+webmapid+' h3').html() );
+          
       }
 	  
 	  function addGroupsToUI(obj)

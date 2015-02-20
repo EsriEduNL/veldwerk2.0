@@ -358,6 +358,9 @@ define([
             		var layerDef = opLayer["layerDefinition"];
             		layerDef["definitionExpression"] = newWhere;
 					console.log(opLayer);*/
+					
+					//url: webmapid / update
+					//
 				};
 				
 				var contentObj = itemRequestItemResp;//Copy the values
@@ -388,8 +391,6 @@ define([
 			).then(
 			  function(itemRequestAddItemResp){
 				//console.log('itemRequestAddItemResp:', itemRequestAddItemResp);
-	//TODO: share the featureservice with the group
-	//TODO: share the tracking layer with the group
 	
 				//Add label refering to the masterwebmap to the group (can run asynch so not deferred)
 				var updateGroupRequestUrl = portalUrl + "/sharing/rest/community/groups/" + groupid + "/update";
@@ -479,10 +480,12 @@ define([
 					delete feature.attributes.GlobalID;
 					feature.attributes.GROUPID = groupid;
 					//feature.attributes.DOCENTID = docentid;
+					feature.attributes.CreationDate = '';
+					feature.attributes.EditDate = '';
 				  });
 				  
 				  fsAddUrl = vragenLayerURL+"/addFeatures";
-				  console.log(features);
+
 				  var fsRequestAddFeatures = esriRequest({
 					url: fsAddUrl,
 					content: { f: "json", features: JSON.stringify(features)},
@@ -505,24 +508,19 @@ define([
 			return deferred.promise;
 		},
 		
+		deleteQuestionsForGroup: function(groupid)
+		{
+		},
+		
         addMapToGroup: function (mapid, groupid)
         {
+//TODO: share map with group
+//TODO: share all the layers with the group
 			username = portal.user.username;
             shareurl = portalUrl + "/sharing/rest/content/users/" + username + "/items/" + mapid + "/share";
 
             content = { groups: groupid };
             //Give group with groupid access to map with mapid
-            return true;//Return true if function has finished succesfully 
-        },
-        
-        
-        removeMapForGroup: function(groupid, mapid)
-        {
-			username = portal.user.username;
-            shareurl = portalUrl + "/sharing/rest/content/users/" + username + "/unshareItems";
-
-            content = { items: mapid, groups: groupid };
-            //Remove access to map with mapid for group with groupid
             return true;//Return true if function has finished succesfully 
         },
         
