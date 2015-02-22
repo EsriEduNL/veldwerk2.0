@@ -561,10 +561,9 @@
         <div class="modal-body">
           
           <input type="hidden" name="groupid"/>
-          <p>Groep om te verwijderen: <em><span class="groupname"></span></em></p>
-          <p><strong>LET OP!</strong> Ook eventuele beantwoorden vragen van deze groep worden verwijderd!</p>
+          <p>U staat op het punt om de groep <em><span class="groupname"></span> te verwijderen</em></p>
           
-          <label>Wilt u ook de gebruikers verwijderen</label>
+          <label>Wilt u de gebruikers van deze groep verwijderen</label>
           <div class="radio">
             <label>
               <input type="radio" name="delete-users" id="donot-delete-users" value="no" checked>
@@ -574,6 +573,20 @@
           <div class="radio">
             <label>
               <input type="radio" name="delete-users" id="do-delete-users" value="yes">
+              Ja, verwijder de gebruikers van deze groep
+            </label>
+          </div>
+          
+          <label>Wilt u de beantwoorde vragen van deze groep verwijderen</label>
+          <div class="radio">
+            <label>
+              <input type="radio" name="delete-questions" id="donot-delete-questions" value="no" checked>
+              Nee
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="delete-questions" id="do-delete-questions" value="yes">
               Ja, verwijder de gebruikers van deze groep
             </label>
           </div>
@@ -759,6 +772,46 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal --> 
+  
+  <!--
+  START MODAL DELETE USER
+  -->
+  <div class="modal fade" id="modal-delete-user" tabindex="-1" role="dialog" aria-labelledby="Gebruiker verwijderen" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Sluit</span></button>
+          <h4 class="modal-title">Gebruiker verwijderen</h4>
+        </div>
+        <div class="modal-body">
+          
+          <input type="hidden" name="groupid"/>
+          <input type="hidden" name="username"
+          <p>U staat op het punt om gebruiker <em><span class="username"></span></em> uit groep <em><span class="groupname"></span></em> te verwijderen </p>
+          
+          <label>Wilt u het account van deze gebruiker ook verwijderen uit ArcGIS Online?</label>
+          <div class="radio">
+            <label>
+              <input type="radio" name="delete-users" id="donot-delete-users" value="no" checked>
+              Nee
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="delete-users" id="do-delete-users" value="yes">
+              Ja, verwijder de gebruiker uit ArcGIS Online
+            </label>
+          </div>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+          <button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Verwijderen</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->   
+  
   
   <!-- 
   //START #modal-export-item//

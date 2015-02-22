@@ -10,6 +10,7 @@ require([
     
     "dojo/on",
     "dojo/_base/window",
+	"dojo/promise/all",
     
     "esri/config",
     
@@ -27,6 +28,7 @@ require([
     
     on,
     wind,
+	All,
     
     esriConfig,
     
@@ -97,7 +99,7 @@ require([
 		  $('#groups-list').on('show.bs.collapse', function (el) 
 		  {
 			var groupid = (el.target.id).replace(/group-/, '');
-			vCalls.getStudentUsersForGroup(groupid)
+			vCalls.getUsersForGroup(groupid)
 			.then(
 			  function(response)
 			  { 
@@ -130,6 +132,17 @@ require([
 	
 			  $('#modal-delete-group span.groupname').text(groupname);
 			  $('#modal-delete-group input[name=groupid]').val(groupid);
+		  });
+		  
+		  //On opening delete user modal: copy group name and username
+		  $('#modal-delete-user').on('show.bs.modal', function(e){
+			  var groupname = $(e.relatedTarget).parent('li').data('groupname');
+			  var groupid = $(e.relatedTarget).parent('li').data('groupid');
+	
+			  $('#modal-delete-user span.groupname').text(groupname);
+			  $('#modal-delete-user input[name=groupid]').val(groupid);
+			  $('#modal-delete-user span.username').val(username);
+			  $('#modal-delete-user input[name=username]').val(username);
 		  });
 		  
 		  
@@ -283,13 +296,64 @@ require([
 		  //////////////////////
 		  //Modal delete group//
 		  $('#modal-delete-group .btn-primary').on('click', function(){
+	
+			  var groupid = $('#modal-delete-group input[name=groupid]').val();
+			  
+			  All([vCalls.getUsersForGroup(groupid), vCalls.getMapsForGroup(groupid)])
+			  .then(
+			    function(results)
+			    {
+				  console.log(results);
+				
+				  var getUsersForGroupResp = results[0],
+				  getMapsForGroupResp = results[1]
+				  
+				  //3. delete map (async)
+				  //4. delete group (async)
+				  //5. and 6.: if selected, delete users (async) and questions (async)
+				  
+	//@TODO: find a way to dynamicly fill a All[] arr with all functions that need to be executed next
+				  
+				  var allObjArr = ["vCalls.deleteMap("+getMapsForGroupResp.items.id+")", "vCalls.deleteGroup("+groupid+")"];
+				  
+				  if($('#modal-delete-group input[name=delete-users]').val() && getUsersForGroupResp.users)
+				  {
+					  $(getUsersForGroupResp.users).each(function(i, username)
+					  {
+	//@TODO: make function deleteUser work
+						console.log("@TODO: make function deleteUser work");
+						allObjArr.push("vCalls.deleteUser("+username+")");
+                      });
+				  }
+				  
+				  if($('#modal-delete-group input[name=delete-questions]').val())
+				  {
+					  allObjArr.push("vCalls.deleteQuestionsForGroup("+groupid+")");
+				  }
+				  console.log(allObjArr);
+				  return All(allObjArr);
+				  //return All([vCalls.getUsersForGroup(groupid), vCalls.getMapsForGroup(groupid)]);
+			    },
+				function(err)
+				{
+					alert('Fout, niets verwijderd. Error details: ', err);
+				}
+			  ).then(
+			    function(result)
+				{
+					console.log("second All is done");
+					console.log(result);
+				}
+			  );
+			  
+			  return false;
 			  
 			  if('#modal-delete-group input[name=delete-users]')
 			  {
-				  vCalls.getStudentUsersForGroup(groupid)
+				  vCalls.getUsersForGroup(groupid)
 				  .then(
-				    function (getStudentUsersForGroupResult){
-					  $.each(getStudentUsersForGroupResult, u)
+				    function (getUsersForGroupResult){
+					  $.each(getUsersForGroupResult, u)
 					  {
 					    vCalls.deleteStudentUser(u)
 					  }
@@ -575,7 +639,7 @@ require([
 				.then(
 				  function(userDetails)
 				  {  
-					var userString = '<li data-username="'+userDetails.username+'">'+userDetails.fullName+' ('+userDetails.username+') <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></li>';
+					var userString = '<li data-username="'+userDetails.username+'">'+userDetails.fullName+' ('+userDetails.username+') <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-user"></span></li>';
 					  $('ul#group-'+groupid).append(userString);
 					
 				  }

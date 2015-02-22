@@ -258,23 +258,24 @@ define([
 		},
         
         
-        deleteStudentUser: function(userid)
+        deleteUser: function(userid)
         {
             //Delete AOL user account with userid
             return true;//Return true if function has finished succesfully 
         },
         
-        getStudentUsersForGroup: function(groupid)
+        getUsersForGroup: function(groupid)
         {
-            //return jsob object with all users with role=student
+			var deferred = new Deferred();
             requestUrl = portalUrl + "/sharing/rest/community/groups/" + groupid+ "/users";
             var itemRequest = esriRequest({
                 url: requestUrl,
                 content: { f: "json" },
                 handleAs: "json"
             });
-            //TODO: do something with the request?
             return itemRequest;
+			deferred.resolve;
+			return deferred.promise;
         },
         
         
@@ -311,8 +312,12 @@ define([
         {
             
             requestUrl = portalUrl + "/sharing/rest/content/groups/" + groupid;
-            //Return: list with all maps (id+name+thumb+layers) that the group with groupid has access to
-            //return json object
+			var itemRequest = esriRequest({
+                url: requestUrl,
+                content: {f:"json"},
+                usePost: true
+            }, { usePost: true });
+            return itemRequest;
         },
         
         
@@ -510,6 +515,7 @@ define([
 		
 		deleteQuestionsForGroup: function(groupid)
 		{
+			return true;
 		},
 		
         addMapToGroup: function (mapid, groupid)
