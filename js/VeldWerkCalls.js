@@ -389,7 +389,7 @@ define([
 					content: contentObj,
 					usePost: true
 				}, { usePost: true });
-				itemr
+				
 				//itemRequestAddItem.then(function(res){console.log(res);});
 				return itemRequestAddItem;
 				
