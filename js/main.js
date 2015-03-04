@@ -69,10 +69,14 @@ require([
               logIn();/*Handels login, get webmaps, get users*/
           };
           
+          //POC:
+          on(dom.byId('btnPOCDuplicatMap'), 'click', PocDuplicateMap);
           
           //search when enter key is pressed or button is clicked
           on(dom.byId('loginLink'), 'click', logIn);
-          on(dom.byId('logoutLink'), 'click', logOut); 
+          on(dom.byId('logoutLink'), 'click', logOut);
+
+          
           
           //Select webmapp, show it and scroll to it
           on(wind.doc, ".btn-select-this-webmap:click", function(e){
@@ -649,6 +653,8 @@ require([
 		  $('ul#group-'+groupid+' li span.glyphicon-repeat').parent('li').hide();
 	  }
 
+      
+
       function LogMessage(msg)
       {
           if(debug){
@@ -660,6 +666,14 @@ require([
           }
       }
 
-
+      
+      function PocDuplicateMap()
+      {
+          //id's are on mvanhulzendev portal
+          var mapId = "5670eac7cd734c6e9bbf6fd7f2025170";
+          var groupId = "7857a21c2dcf43369ca743f486587a26";
+          var groupName = "TEST2";
+          vCalls.createMap(mapId, groupId, groupName);
+      }
 
   });

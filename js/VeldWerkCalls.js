@@ -354,24 +354,30 @@ define([
 					console.log('error');
 					return;
 				}
-//TODO: IF layer = vragen -> add filter
-				for (var opLayer in itemRequestDataResp["operationalLayers"]) {
+
+				for (var i = 0; i < itemRequestDataResp.operationalLayers.length; i++)
+                {
+				    var opLayer = itemRequestDataResp.operationalLayers[i];
 					//console.log("opLayer:"+opLayer["id"]);
 				
-					//if opLayer["url"]== settings.FeatureServiceLayerUrl:
-            		/*var newWhere = "GROUPID = '"+groupname+"'";
-            		var layerDef = opLayer["layerDefinition"];
-            		layerDef["definitionExpression"] = newWhere;
-					console.log(opLayer);*/
-					
-					//url: webmapid / update
-					//
-				};
+				    if(opLayer.title.toUpperCase()== "VRAGEN")
+				    {
+				        if (!opLayer.layerDefinition)
+				        {
+				            opLayer.layerDefinition = {};
+				        }
+				        if (!opLayer.layerDefinition.definitionExpression)
+				        {
+				            opLayer.layerDefinition.definitionExpression = "";
+				        }
+				        opLayer.layerDefinition.definitionExpression = "GROUPID = '" + groupname + "'";
+				    }
+  				}
 				
 				var contentObj = itemRequestItemResp;//Copy the values
 				//Now, let's edit/add several:
 				contentObj.f = "json";
-				contentObj.title = groupname+"_map";
+				contentObj.title = groupname + "_map_" + new Date().toLocaleTimeString();
 				contentObj.tags.push("veldwerk-childmap", "veldwerk-mastermap-for-this-map-ID-"+mastermapid); 
 				contentObj.tags = (contentObj.tags).join(",");
 				contentObj.text = JSON.stringify(itemRequestDataResp);
@@ -383,7 +389,7 @@ define([
 					content: contentObj,
 					usePost: true
 				}, { usePost: true });
-				
+				itemr
 				//itemRequestAddItem.then(function(res){console.log(res);});
 				return itemRequestAddItem;
 				
