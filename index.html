@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
+        <title>Veldwerk 2.0 - Esri Nederland</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -14,15 +14,19 @@
 
         <!--<link rel="stylesheet" href="css/bootstrap-theme.min.css">-->
         <link rel="stylesheet" href="css/bootstrap-theme.css">
+        <link rel="stylesheet" href="//js.arcgis.com/3.11/dgrid/css/skins/claro.css">
+        <link rel="stylesheet" href="//js.arcgis.com/3.11/dijit/themes/claro/claro.css">
         <link rel="stylesheet" href="//js.arcgis.com/3.11/esri/css/esri.css">
+        <link rel="stylesheet" href="css/bootstrap-switch.min.css">
         <link rel="stylesheet" href="css/main.css">
 
         <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
-    <body>
-        <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+    <body class="claro">
+    <!--[if lt IE 7]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    
     <div class="navbar navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -35,7 +39,21 @@
           <a class="navbar-brand" href="#"><img src="img/logo_esri_nederland.png" alt="Esri Nederland" height="30"/></a>
         </div>
         <div class="navbar-collapse collapse">
-          Mooi menu he
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#section-webmap-selection">Configureren</a></li>
+            <li><a href="#section-tools">Tools</a></li>
+            <li><a href="#col-section-about">Over ons</a></li>
+            <li><a href="#col-section-contact">Contact</a></li>
+            <!--<li class="dropdown section-private">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+              </ul>
+            </li>
+          </ul>-->
         </div><!--/.navbar-collapse -->
       </div><!-- end container -->
       
@@ -43,106 +61,841 @@
         <div class="container">
           <div class="row">
             <div class="col-xs-9">
-              <p>Veldwerk 2.0</p>
+              <p>Veldwerk 2.0 <span class="label label-default">beta</span></p>
             </div>
             <div class="col-xs-3">
-              <p class="pull-right"><a href="#" class="user-toggle-actions"><span class="glyphicon glyphicon-user"></span> <span class="hidden-xs">Peter Henk</span> <span class="glyphicon glyphicon-chevron-down"></span></a></p>
+              <div id="login-link-wrap" class="pull-right">
+                <a href="#" id="loginLink" ><span class="glyphicon glyphicon-user hidden-xs"></span> Inloggen</a>
+              </div>
+              
+              <div class="dropdown pull-right hidden" id="user-menu-dropdown-wrap">  
+                <a class="user-toggle-actions" id="user-menu-dropdown" data-toggle="dropdown">
+                  <span class="hidden-xs userNameLabel" id="userNameLabel">Inloggen</span> <span class="caret hidden-xs"></span>
+                  <span class="glyphicon glyphicon-user visible-xs"><span class="caret"></span></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-left" role="menu" aria-labelledby="user-menu-dropdown">
+                  <li role="presentation"><span class="userNameLabel"></span></li>
+                  <li role="presentation"><span class="userOrgLabel"></span></li>
+                  <li role="presentation" class="divider"></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="logoutLink">Uitloggen</a></li>
+                </ul>
+              </div><!-- end div.dropdown -->
             </div>
+            <!--<div class="col-xs-3">
+              <p class="pull-right"><a href="#" class="user-toggle-actions" id="loginLink"><span class="glyphicon glyphicon-user"></span> <span class="hidden-xs" id="userNameLabel">Inloggen</span> <span class="glyphicon glyphicon-chevron-down"></span><span id="userOrgLabel"></span></a></p>
+            </div>-->
           </div>
         </div><!-- end container -->
       </div><!-- end row sub-header -->
     
     </div><!-- end navbar -->
-	
-    <div class="container container-login">
-      <div class="row row-login">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-8 col-login">
-          <h3>Login</h3>
-          <p>Deze Veldwerk 2.0 applicatie is bedoelt voor docenten die deelnemen aan het <a href="">ArcGIS Veldwerk</a> programma.</p>
-          <form role="form">
+  
+  <section id="section-intro-carousel" class="section-public-only">
+    <div id="intro-carousel" class="carousel slide">  
+      <div class="carousel-inner">
+        <div class="item active">
+          <!--<img src="img/product-images/iphone/on-the-street-1-2500x1669.jpg" alt="Slide1">-->
+          <img
+          srcset="img/product-images/iphone/on-the-street-1-2500x1669.jpg 2500w, 
+                  img/product-images/iphone/on-the-street-1-1200x801.jpg 1200w,
+                  img/product-images/iphone/on-the-street-1-1024x684.jpg 1024w,
+                  img/product-images/iphone/on-the-street-1-992x662.jpg 992w,
+                  img/product-images/iphone/on-the-street-1-640x427.jpg 640w,
+                  img/product-images/iphone/on-the-street-1-320x214.jpg 320w"
+          src="img/product-images/iphone/on-the-street-1-992x662.jpg"
+          alt="Veldwerk kan moderner!">
+          
+          <div class="container">
+            <div class="carousel-caption">
+              <h2>Veldwerk kan moderner!</h2>
+            </p></div>
+          </div>
+        </div>
+        <div class="item">
+          <img 
+          srcset="img/veldwerk-develstein/docent-instructie-2225x1669.jpg 2225w,
+          		  img/veldwerk-develstein/docent-instructie-1200x900.jpg 1200w,
+                  img/veldwerk-develstein/docent-instructie-1024x768.jpg 1024w,
+                  img/veldwerk-develstein/docent-instructie-992x744.jpg 992w,
+                  img/veldwerk-develstein/docent-instructie-640x480.jpg 640w,
+                  img/veldwerk-develstein/docent-instructie-320x240.jpg 320w"
+          src="img/veldwerk-develstein/docent-instructie-992x744.jpg" 
+          alt="Voor Iedereen!">
+          <div class="container">
+            <div class="carousel-caption">
+              <h2>Voor iedereen!</h2>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img
+          srcset="img/product-images/iphone/on-the-street-2-2500x1669.jpg 2500w, 
+                  img/product-images/iphone/on-the-street-2-1200x801.jpg 1200w,
+                  img/product-images/iphone/on-the-street-2-1024x684.jpg 1024w,
+                  img/product-images/iphone/on-the-street-2-992x662.jpg 992w,
+                  img/product-images/iphone/on-the-street-2-640x427.jpg 640w,
+                  img/product-images/iphone/on-the-street-2-320x214.jpg 320w"
+          src="img/product-images/iphone/on-the-street-2-992x662.jpg"
+          alt="Helemaal van nu!">
+          
+          <div class="container">
+            <div class="carousel-caption">
+              <h2>Helemaal van nu</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Controls -->
+      <a class="left carousel-control" href="#intro-carousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <a class="right carousel-control" href="#intro-carousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>  
+    </div><!-- /.carousel -->
+  </section><!-- end section-intro-carousel -->
+
+  <section id="section-workflow" class="section-white section-public section-public-only">	
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <h3>In drie stappen online</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <p>Een digitaal veldwerk maken voor uw leerlingen is eenvoudiger dan gedacht.</p>
+        </div>
+        
+        <div class="col-sm-4">
+          <div class="circle-tile ">
+            <div class="circle-tile-heading dark-blue">1</div>
+            <div class="circle-tile-content dark-blue">
+              <div class="circle-tile-title">Toegang krijgen</div>
+              <div class="circle-tile-description text-faded"> 
+                <p>Om gebruik te maken van het digitale veldwerk gebruikt u een ArcGIS Online Organisatie account. Meer informatie daarover is te vinden op <a href="">deze pagina</a>.</p>
+                <p>Nadat er een organisatie accounts voor uw school is geactiveerd kunt u aan de slag!</p>
+              </div>
+             
+              <div class="circle-tile-footer" ></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-sm-4">
+          <div class="circle-tile ">
+            <div class="circle-tile-heading dark-blue">2</div>
+            <div class="circle-tile-content dark-blue">
+              <div class="circle-tile-title">Kaart maken</div>
+              <div class="circle-tile-description text-faded"> 
+                <p>Wanneer u inlogt in de ArcGIS Online organisatie van uw school staan er standaard voorbeelden klaar waarmee u snel aan de slag kunt om een kaart te maken voor uw leerlingen.</p>
+                <p>In de kaart kunt u vragen, tips en een route opnemen. Ook afbeeldingen kunnen worden toegevoegd. Om het maken van uw kaart eenvoudiger te maken helpen wij u graag via <a href="">deze Esri Online Training</a>.</p>
+              </div>
+             
+              <div class="circle-tile-footer" ></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-sm-4">
+          <div class="circle-tile ">
+            <div class="circle-tile-heading dark-blue">3</div>
+            <div class="circle-tile-content dark-blue">
+              <div class="circle-tile-title">Klaarzetten voor leerlingen</div>
+              <div class="circle-tile-description text-faded"> 
+                <p>Wanneer u helemaal tevreden bent met de door u gemaakte kaart gebruikt u deze website om eenvoudig de kaart klaar te zetten voor de dag(en) waarop uw leerlingen naar buiten gaan.</p>
+                <p>Deze tool helpt u om automatisch gebruikers een te maken voor uw leerlingen, eventueel leerlingen in te delen in groepen en uiteindelijk elke groep (of leerling) een eigen versie van de kaart te geven.</p>
+              </div>
+             
+              <div class="circle-tile-footer" ></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end row -->
+    </div><!-- end container -->
+  </section>
+   
+   <section id="section-webmap-selection" class="section-grey section-private"> 
+    <div class="container container-webmap-selection">
+      <div class="row">
+        
+        <div class="col-xs-12">
+          <h3>Veldwerk Webmap</h3>
+        </div><!-- end col-xs-12 -->
+        
+        <div class="col-xs-12">
+          <p>Geselecteerde webmap voor dit veldwerk: <strong><span class="selected-webmap-title"></span></strong>. <button type="button" class="btn btn-default btn-xs btn-toggle-webmap-details">Details</button> <button type="button" class="btn btn-default btn-xs btn-select-different-webmap">Kies een andere</button></p>
+        </div>
+        
+        <div class="webmap-list-container">
+          <!-- JS will place all webmaps's from the portal here after singin -->
+        </div><!-- end webmap-list-container -->
+        
+        <div class="col-sm-12" id="col-selected-webmapp">
+          <div class="webmap-selected-wrap">
+            <div class="selected-webmap-map"><!-- JS will place the details of a user-selected webmap here --></div>
+          </div>
+        </div><!-- end col-sm-6 #selected-webmapp -->
+        
+        
+        
+        
+      </div><!-- end row -->
+    </div><!-- end container webmap-selection -->
+  </section><!-- end section webmap-selection -->  
+  
+  <sction id="section-poc" class="section-white section-private">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12" id="poc-buttons">
+          <h3>POC knopjes</h3>
+          <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-add-users">Nieuwe gebruiker toevoegen</button>
+          <button class="btn btn-default btn-xs" >Bestaande AOL gebruiker toevoegen</button>
+          <button class="btn btn-default btn-xs" >Gebruiker verwijderen van veldwerk</button>
+          <button class="btn btn-default btn-xs" >Gebruiker verwijderen van AOL</button>
+          <br/>
+          <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep aanmaken</button>
+          <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-delete-group">Groep verwijderen</button>
+          <button class="btn btn-default btn-xs" data-toggle="modal" id="btnPOCDuplicatMap">Map dupliceren</button>
+          <br/>
+          <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-export-item">Featureservice naar CSV</button>
+        </div><!-- end #poc-buttons -->
+      </div><!-- end row -->
+    </div><!-- end container -->
+  </section>
+  
+  <section id="section-define-users" class="section-white section-private">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <h3>Groepen en gebruikers beheren</h3>
+        </div><!-- end col-xs-12 -->
+      </div><!-- end row -->
+      <div class="row">
+        <div class="col-xs-12">
+          <p>Voor aangemaakte groepen worden automatisch nieuwe webmaps met de juiste filters aangemaakt.</p>
+        </div>
+      </div><!-- end row -->
+      
+      <div class="row">
+        
+        <div class="col-xs-12">
+          <h4>Groepen en gebruikers voor dit veldwerk</h4>
+          <div class="selected-webmap-groups thumbnail">
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-add-group">Groep toevoegen</button><button type="button" class="btn btn-default btn-goto-add-users" data-toggle="modal" data-target="#modal-add-users">Gebruiker(s) toevoegen</button><hr/>
+            <ul class="" id="groups-list">
+            </ul>
+          </div><!-- end selected-webmap-groups thumbnail -->
+        </div><!-- end col-xs-12 -->
+            
+      </div>
+     <!-- MOVED TO MODAL __> 
+      <div class="row" id="addUserAccounts-settings">
+        <div class="col-xs-12">
+          <form role="form" class="with-bg-grey">
             <div class="form-group">
-              <label for="username">Gebruikersnaam</label>
-              <input type="text" name="username" class="form-control"/>
+              <label for="">Hoeveel accounts wilt u aanmaken?</label>
+              <div class="radio">
+              <label>
+                <input type="radio" name="accountsAmmount" value="one" checked>
+                één
+              </label>
+              </div>
+              <div class="radio">
+              <label>
+                <input type="radio" name="accountsAmmount" value="multiple">
+                meerdere
+              </label>
+              </div>
             </div>
             
             <div class="form-group">
-              <label for="password">Wachtwoord</label>
-              <input type="password" name="password"class="form-control" />
+              <label for="has-email">Beschikken uw leerlingen over een e-mailadres?</label>
+              <div class="radio">
+              <label>
+                <input type="radio" name="accountsHasEmail" value="yes" data-size="medium" checked>Ja
+                <input type="radio" name="accountsHasEmail" value="yes" data-size="medium" checked>Nee
+              </label>
+              </div>
             </div>
-            <button type="submit" class="btn btn-primary">Inloggen</button>
+            
           </form>
         </div>
       </div>
-    </div>
-    
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron" id="jumbo-introduction">
-      <div class="container">
-        <h2>Veldwerk kan moderner!</h2>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
-      </div>
-    </div>
-
+      -->
+      
+      <!-- MOVED TO MODAL
+      <div class="row" id="addUserAccount-single">
+        <div class="col-lg-4 col-md-6 col-xs-12">
+          <form role="form" class="with-bg-grey" id="form-add-single-user" data-init-psswrd>
+            <div class="form-group">
+              <h3>Nieuw account aanmaken</h3>
+            </div>
+            <div class="form-group">
+              <label for="fullname">Volledige naam</label>
+              <input class="form-control" type="text" name="fullname" placeholder="Naam leerling">
+            </div>
+            <div class="form-group">
+              <label for="username">Gebruikersnaam</label>
+              <input type="text" class="form-control" name="username" placeholder="Gebruikersnaam">
+            </div>
+            <div class="form-group">
+              <label for="email">E-mailadres</label>
+              <input type="email" class="form-control" name="email" placeholder="E-mailadres">
+            </div>
+            <div class="form-group">
+              <label for="password">Wachtwoord</label>
+              <div class="input-group">
+                <input type="password" class="form-control" name="password" id="password" placeholder="Wachtwoord" autocomplete="off" data-psswrd-toggle>
+                <span class="input-group-addon">genereer</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="add-to-group">Toevoegen aan bestaande groep</label>
+              <select name="add-to-group" class="form-control">
+                <option value="1234">Om te testen</option>
+              </select>
+              <a href="" class="help-block create-group" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep aanmaken</a>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="inform-student"> Verstuur logingegevens naar leerling
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="inform-teacher"> Verstuur logingegevens naar mijzelf
+              </label>
+            </div>
+              <button type="submit" class="btn btn-primary">Account aanmaken</button>
+          </form>
+        </div>
+      </div><!-- end row -->
+      <!-- -->
+      
+      <!-- MOVED TO MODAL
+      <div class="row" id="addUserAccounts-multiple-manual">
+        <div class="col-xs-12">
+          
+          <div class="row">
+            <div class="col-xs-12">
+              <p>Om handmatig leerlingen toe te voegen dient u eerst groepen aan te maken. Vervolgens kunt u de gegevens van leerlingen invoeren en aangeven aan welke groep zij toegevoegd moeten worden.</p>
+            </div>
+          </div> 
+          
+          <div class="row row-action-buttons">
+            <div class="col-xs-4"><button type="button" class="btn btn-default pull-left btn-add-row" role="button" data-target="#addUserAccounts-multiple-manual table">Rij toevoegen</button></div>
+            <div class="col-xs-4"><input class="btn btn-primary center-block" type="submit" value="Accounts aanmaken"></div>
+            <div class="col-xs-4"><button type="button" class="btn btn-default pull-right btn-remove-row" data-target="#addUserAccounts-multiple-manual table">Rij verwijderen</button></div>
+          </div> 
+          
+          <table class="table table-bordered table-hover">
+            <thead>
+                <tr class="table-head">
+                    <th class="text-center">#</th>
+                    <th class="text-center">Volledige naam</th>
+                    <th class="text-center email_th">E-mailadres</th>
+                    <th class="text-center username_th" style="display:none;">Gebruikersnaam</th>
+                    <th class="text-center password_th">Wachtwoord</th>
+                    <th class="text-center addtogroup_th">Voeg toe aan groep</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id='addUserRow1'>
+                    <td>1</td>
+                    <td><input type="text" name='fullname'  placeholder='Volledige naam' class="form-control" spellcheck="false" required="required" aria-required="true" /></td>
+                    <td class="email_td"><input type="text" name='email' placeholder='E-mailadres' class="form-control" spellcheck="false" required="required" aria-required="true" pattern="^(([-\w\d]+)(\.[-\w\d]+)*@([-\w\d]+)(\.[-\w\d]+)*(\.([a-zA-Z]{2,5}|[\d]{1,3})){1,2})$"/></td>
+                    <td class="username_td" style="display:none;"><input type="text" name='username' placeholder='Gebruikersnaam' class="form-control" spellcheck="false"/></td>
+                    <td class="password_td"><input type="text" name='password' placeholder='Wachtwoord' class="form-control" spellcheck="false"/></td>
+                    <td class="add-to-group_td"><select name="add-to-group" class="form-control"></select></td>
+                </tr>
+            </tbody>
+            </table>
+            
+            <div class="row row-action-buttons">
+            <div class="col-xs-4"><button type="button" class="btn btn-default pull-left btn-add-row" role="button" data-target="#addUserAccounts-multiple-manual table">Rij toevoegen</button></div>
+            <div class="col-xs-4"><input class="btn btn-primary center-block" type="submit" value="Accounts aanmaken"></div>
+            <div class="col-xs-4"><button type="button" class="btn btn-default pull-right btn-remove-row" data-target="#addUserAccounts-multiple-manual table">Rij verwijderen</button></div>
+          </div> 
+          
+        </div><!-- end col-xs-12 -->
+      <!--</div><!-- end row #addUserAccounts-multiple-manual 
+      -->
+      
+    </div><!-- end container -->
+  </section>
+  
+<!-- start section-tools -->  
+  <section id="section-tools" class="section-blue section-private">
     <div class="container">
-      <!-- Example row of columns -->
+      
       <div class="row">
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-       </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-      </div>
+        <div class="col-xs-12">
+          <h3>Tools</h3>
+        </div><!-- end col-xs-12 -->
+      </div><!-- end row -->
+      
+      <div class="row">
+        
+        <div class="col-sm-6 col-md-4">
+          <div class="thumbnail">
+            <div class="caption">
+              <h3><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Exporteer CSV</h3>
+              <p>Hebben uw leerlingen vragen beantwoord? Gebruik deze tool om alle kaartlagen van de webmap te exporteren naar een CSV bestand en de antwoorden te bekijken.</p>
+              <p><button class="btn btn-primary" data-toggle="modal" data-target="#modal-export-item">Tool openen</button></p>
+            </div><!-- end caption -->
+          </div><!-- end thumbnail -->
+        </div><!-- end col-sm-6 col-md-4 -->
+      
+      </div><!-- end row -->
 
+    </div><!-- end container -->
+  </section>
+<!-- end section-tools -->
+
+<!-- start section-contact-and-about -->
+  <section id="section-contact-and-about" class="section-white">
+   	<div class="container">
+      <div class="row">
+        <div class="col-md-6" id="col-section-contact">
+          <h3>Contact</h3>
+          <form role="form">
+            <div class="form-group">
+              <label for="name">Naam</label>
+              <input type="text" name="name" class="form-control" placeholder="Uw naam"/>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">E-mailadres</label>
+              <input type="email" name="email" class="form-control" placeholder="Waar mag onze reactie naartoe?"/>
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Bericht</label>
+              <textarea class="form-control" name="message" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-default">Verstuur</button>
+          </form>
+        </div><!-- end col-md-6 -->
+        <div class="col-md-6" id="col-section-about">
+          <h3>Wie maken Veldwerk 2.0?</h3>
+          <p>Het concept voor Veldwerk 2.0 is tot stand gekomen door een samenwerking tussen Esri Nederland en een enthiousaste aardrijkskunde docent.</p>
+          <h3>Esri Nederland</h3>
+          <p>Esri Nederland is een dynamisch IT-bedrijf en marktleider in geografische informatiesystemen (GIS). Organisaties en bedrijven kunnen succesvoller zijn als ze informatie geografisch benaderen. Onskwalitatief hoogwaardige GIS-product leveren we in combinatie met een uitgebreide tak dienstverlening. Uiteraard bieden we support aan, verzorgen we een breed scala aan opleidingen en organiseren we jaarlijks twee grote GIS-evenementen. Onze organisatie beschikt over een wereldwijd netwerk aan kennis en ervaring op GIS-gebied!</p>
+          <h3>De docent</h3>
+          <p>Dennis Hunink is werkzaam als aardrijkskunde docent op een middelbare school in Zwijndrecht. Naast passie voor zijn vak in het algemeen heeft hij een voorliefde voor GIS. Eerder ontwikkelde hij de website <a href="https://topografieindeklas.nl">topografieindeklas.nl</a>, waar leerlingen gratis gemakkelijk topografie kunnen leren. </p>
+        </div><!-- end col-md-6 -->
+      </div><!-- end row -->
+    </div><!-- end container
+  </section><!-- end section-contact -->
+  
+  <section id="section-footer" class="section-blue">  
+    <div class="container">
       <hr>
 
       <footer>
-        <p>&copy; Company 2014</p>
+        <p>&copy; Esri Nederland, 2014</p>
       </footer>
-    </div> <!-- /container -->        
-            
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
+    </div> <!-- /container --> 
+  </section>  
+<!-- end section-contact-and-about -->
+  
+  <!-- MODALS -->
+  <!--
+  START MODAL ADD GROUP
+  -->
+  <div class="modal fade" id="modal-add-group" tabindex="-1" role="dialog" aria-labelledby="Groep toevoegen" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Sluit</span></button>
+          <h4 class="modal-title">Nieuwe groep aanmaken</h4>
+        </div>
+        <div class="modal-body">
+          
+          <label>Naam van de groep</label>
+          <input type="text" name="groupname"/>
+          <p class="help-block">Hou de naam kort en krachtig</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+          <button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Aanmaken</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->   
+  
+  <!-- MODALS -->
+  <!--
+  START MODAL EDIT GROUP
+  -->
+  <div class="modal fade" id="modal-edit-group" tabindex="-1" role="dialog" aria-labelledby="Groep bewerken" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Sluit</span></button>
+          <h4 class="modal-title">Groep bewerken</h4>
+        </div>
+        <div class="modal-body">
+          
+          <input type="hidden" name="groupid"/>
+          
+          <label>Naam van de groep</label>
+          <input type="text" name="groupname"/>
+          <p class="help-block">Hou de naam kort en krachtig</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+          <button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Opslaan</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->   
+  
+  <!-- 
+  START MODAL DELETE GROUP
+  -->
+  <div class="modal fade" id="modal-delete-group" tabindex="-1" role="dialog" aria-labelledby="Groep verwijderen" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Sluit</span></button>
+          <h4 class="modal-title">Groep verwijderen</h4>
+        </div>
+        <div class="modal-body">
+          
+          <input type="hidden" name="groupid"/>
+          <p>U staat op het punt om de groep <em><span class="groupname"></span> te verwijderen</em></p>
+          
+          <label>Wilt u de gebruikers van deze groep verwijderen</label>
+          <div class="radio">
+            <label>
+              <input type="radio" name="delete-users" id="donot-delete-users" value="no" checked>
+              Nee
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="delete-users" id="do-delete-users" value="yes">
+              Ja, verwijder de gebruikers van deze groep
+            </label>
+          </div>
+          
+          <label>Wilt u de beantwoorde vragen van deze groep verwijderen</label>
+          <div class="radio">
+            <label>
+              <input type="radio" name="delete-questions" id="donot-delete-questions" value="no" checked>
+              Nee
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="delete-questions" id="do-delete-questions" value="yes">
+              Ja, verwijder de gebruikers van deze groep
+            </label>
+          </div>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+          <button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Verwijderen</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->   
+  
+  <!-- 
+  START MODAL ADD USERS
+  -->
+  <div class="modal fade" id="modal-add-users" tabindex="-1" role="dialog" aria-labelledby="Gebruiker(s) toevoegen" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Sluit</span></button>
+          <h4 class="modal-title">Nieuwe gebruiker(s) toevoegen</h4>
+        </div>
+        <div class="modal-body">
+ 
+          <div role="tabpanel">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#tab-users-single" aria-controls="home" role="tab" data-toggle="tab">Eén nieuwe gebruiker</a></li>
+              <li role="presentation"><a href="#tab-users-multiple" aria-controls="profile" role="tab" data-toggle="tab">Meerdere nieuwe gebruikers</a></li>
+              <li role="presentation"><a href="#tab-users-aol" aria-controls="profile" role="tab" data-toggle="tab">Bestaande AOL gebruiker</a></li>
+            </ul>
+          
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="tab-users-single">
+                <form role="form" class="with-bg-grey" id="form-add-single-user" data-init-psswrd>
 
-        <script src="js/vendor/bootstrap.min.js"></script>
-		<script src="//js.arcgis.com/3.11/"></script>
+                  <div class="form-group">
+                    <label for="firstname">Voornaam</label>
+                    <input class="form-control" type="text" name="firstname" placeholder="Voornaam leerling"/>
+                  </div>
+                  <div class="form-group">
+                    <label for="lastname">Achternaam</label>
+                    <input class="form-control" type="text" name="lastname" placeholder="Achternaam leerling"/>
+                  </div>
+                  <div class="form-group">
+                    <label for="username">Gebruikersnaam</label>
+                    <input type="text" class="form-control" name="username" placeholder="Gebruikersnaam"/>
+                    <!--<a href="" class="help-block single-toggle-email-username">De leerling heeft een e-mailadres</a>-->
+                  </div>
+                  <div class="form-group">
+                    <label for="email">E-mailadres</label>
+                    <input type="email" class="form-control" name="email" placeholder="E-mailadres"/>
+                    <p class="help-block"><a href="" class="add-users-single-toggle-email">De leerling heeft geen e-mailadres</a></p>
+                    <p class="help-block add-users-single-toggle-email-text hidden">Uw e-mailadres wordt gebruikt voor de registratie. Wanneer de leerling zijn/haar wachtwoord is vergeten en zijn gebruikersnaam invult ontvangt u daarover bericht.</p><p><a href="" class="add-users-single-toggle-email hidden">De leerling heeft wel een e-mailadres</a></p>
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Wachtwoord</label>
+                    <div class="input-group">
+                      <input type="password" class="form-control" name="password" id="password" placeholder="Wachtwoord" autocomplete="off" data-psswrd-toggle/>
+                      <span class="input-group-addon">genereer</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="add-to-group">Toevoegen aan bestaande groep</label>
+                    <select name="add-to-group" class="form-control">
+                      <option value="1234">Om te testen</option>
+                    </select>
+                    <a href="" class="help-block create-group" data-toggle="modal" data-target="#modal-add-group">Nieuwe groep aanmaken</a>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="inform-student"/> Verstuur logingegevens naar leerling
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="inform-teacher"/> Verstuur logingegevens naar mijzelf
+                    </label>
+                  </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+          			<button type="submit" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Aanmaken</button>
+                </form>
+              </div><!-- end tabpanel #tab-users-single -->
+              
+              <div role="tabpanel" class="tab-pane" id="tab-users-multiple">
+                  <div class="row row-action-buttons">
+                	<div class="col-xs-4"><button type="button" class="btn btn-default pull-left btn-add-row" role="button" data-target="#addUserAccounts-multiple-manual table">Rij toevoegen</button></div>
+                	<div class="col-xs-4"><input class="btn btn-primary center-block" type="submit" value="Accounts aanmaken"></div>
+                	<div class="col-xs-4"><button type="button" class="btn btn-default pull-right btn-remove-row" data-target="#addUserAccounts-multiple-manual table">Rij verwijderen</button></div>
+              	</div> <!-- end div.row-action-buttons -->
+              
+                <table class="table table-bordered table-hover">
+                  <thead>
+                      <tr class="table-head">
+                          <th class="text-center">#</th>
+                          <th class="text-center">Volledige naam</th>
+                          <th class="text-center email_th">E-mailadres</th>
+                          <th class="text-center username_th" style="display:none;">Gebruikersnaam</th>
+                          <th class="text-center password_th">Wachtwoord</th>
+                          <th class="text-center addtogroup_th">Voeg toe aan groep</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr id='addUserRow1'>
+                          <td>1</td>
+                          <td><input type="text" name='fullname'  placeholder='Volledige naam' class="form-control" spellcheck="false" required="required" aria-required="true" /></td>
+                          <td class="email_td"><input type="text" name='email' placeholder='E-mailadres' class="form-control" spellcheck="false" required="required" aria-required="true" pattern="^(([-\w\d]+)(\.[-\w\d]+)*@([-\w\d]+)(\.[-\w\d]+)*(\.([a-zA-Z]{2,5}|[\d]{1,3})){1,2})$"/></td>
+                          <td class="username_td" style="display:none;"><input type="text" name='username' placeholder='Gebruikersnaam' class="form-control" spellcheck="false"/></td>
+                          <td class="password_td"><input type="text" name='password' placeholder='Wachtwoord' class="form-control" spellcheck="false"/></td>
+                          <td class="add-to-group_td"><select name="add-to-group" class="form-control"></select></td>
+                      </tr>
+                  </tbody>
+                  </table>
+                
+                  <div class="row row-action-buttons">
+                  <div class="col-xs-4"><button type="button" class="btn btn-default pull-left btn-add-row" role="button" data-target="#addUserAccounts-multiple-manual table">Rij toevoegen</button></div>
+                  <div class="col-xs-4"><input class="btn btn-primary center-block" type="submit" value="Accounts aanmaken"></div>
+                  <div class="col-xs-4"><button type="button" class="btn btn-default pull-right btn-remove-row" data-target="#addUserAccounts-multiple-manual table">Rij verwijderen</button></div>
+                </div><!-- end div.row-action-buttons -->
+                
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+          		<button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Aanmaken</button>
+          
+              </div><!-- end #tab-users-multiple -->
+              
+              <div role="tabpanel" class="tab-pane" id="tab-users-aol">
+                <p>In onderstaand overzicht worden alle bestaande ArcGIS Online gebruikers weergegeven.</p>
+                <div class="row">
+                <div class="col-xs-6">
+                <form role="form" class="with-bg-grey" id="form-add-aol-user">
+				  <div class="form-group">
+                    <label>Gebruiker(s)</label>
+                    <p>Nog geen gebruikers geselecteerd</p>
+                    <ul class="list-group" id="users-aol-selected">
+                    </ul>
+                  </div>
+                  <div class="form-group">
+                    <label for="firstname">Toevoegen aan groep</label>
+                    <select name="add-to-group" class="form-control">
+                    </select>
+                  </div>
+                  
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+          		  <button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Geselecteerde gebruikers toevoegen</button>
+                    
+                </form>
+                </div><!-- end col-xs-6 -->
+                <div class="col-xs-6 with-bg-grey">
+                  <label>Alle gebruikers</label>
+                  <div class="input-group custom-search-form" id="users-aol-search">
+                    <input type="text" class="form-control">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">
+                        <span class="glyphicon glyphicon-search"></span>
+                      </button>
+                    </span>
+                  </div><!-- /input-group -->
+                   
+                  <ul class="list-group" id="users-aol-all">
+                    <li class="list-group-item">Cras justo odio <a href="#" class="pull-right" data-user-id="" data-user-fullname=""><small>toevoegen</small></a></li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                    <li class="list-group-item">Morbi leo risus</li>
+                    <li class="list-group-item">Porta ac consectetur ac</li>
+                    <li class="list-group-item">Vestibulum at eros</li>
+                  </ul>
         
-        <script src="js/main.js"></script>
-		
-        <!-- google web font -->
-        <script type="text/javascript">
-		WebFontConfig = {
-		  google: { families: [ 'Open+Sans:400italic,400,300,600,700:latin' ] }
-		};
-		(function() {
-		  var wf = document.createElement('script');
-		  wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-			'://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-		  wf.type = 'text/javascript';
-		  wf.async = 'true';
-		  var s = document.getElementsByTagName('script')[0];
-		  s.parentNode.insertBefore(wf, s);
-		})(); </script>
+                </div><!-- end col-xs-6 -->
+                </div><!-- end row -->
+
+              </div><!-- end tabpane #tab-users-aol -->
+              
+            </div><!-- end div .tab-content -->
+
+		  </div><!-- end tabpanel warp-->
+          
+        </div><!-- end #modal-body -->
         
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-        <script>
-            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-            e.src='//www.google-analytics.com/analytics.js';
-            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-            ga('create','UA-XXXXX-X');ga('send','pageview');
-        </script>
+        <div class="modal-footer">
+          
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal --> 
+  
+  <!--
+  START MODAL DELETE USER
+  -->
+  <div class="modal fade" id="modal-delete-user" tabindex="-1" role="dialog" aria-labelledby="Gebruiker verwijderen" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Sluit</span></button>
+          <h4 class="modal-title">Gebruiker verwijderen</h4>
+        </div>
+        <div class="modal-body">
+          
+          <input type="hidden" name="groupid"/>
+          <input type="hidden" name="username"
+          <p>U staat op het punt om gebruiker <em><span class="username"></span></em> uit groep <em><span class="groupname"></span></em> te verwijderen </p>
+          
+          <label>Wilt u het account van deze gebruiker ook verwijderen uit ArcGIS Online?</label>
+          <div class="radio">
+            <label>
+              <input type="radio" name="delete-users" id="donot-delete-users" value="no" checked>
+              Nee
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="delete-users" id="do-delete-users" value="yes">
+              Ja, verwijder de gebruiker uit ArcGIS Online
+            </label>
+          </div>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+          <button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Verwijderen</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->   
+  
+  
+  <!-- 
+  //START #modal-export-item//
+  -->
+  <div class="modal fade" id="modal-export-item" tabindex="-1" role="dialog" aria-labelledby="Exporteren" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Sluit</span></button>
+          <h4 class="modal-title">Exporteren</h4>
+        </div>
+        <div class="modal-body">
+          
+          <p><button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Start exporteren</button></p>
+          <p class="msg-job-working hidden"><span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig...</p>
+          <p class="msg-job-success hidden">Exporteren is geslaagd! Het CSV bestand is beschikbaar in uw ArcGIS Online Account op de pagina <strong>Mijn Content</strong>.<br/><br/>
+          <strong>TIP!</strong> Lees <a href="https://support.office.com/en-za/article/Import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba" target="_blank">hier</a> hoe u een CSV bestand kunt converteren naar een Microsoft Excel bestand.</p>
+          <p class="msg-job-failed hidden"><strong>Mislukt</strong> Er is iets misgegaan bij het exporteren. Probeer opnieuw.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Sluit venster</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal --> 
+  
+  
+  
+  <!-- Default JS Stuff -->  
+  <script src="js/vendor/psswrd.min.js"></script>
+  <script src="js/vendor/picturefill.min.js"></script>
+  
+  <!-- jQuery JS stuff -->          
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
+  <script src="js/vendor/jquery.smooth-scroll.js"></script>
+  <script src="js/vendor/store-and-json2.min.js"></script>
+  <script src="js/vendor/hideShowPassword.min.js"></script>
+  <script src="js/vendor/xls.core.min.js"></script>
+  <script src="js/vendor/xlsx.core.min.js"></script>
+
+  <!-- Bootstrap JS stuff -->
+  <script src="js/vendor/bootstrap.min.js"></script>
+  <script src="js/vendor/bootstrap-switch.min.js"></script>
+  
+  <!-- DOJO Config -->
+  <script>
+        //async is a new dojoConfig option. The default value of false will load all the Dojo base modules
+        //here we set it to true to take advantage of the asynchronous nature of dojo and the the base modules
+        //are not automatically loaded.
+        var dojoConfig = { async: true, paths: { js: location.pathname.replace(/\/[^/]+$/, "") + "\/js" } };
+  </script>
+  
+  <!-- Esri JS Stuff -->
+  <script src="//js.arcgis.com/3.11/"></script>
+  
+  <!-- Own JS Stuff -->
+  <script src="js/main.js"></script>
+    
+  <!-- google web font -->
+  <script type="text/javascript">
+    WebFontConfig = {
+      google: { families: [ 'Open+Sans:400italic,400,300,600,700:latin' ] }
+    };
+    (function() {
+      var wf = document.createElement('script');
+      wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+        '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+      wf.type = 'text/javascript';
+      wf.async = 'true';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(wf, s);
+    })(); 
+  </script>
+    
+  <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+  <script>
+        (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+        function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+        e.src='//www.google-analytics.com/analytics.js';
+        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+        ga('create','UA-XXXXX-X');ga('send','pageview');
+  </script>
     </body>
 </html>

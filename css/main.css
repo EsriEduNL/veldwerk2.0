@@ -6,11 +6,69 @@ body, html{
 	font-family: 'Open Sans', sans-serif;
 	font-style:normal;
 	font-weight:400;
-	padding-top:62px;/*Height of sub-header*/
-    padding-bottom: 20px;
+	padding-top:56px;/*Height of sub-header*/
+    padding-bottom: 0;
+	color:#4D4D4D;
 }
+
+/*////////////////////////
+//Font and text settings//
+////////////////////////*/
 h1, h2, h3, h4{
 	font-weight:300;
+	color: #2A7433;
+}
+/*Spin icon-fonts*/
+.spin-icon {
+  -webkit-animation: spin-icon 1500ms infinite linear;
+  -moz-animation: spin-icon 1500ms infinite linear;
+  -o-animation: spin-icon 1500ms infinite linear;
+  animation: spin-icon 1500ms infinite linear;
+     -webkit-transform-origin: 50% 50%;
+         transform-origin:50% 50%;
+         -ms-transform-origin:50% 50%; /* IE 9 */
+}
+
+@-webkit-keyframes spin-icon {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
+@keyframes spin-icon {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
+
+/*
+//Form styles//
+*/
+form.with-bg-grey{
+	background:#fbfbfb;
+	padding:10px 20px 40px 20px;
+	margin-bottom:10px;
+	border:1px solid #ededed;
+}
+form h3{
+	padding:0 0 10px 0;
+}
+form label{
+	font-size: .875em;
+    line-height: 1.71429em;
 }
 
 /*
@@ -18,6 +76,9 @@ h1, h2, h3, h4{
 */
 .navbar{
 	background:#FFF;
+	margin-bottom:0;
+	border:none;
+	z-index:949;/*AOL Login widget has z-index 950*/
 }
 .navbar-toggle{
 	border-color:#CCC;
@@ -45,33 +106,296 @@ h1, h2, h3, h4{
 	padding:18px 0;
 	margin:0;
 }
-.sub-header p a.user-toggle-actions{
+.sub-header p .label{
+  	background:#FFF;
+	color:#007AC2;
+	margin-left:5px;
+}
+.sub-header #login-link-wrap,
+.sub-header div.dropdown{
+	padding:18px 0;
+}
+.sub-header #login-link-wrap a{
+	color:#FFF;
+}
+.sub-header a.user-toggle-actions{
  	color:#FFF;
 	font-size:14px;
+}
+.sub-header div.dropdown:hover{
+	cursor:pointer;
+}
+.sub-header div.dropdown:hover a.user-toggle-actions{
+	text-decoration:none;
+}
+#user-menu-dropdown-wrap ul li span.userNameLabel,
+#user-menu-dropdown-wrap ul li span.userOrgLabel{
+	display: block;
+	padding: 3px 20px;
+	clear: both;
+	font-weight: 400;
+	color: #333;
+	white-space: nowrap;
+}
+#user-menu-dropdown-wrap ul li span.userNameLabel:hover,
+#user-menu-dropdown-wrap ul li span.userOrgLabel:hover{
+	cursor:default;
 }
 
 /*
 //Jumbo intro
 */
 #jumbo-introduction{
-	background:#e5f1f9;
+	
 }
 #jumbo-introduction h3{
 	color:#2a7433;
 }
 
 /*
-//Login
+//Sections
 */
-.row-login{
-  
+.section-white,
+.section-blue,
+.section-grey{
+  padding-top:40px;
+  padding-bottom:40px;
 }
-.col-login{
-	background:#fbfbfb;
-	border: 1px solid rgb(237, 237, 237);
-	border-radius: 0px;
-	font-size: 14px;
-	margin: 20px 0px;
-	padding: 20px;
-	position: relative;
+.section-white{
+	background-color:#FFF;
+}
+.section-grey{
+	background-color:#F2F3F5;
+}
+.section-blue{
+	background-color:#e5f1f9;
+}
+.section-public{
+}
+.section-private{
+	display:none;
+}
+
+/*
+//Section carousel
+*/
+/*#section-intro-carousel { 
+	height: 60vh; 
+}*/
+/* CAROUSEL */
+.carousel .item{
+	overflow:hidden;
+	/*height:60vh;*/
+}
+.carousel .item img{
+	position:absolute;
+/*FOR TESTING*/
+	
+}
+.carousel-control.left, .carousel-control.right {
+	background-image:none !important;
+	opacity:1;
+}
+.carousel-caption {
+	top:15%;
+	text-align:left;
+  	height:auto;
+ 
+}
+.carousel-caption h2{
+	font-size:18px;
+	display:inline-block;
+	background:#7f7f7f;
+    background:rgba(255,255,255,0.5);
+	padding:15px 25px;
+	color:#000;
+	text-shadow:none;
+}
+
+/*
+//Section workflow
+*/
+.circle-tile {
+    margin-bottom: 15px;
+}
+.circle-tile-heading {
+	text-align: center;
+	font-size:32px;
+	background:#E98D32;
+    border-radius: 100%;
+    color: #FFFFFF;
+    margin: 0 auto -40px;
+    position: relative;
+    transition: all 0.3s ease-in-out 0s;
+    width: 80px;
+	height: 80px;
+    line-height: 80px;
+}
+.circle-tile-content {
+    padding-top: 50px;
+	background-color:#e5f1f9;
+	color:#4D4D4D;
+	text-align:left;
+}
+.circle-tile-title{
+  	padding: 0 15px;
+	font-size:1.3em;
+	font-weight:300;
+	color: #2A7433;
+}
+.circle-tile-description {
+	padding:15px;
+}
+.circle-tile-footer {
+    background-color: #E98D32;
+    display: block;
+    padding: 5px;
+    transition: all 0.3s ease-in-out 0s;
+}
+
+
+/*
+//Webmapp selection//
+*/
+#section-webmap-selection{
+	background:#F2F3F5;
+}
+#col-selected-webmapp{
+	display:none;
+}
+#section-webmap-selection .thumbnail{
+    margin-bottom:15px;
+}
+#section-webmap-selection .thumbnail h3{
+	word-wrap: break-word;
+}
+.selected-webmap-map img{
+	display:inline;
+}
+.selected-webmap-map .caption{
+	display:inline;
+   	margin:10px;
+}
+.selected-webmap-map .caption .btn{
+	display:none;
+}
+ul.webmap-meta{
+	list-style:none;
+	padding:0;
+}
+ul.webmap-meta li{
+	display:block;
+	color:#5F5F5F;
+	font-size:12px;
+}
+/*Adjust heights when not vertical stacked (>768px)*/
+@media (min-width: 768px) {
+	div[class*='col-webmap']{
+		height:380px;
+		margin-bottom:20px;
+		overflow:hidden;
+	}
+	div[class*='col-webmap']:hover{
+		overflow:visible;
+		z-index:100;
+	}
+}
+
+/*Groups and users for selected webmap*/
+.selected-webmap-groups button{
+	margin:10px 10px 10px 0;
+}
+.selected-webmap-groups hr{
+	margin-top:10px;
+}
+
+/*
+//Section define users
+*/
+#form-add-single-user p.help-block a{
+	color:#737373;
+	font-size:14px;
+}
+
+div.selected-webmap-groups{
+  	padding:10px;
+}
+#groups-list,
+#groups-list ul{
+	list-style:none;
+	padding:0;
+}
+
+
+#groups-list .glyphicon{
+	cursor:pointer;
+}
+#groups-list .glyphicon:hover{
+	color:#e16b17;
+}
+
+#groups-list{
+	
+}
+#groups-list li{
+	padding:10px 0;
+	border-bottom:1px solid #eee;
+}
+#groups-list li ul{
+	padding-left:10px;
+}
+#groups-list li ul li{
+}
+
+/*
+//Section contact//
+*/
+#section-footer{
+	
+}
+
+/*
+//Login (AOL widget
+)*/
+/*Error color*/
+.claro .dijitSelectError, .claro .dijitSelectError .dijitButtonContents, .claro .dijitTextBoxError, .claro .dijitTextBoxError .dijitButtonNode{
+    border-color:#c12e2a;
+}
+/*Title*/
+.claro .dijitDialogTitleBar{
+	background-color:#007ac2;
+	background-image:none;
+	border:none;
+}
+.claro .dijitDialogTitle{
+	color:#FFF;
+}
+/*buttons*/
+.claro .dijitButton .dijitButtonNode, .claro .dijitDropDownButton .dijitButtonNode, .claro .dijitComboButton .dijitButtonNode, .claro .dijitToggleButton .dijitButtonNode{
+	border:1px solid #CCC;
+	background-color:#FFF;
+	background-image:none;
+}
+
+/*////////
+//MODALS//
+////////*/
+
+/*//////////////////
+//Modal add-group*/
+#modal-add-group input{
+	display:block;
+}
+#modal-add-group p.help-block{
+	font-size:14px;
+}
+
+/*/////////////////
+//Modal add-users*/
+#modal-add-users .tab-pane{
+	padding-top:10px;
+}
+/*AOL*/
+#modal-add-users #users-aol-search{
+	margin-bottom:10px;
 }

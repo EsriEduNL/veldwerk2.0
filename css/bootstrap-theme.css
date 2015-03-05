@@ -14,6 +14,14 @@
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 1px rgba(0, 0, 0, .075);
           box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 1px rgba(0, 0, 0, .075);
 }
+.btn-primary,
+.btn-success,
+.btn-info,
+.btn-warning,
+.btn-danger{
+  border-radius:0;
+  border:none;
+}
 .btn-default:active,
 .btn-primary:active,
 .btn-success:active,
@@ -35,11 +43,6 @@
 }
 .btn-default {
   text-shadow: 0 1px 0 #fff;
-  background-image: -webkit-linear-gradient(top, #fff 0%, #e0e0e0 100%);
-  background-image:         linear-gradient(to bottom, #fff 0%, #e0e0e0 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe0e0e0', GradientType=0);
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
-  background-repeat: repeat-x;
   border-color: #dbdbdb;
   border-color: #ccc;
 }
@@ -54,9 +57,7 @@
   border-color: #dbdbdb;
 }
 .btn-primary {
-  border:none;
   background:#e98d32;
-  border-radius:0;
 }
 .btn-primary:hover,
 .btn-primary:focus {

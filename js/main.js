@@ -1,1 +1,679 @@
+require([
+          
+    "dojo/ready",
+	"dojo/Deferred",
+    "dojo/dom-class",
+    "dojo/dom",
+    "dojo/query",
+	"dojo/dom-form",
+	"dojo/dom-style",
+    
+    "dojo/on",
+    "dojo/_base/window",
+	"dojo/promise/all",
+    
+    "esri/config",
+    
+    "js/VeldWerkCalls",
 
+  ], function (
+    
+    ready,
+	deferred,
+    domClass,
+    dom,
+    query,
+	domForm,
+	domStyle,
+    
+    on,
+    wind,
+	All,
+    
+    esriConfig,
+    
+    VeldWerkCalls
+  ) {
+     
+      var debug = true;
+
+      var vCalls;
+    
+      ready(function () { 
+	
+		  $("#intro-carousel, #intro-carousel .item").css('height', (0.6 * window.innerHeight));
+		  resizeCarouselImages();
+		  
+		  $( window ).resize(function() {
+			LogMessage("resize container naar 0.6*"+window.innerHeight);
+			$("#intro-carousel, #intro-carousel .item").css('height', (0.6 * window.innerHeight));
+		    resizeCarouselImages();
+		  });
+		  
+		  //SmoothScroll from menu
+		  $('ul.navbar-nav li a').on('click', function(e){
+			e.preventDefault();
+		    $.smoothScroll({
+                offset: -75,
+                scrollTarget: $(this).attr('href')
+            });
+		  });
+		  
+		  /*Initialize some UI stuff*/
+          $("input.style-as-switch").bootstrapSwitch();
+          
+		  
+          vCalls = new VeldWerkCalls();
+
+          if(vCalls.signInCheck()) {
+              logIn();/*Handels login, get webmaps, get users*/
+          };
+          
+          //POC:
+          on(dom.byId('btnPOCDuplicatMap'), 'click', PocDuplicateMap);
+          
+          //search when enter key is pressed or button is clicked
+          on(dom.byId('loginLink'), 'click', logIn);
+          on(dom.byId('logoutLink'), 'click', logOut);
+
+          
+          
+          //Select webmapp, show it and scroll to it
+          on(wind.doc, ".btn-select-this-webmap:click", function(e){
+              selectWebmap($(this).data('webmapid'));
+          });
+          
+		  $('.btn-toggle-webmap-details').click(function(){
+		    $('#col-selected-webmapp').toggle();
+		  });
+		  
+		  $('.btn-select-different-webmap').click(function(){
+			$('.webmap-list-container').toggle();
+		  });
+          
+          //Scroll to add-users
+          $('.btn-goto-add-users').on('click', function(e){
+            $.smoothScroll({
+                offset: -75,
+                scrollTarget: '#section-define-users'
+            });
+          });
+		  
+		  //Handle getting group details
+		  $('#groups-list').on('show.bs.collapse', function (el) 
+		  {
+			var groupid = (el.target.id).replace(/group-/, '');
+			vCalls.getUsersForGroup(groupid)
+			.then(
+			  function(response)
+			  { 
+				var nUsers = (response.users).length;
+				if(nUsers > 0)
+				{
+					addGroupUsersToUI(response.users, groupid);
+				}else
+				{
+					$('ul#group-'+groupid).html('<li><strong>Geen</strong> gebruikers gevonden voor deze groep</li>');
+				}
+			  }
+			);
+
+		  })
+		  
+		  //On opening edit group modal: copy group name and groupid
+		  $('#modal-edit-group').on('show.bs.modal', function(e){
+			  var groupname = $(e.relatedTarget).parent('li').data('groupname');
+			  var groupid = $(e.relatedTarget).parent('li').data('groupid');
+	
+			  $('#modal-edit-group input[name=groupname]').val(groupname);
+			  $('#modal-edit-group input[name=groupid]').val(groupid);
+		  });
+		  
+		  //On opening delete group modal: copy group name and groupid
+		  $('#modal-delete-group').on('show.bs.modal', function(e){
+			  var groupname = $(e.relatedTarget).parent('li').data('groupname');
+			  var groupid = $(e.relatedTarget).parent('li').data('groupid');
+	
+			  $('#modal-delete-group span.groupname').text(groupname);
+			  $('#modal-delete-group input[name=groupid]').val(groupid);
+		  });
+		  
+		  //On opening delete user modal: copy group name and username
+		  $('#modal-delete-user').on('show.bs.modal', function(e){
+			  var groupname = $(e.relatedTarget).parent('li').data('groupname');
+			  var groupid = $(e.relatedTarget).parent('li').data('groupid');
+	
+			  $('#modal-delete-user span.groupname').text(groupname);
+			  $('#modal-delete-user input[name=groupid]').val(groupid);
+			  $('#modal-delete-user span.username').val(username);
+			  $('#modal-delete-user input[name=username]').val(username);
+		  });
+		  
+		  
+		  
+
+          
+          //
+          //MODALS
+          //
+		  
+		  ///////////////////
+          //Modal add-users//
+          $('.add-users-single-toggle-email').on('click', function(e){ e.preventDefault();
+            $('.add-users-single-toggle-email-text, input[type=email]').toggleClass('hidden');
+			$('.add-users-single-toggle-email').toggleClass('hidden');
+          });
+		  
+		  $('form#form-add-single-user').on( "submit", function(event){
+		    event.preventDefault();
+			console.log( $(this).serializeArray() );
+			vCalls.createStudentUser( $( this ).serializeArray() );
+		  });
+		  
+		  //AOL users search
+		  $('#users-aol-search input').on('keyup', null, function() {
+			var rex = new RegExp($(this).val(), 'i');
+			$('#users-aol-all li').hide();
+			$('#users-aol-all li').filter(function() {
+				return rex.test($(this).text());
+			}).show();
+		  });
+		  
+		  //AOL users add to selection
+		  $("#users-aol-all").on('click', 'li a', function(event){
+			event.preventDefault();
+		    var parent = $(this).parent('li');
+			$(this).children('small').text('annuleer');
+			$('#users-aol-selected').append(parent);
+		  });
+		  
+		  //AOL users remove from selection
+		  $("#users-aol-selected").on('click', 'li a', function(event){
+			event.preventDefault();
+		    var parent = $(this).parent('li');
+			$(this).children('small').text('toevoegen');
+			$('#users-aol-all').append(parent);
+		  });
+		  
+		  //AOL users form submit
+		  $('#modal-add-users #tab-users-aol .btn-primary').on('click', function(){
+			  var groupid = $('#tab-users-aol select[name=add-to-group]').val();
+			  var listItems = $("#users-aol-selected li");
+			  var usernamesToAdd = [];
+	
+			  listItems.each(function(index,li) {
+				  var username = $(li).children('a').attr('data-username');
+				  var fullname = $(li).children('a').attr('data-fullname');
+				  usernamesToAdd.push({username: username, fullname: fullname});
+			  });
+			  var i = 0;
+			  usernamesToAdd.forEach(function(user, index, usernamesToAdd){
+				  vCalls.addStudentUserToGroup(user.username, groupid)
+				  .then(function(){ 
+				  	$('ul#group-'+groupid).append('<li data-username="'+user.username+'">'+user.fullname+' ('+user.username+') <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></li>');
+					 if (index === usernamesToAdd.length - 1) {
+						 $('#users-aol-selected').html('');
+						 $('#modal-add-users').modal('hide');
+					 }
+				})
+			});
+		  });
+		  
+		  ////////////////////
+		  //Modal: add-group//
+          $('#modal-add-group .btn-primary').on('click', function(){
+    //@TODO: move all stuff below regarding vCalls.createGroup to a seperate function in main.js (so it can also be triggered by different actions)
+            $(this).button('loading');
+			
+            var name = $('#modal-add-group input[name=groupname]').val();
+			var groupid = '';
+			
+			if(!name){
+			  alert('U heeft geen naam ingevoerd');
+              $(this).button('reset');
+			}
+			
+			var stored = store.get('veldwerkWorkflowProgress');
+			
+			vCalls.createGroup(name)
+			.then(
+			  function(createGroupResults) 
+			  { 
+			    groupid = createGroupResults.group.id
+				console.log('createGroup done, proceeding to createMap');
+				
+		//TODO: check if a map exists that has a title which refers to this groups tile
+				
+				
+					
+		  //if not, create one:	
+				return vCalls.createMap(stored.webmapid, createGroupResults.group.id, createGroupResults.group.title); 
+				
+				$('#groups-list').append('<li data-groupid="'+createGroupResults.group.id+'" data-groupname="'+createGroupResults.group.title+'><a href="#group-'+createGroupResults.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+createGroupResults.group.id+'">'+createGroupResults.group.title+' <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span></a><ul id="group-'+createGroupResults.group.id+'" class="collapse" data-groupid="'+createGroupResults.group.id+'"></ul></li>');
+				
+				//Add to the dropdown buttons
+				$('select[name=add-to-group]').append('<option value="'+createGroupResults.group.id+'">'+createGroupResults.group.title+'</option>');
+				$('select[name=group-to-delete]').append('<option value="'+createGroupResults.group.id+'">'+createGroupResults.group.title+'</option>');
+			  }
+			).then(
+			  function(createMapResult) 
+			  {  
+				return vCalls.duplicateQuestions(groupid, stored.webmapid);//groupname, mastermapid
+				
+			  }, 
+			  function (error) 
+			  {
+				if(error.messageCode == 'COM_0044'){
+					alert('Fout: er bestaat al een groep met deze naam. Kies een andere naam.');
+				}else{
+					alert('Er is een fout opgetreden. Details: '+error.details);
+				}
+			  }
+			).then(
+			  function(duplicateQuestionsResult)
+			  {
+				  console.log('duplicateQuestionsResult:', duplicateQuestionsResult);
+				  //Close the modal
+				$('#modal-add-group').modal('hide');
+			  }
+			);
+			
+			$(this).button('reset');
+
+          });//End modal-add-group .btn-primary .on click
+		  
+		  ////////////////////
+		  //Modal edit group//
+		  $('#modal-edit-group .btn-primary').on('click', function(){
+			var newGroupName = $('#modal-edit-group input[name=groupname]').val();
+			var groupid = $('#modal-edit-group input[name=groupid]').val();
+			
+			vCalls.updateGroup(groupid, newGroupName)
+			.then(
+			  function(result){ 
+			    $('li[data-groupid='+groupid+'] a').text(newGroupName);
+				$('#modal-edit-group').modal('hide');
+			  }
+			);  
+		  });//End #modal-edit-group on click
+		  
+		  //////////////////////
+		  //Modal delete group//
+		  $('#modal-delete-group .btn-primary').on('click', function(){
+	
+			  var groupid = $('#modal-delete-group input[name=groupid]').val();
+			  
+			  All([vCalls.getUsersForGroup(groupid), vCalls.getMapsForGroup(groupid)])
+			  .then(
+			    function(results)
+			    {
+				  console.log(results);
+				
+				  var getUsersForGroupResp = results[0],
+				  getMapsForGroupResp = results[1]
+				  
+				  //3. delete map (async)
+				  //4. delete group (async)
+				  //5. and 6.: if selected, delete users (async) and questions (async)
+				  
+	//@TODO: find a way to dynamicly fill a All[] arr with all functions that need to be executed next
+				  
+				  var allObjArr = ["vCalls.deleteMap("+getMapsForGroupResp.items.id+")", "vCalls.deleteGroup("+groupid+")"];
+				  
+				  if($('#modal-delete-group input[name=delete-users]').val() && getUsersForGroupResp.users)
+				  {
+					  $(getUsersForGroupResp.users).each(function(i, username)
+					  {
+	//@TODO: make function deleteUser work
+						console.log("@TODO: make function deleteUser work");
+						allObjArr.push("vCalls.deleteUser("+username+")");
+                      });
+				  }
+				  
+				  if($('#modal-delete-group input[name=delete-questions]').val())
+				  {
+					  allObjArr.push("vCalls.deleteQuestionsForGroup("+groupid+")");
+				  }
+				  console.log(allObjArr);
+				  return All(allObjArr);
+				  //return All([vCalls.getUsersForGroup(groupid), vCalls.getMapsForGroup(groupid)]);
+			    },
+				function(err)
+				{
+					alert('Fout, niets verwijderd. Error details: ', err);
+				}
+			  ).then(
+			    function(result)
+				{
+					console.log("second All is done");
+					console.log(result);
+				}
+			  );
+			  
+			  return false;
+			  
+			  if('#modal-delete-group input[name=delete-users]')
+			  {
+				  vCalls.getUsersForGroup(groupid)
+				  .then(
+				    function (getUsersForGroupResult){
+					  $.each(getUsersForGroupResult, u)
+					  {
+					    vCalls.deleteStudentUser(u)
+					  }
+					}
+				  );
+			  }
+			  
+//@TODO: wait on the functions above to finish before really deleting the question
+			  
+			  //Delete the map
+			  vCalls.deleteMap()
+			  .then(
+			    function(deleteMapResponse)
+			    {
+					return vCalls.deleteQuestionsForGroup(groupid);
+			    },
+				function(err){
+					//do something
+				}
+			  ).then(
+			    function(deleteQuestionsForGroupResponse)
+				{
+				}
+			  );
+
+			  
+		  });//End #modal-add-group on click
+		  
+		  //////////////////////
+		  //Modal export layer//
+		  $('#modal-export-item .btn-primary').on('click', function(){
+			  $(this).button('loading');
+			  
+			  $("#modal-export-item p.msg-job-success, #modal-export-item p.msg-job-failed").addClass('hidden');
+			  $("#modal-export-item p.msg-job-working").removeClass('hidden');
+			  
+			  var stored = store.get('veldwerkWorkflowProgress');
+              if(stored.webmapid)
+              {
+				  
+              	vCalls.exportItem(stored.webmapid)
+				.then(function(response){
+				  	console.log(response);
+				  	$("#modal-export-item p.msg-job-working").addClass('hidden');
+				  	$("#modal-export-item p.msg-job-success").removeClass('hidden');
+				},
+				function(err){
+					$("#modal-export-item p.msg-job-working").addClass('hidden');
+					$("#modal-export-item p.msg-job-failed").removeClass('hidden');
+				});
+				
+              }else{
+			  	alert("Er is geen webmap geselecteerd");
+			  }
+			  
+			  $(this).button('reset');
+			  
+		  });//End #modal-add-group on click
+
+      });//End ready
+      
+      
+      
+      /*///////////
+      //Functions//
+      ///////////*/
+	  function resizeCarouselImages(){
+		var cW = $('#intro-carousel').outerWidth();
+		var cH = $('#intro-carousel').outerHeight();
+		var cA = cW / cH;
+		
+		$("#intro-carousel img").each(function()
+		{
+			
+    	  var imgW = $(this).get(0).width;
+		  var imgH = $(this).get(0).height;
+		  var imgA = imgW / imgH;
+		  
+		  if ( cA < imgA ){
+			$(this).css({
+              width: 'auto',
+              height: cH,
+              top:0,
+			  left: ( cW - cH / imgH * imgW ) / 2
+            });
+			//LogMessage("containerRatio < imgRatio, nieuwe w=aut0, h="+cH+', top=0, left='+( cW - cH / imgH * imgW ) / 2);
+		  }else{
+			$(this).css({
+              width: cW,
+              height: 'auto',
+              top: ( cH - cW / imgW * imgH ) / 2,
+              left:0
+            });
+			//LogMessage("containerRatio < imgRatio, nieuwe w="+cW+", h=auto, top="+( cH - cW / imgW * imgH ) / 2+", left=0");
+		  }//end if else
+		});//end for each
+	  }//end function
+	  
+      function logIn()
+      {
+        vCalls.signIn().then(function(loggedInUser){
+            loggedInUI(loggedInUser);
+            GetWebMaps();
+			getPortalUsers();
+        });
+      }
+      
+      function logOut()
+      {	  LogMessage('Start singout');
+          vCalls.signOut();
+          domClass.toggle("user-menu-dropdown-wrap", "hidden");
+          domClass.toggle("login-link-wrap", "hidden");
+          query(".section-private").style("display", "none");
+		  query(".section-public-only").style("display", "block");
+		  window.location.reload(true);//Refresh browser to make sure no traces are left in the UI
+      }
+      
+      
+      function loggedInUI(loggedInUser)
+      {
+        //dom.byId('userNameLabel').innerHTML = '<span class="glyphicon glyphicon-user"></span> '+loggedInUser.fullName;//setting username in the UI
+		//query('.userNameLabel').innerHTML = '<span class="glyphicon glyphicon-user"></span> '+loggedInUser.fullName;//setting username in the UI
+		$('.userNameLabel').html('<span class="glyphicon glyphicon-user"></span> '+loggedInUser.fullName);
+        //dom.byId('userOrgLabel').innerHTML = loggedInUser.portal.name;
+		$('.userOrgLabel').html('<span class="glyphicon glyphicon-briefcase"></span> '+loggedInUser.portal.name);
+        domClass.toggle("login-link-wrap", "hidden");
+        domClass.toggle("user-menu-dropdown-wrap", "hidden");
+        query(".section-private").style("display", "block");
+		query(".section-public-only").style("display", "none");
+      }
+      
+      function GetWebMaps()
+      {
+          LogMessage("function GetWebMaps: Start getting info");
+          //getting all webmaps for this user and add them to the list
+          vCalls.getMapsForTeacher()
+		  .then(function (response) 
+		  {
+            LogMessage("Aantal webmaps found: " + response.total);
+            if (response.total > 0)
+            {
+                $(response.results).each(function(i, e) {
+
+					if($.inArray('veldwerk-childmap', e.tags) > -1){
+					  return true; //If childmap, don't show this
+					}
+					
+					
+					
+					if(!e.thumbnailUrl)
+                      e.thumbnailUrl = ''
+                        
+                    if(!e.description)
+                      e.description = '<em>geen</em>'
+                    
+                    if(e.access == 'public')
+                      var access = 'iedereen'
+                    else if(e.access == 'private')
+                      var access = 'niemand'
+                    else if(e.access == 'org')
+                      var access = 'organisatie'
+                    else if(e.access == 'shared')
+                      var access = 'groep(en)'
+                      
+                    created = new Date(parseInt(e.created));
+                    modified = new Date(parseInt(e.modified));
+                    
+                    $('.webmap-list-container').append('<div class="col-sm-6 col-md-4 col-lg-3 col-webmap-'+e.id+'"><div class="thumbnail"><img src="'+e.thumbnailUrl+'" width="200" height="133" alt="Afbeelding voor webmap '+e.title+'"><div class="caption"><h3 id="map1Title">'+e.title+'</h3><p>Omschrijving: '+e.description+'</p><ul class="webmap-meta"><li>Gedeeld met: '+access+'</li><li>Aangemaakt op '+created+'</li><li>Laatst bewerkt op '+modified+'</li></ul><p><a href="#" data-webmapid="'+e.id+'" class="btn btn-default btn-select-this-webmap" data-webmapid="'+e.id+'" role="button">Selecteer</a></p></div></div></div>');
+    
+                    //LogMessage("just added to the UI: webmap with id: " + e.id + " (" + e.title + ")");  
+                  });//End response each
+				  
+                  //Let's check if any webmapp has been stored in localstorage
+                  var stored = store.get('veldwerkWorkflowProgress');
+                  if(stored.webmapid)
+                  {
+                      selectWebmap(stored.webmapid);
+                  }//end if storedID
+				  
+              }else{
+                //@TODO ERROR: geen webmaps gevonden
+              }
+
+          });
+      }
+	  
+	  function getPortalUsers()
+	  {  
+		  vCalls.getPortalUsers()
+		  .then(
+		    function(response)
+			{
+				//construct the user-list in the modal-add-users -> tab users-aol
+				var userList = '';
+				$(response.users).each(function(i, e) {
+					userList += '<li class="list-group-item">' + e.fullName + ' <a href="#" class="pull-right" data-username="' + e.username + '" data-user-fullname="' + e.fullName + '"><small>toevoegen</small></a></li>';
+				});
+				if(!userList)
+				  userList = 'Geen AOL gebruikers gevonden';
+				  
+				$('#users-aol-all').html(userList);
+			}
+		  );
+	  }
+
+      function selectWebmap(webmapid)
+      {
+          
+//@TODO: create a check: each webmap needs to have 1 layer with the word 'vragen' in it's title
+		  vCalls.getVragenLayer(webmapid)
+		  .then(
+		    function(getVragenLayerResponse)
+			{
+				console.log(getVragenLayerResponse);
+				if(!getVragenLayerResponse){
+				  alert('De geselecteerde webmap bevat geen laag met het woord \'vragen\' in de titel. Selecteer een andere webmap of pas de gekozen webmap aan in ArcGIS Online.');
+				  throw 'No questions layer found, cancelling deferred chain';
+				}else{
+				  return vCalls.getGroupsForMap(webmapid);
+				}
+			},
+			function(err)
+			{
+				alert('Er is een fout opgetreden');
+			}
+		  ).then(
+		    function(response)
+			{ 
+			  if(response.total == 0)
+			  {
+				  $('ul#groups-list').html("<li><strong>Geen</strong> groepen gevonden voor deze webmap</li>");
+			  }else
+			  {
+				  var objForUI = {};
+				  $(response.results).each(function(i, e) 
+				  {
+					  objForUI[i] = {groupid: e.id, groupname: e.title};
+				  });
+				  addGroupsToUI(objForUI);
+			  }
+			  query(".webmap-list-container").style("display", 'none');
+			  store.set('veldwerkWorkflowProgress', { webmapid: webmapid, userdata: 'CSV/XLSX content' })
+			  $.smoothScroll({
+				  offset: -220,
+				  scrollTarget: '#col-selected-webmapp'
+			  });
+			  
+			  $('.webmap-selected-wrap .selected-webmap-map').html( $('.col-webmap-'+webmapid).html() );
+			  $('.selected-webmap-title').html( $('.col-webmap-'+webmapid+' h3').html() );
+			}
+		  );
+
+          
+      }
+	  
+	  function addGroupsToUI(obj)
+	  {
+		  //Each sub-object need at least has variables: groupid and groupname
+		  var listForCollapseView = ''; var listForAddAOLusers = '';
+		  for (var key in obj) 
+		  {
+			if (obj.hasOwnProperty(key)) 
+			{
+			  listForCollapseView += '<li data-groupid="'+obj[key].groupid+'" data-groupname="'+obj[key].groupname+'"><a href="#group-'+obj[key].groupid+'" data-parent="groups-list" data-toggle="collapse" > '+obj[key].groupname+'</a> <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span><ul id="group-'+obj[key].groupid+'" class="collapse" data-groupid="'+obj[key].groupid+'"><li><span class="glyphicon glyphicon-repeat spin-icon"></span> Bezig...</li></ul></li>';
+			  listForAddAOLusers += '<option value="' + obj[key].groupid + '">' + obj[key].groupname + '</option>';
+			}
+		  }
+		  
+		  $('ul#groups-list').html(listForCollapseView);
+		  $('select[name=add-to-group]').html(listForAddAOLusers);
+	  }
+	  
+	  function addGroupUsersToUI(users, groupid)
+	  {
+		  var nUsers = (users).length;
+		  $('ul#group-'+groupid+' li span.glyphicon-repeat').parent('li').show();
+		  for (var i = 0; i < nUsers; i++) 
+		  {
+			  //only do this if a li element with data-username="username" doesn't exist
+			  if($("ul#group-"+groupid+" li[data-username="+users[i]+"]").length == 0) 
+			  {
+				vCalls.getUserByUsername(users[i])
+				.then(
+				  function(userDetails)
+				  {  
+					var userString = '<li data-username="'+userDetails.username+'">'+userDetails.fullName+' ('+userDetails.username+') <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-user"></span></li>';
+					  $('ul#group-'+groupid).append(userString);
+					
+				  }
+				);
+			  }
+		  }
+		  $('ul#group-'+groupid+' li span.glyphicon-repeat').parent('li').hide();
+	  }
+
+      
+
+      function LogMessage(msg)
+      {
+          if(debug){
+          //var logTxt = dom.byId('txtContent')
+          //var txt = logTxt.value;
+          var d  = new Date();
+          var newtxt = d.toLocaleTimeString()+'-'+ msg;// + '\r\n' + txt;
+          console.log(newtxt);//logTxt.value = newtxt;
+          }
+      }
+
+      
+      function PocDuplicateMap()
+      {
+          //id's are on mvanhulzendev portal
+          var mapId = "5670eac7cd734c6e9bbf6fd7f2025170";
+          var groupId = "7857a21c2dcf43369ca743f486587a26";
+          var groupName = "TEST2";
+          vCalls.createMap(mapId, groupId, groupName);
+      }
+
+  });
