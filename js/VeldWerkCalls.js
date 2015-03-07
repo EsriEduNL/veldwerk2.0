@@ -512,9 +512,6 @@ define([
 			  }
 			);
 			
-			//duplicate questions
-			
-			
 			return deferred.promise;
 		},
 		
@@ -522,18 +519,6 @@ define([
 		{
 			return true;
 		},
-		
-        addMapToGroup: function (mapid, groupid)
-        {
-//TODO: share map with group
-//TODO: share all the layers with the group
-			username = portal.user.username;
-            shareurl = portalUrl + "/sharing/rest/content/users/" + username + "/items/" + mapid + "/share";
-
-            content = { groups: groupid };
-            //Give group with groupid access to map with mapid
-            return true;//Return true if function has finished succesfully 
-        },
         
         
         deleteMap: function(mapid)
