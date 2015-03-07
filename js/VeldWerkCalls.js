@@ -376,7 +376,7 @@ define([
 				//Now, let's edit/add several:
 				contentObj.f = "json";
 				//contentObj.title = groupname + "_map_" + new Date().toLocaleTimeString();
-				contentObj.title = groupname + "_map_";
+				contentObj.title = groupname + "_map";
 				contentObj.tags.push("veldwerk-childmap", "veldwerk-mastermap-for-this-map-ID-"+mastermapid); 
 				contentObj.tags = (contentObj.tags).join(",");
 				contentObj.text = JSON.stringify(itemRequestDataResp);
@@ -489,7 +489,7 @@ define([
 					delete feature.attributes.OBJECTID;
 					delete feature.attributes.GlobalID;
 					feature.attributes.GROUPID = groupid;
-					//feature.attributes.DOCENTID = docentid;
+					feature.attributes.DOCENTID = portal.user.username;
 					feature.attributes.CreationDate = '';
 					feature.attributes.EditDate = '';
 				  });
