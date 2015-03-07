@@ -22,6 +22,7 @@ define([
 ) {
 
     return declare([], {
+		//questionLayerAllowedStrings: ['vragen', 'VRAGEN'];
         portal:null,
         portalUrl: null,
         credStoreKey:null,
@@ -346,9 +347,6 @@ define([
 				
 				var itemRequestItemResp = results[0],
 				itemRequestDataResp = results[1]
-			
-				//console.log("itemRequestItemResp:", itemRequestItemResp);
-				//console.log("itemRequestDataResp:", itemRequestDataResp);
 	 
 				if(!results[0] || !results[1]){
 					console.log('error');
@@ -358,10 +356,10 @@ define([
 				for (var i = 0; i < itemRequestDataResp.operationalLayers.length; i++)
                 {
 				    var opLayer = itemRequestDataResp.operationalLayers[i];
-					//console.log("opLayer:"+opLayer["id"]);
-				
-				    if(opLayer.title.toUpperCase()== "VRAGEN")
+				  
+				    if(opLayer.title.toUpperCase()== "VRAGEN" || opLayer.title.toUpperCase() == "OPGAVEN" || opLayer.title.toUpperCase() == "OPDRACHTEN" )
 				    {
+						console.log('vragenlayer gevonden');
 				        if (!opLayer.layerDefinition)
 				        {
 				            opLayer.layerDefinition = {};
@@ -377,7 +375,8 @@ define([
 				var contentObj = itemRequestItemResp;//Copy the values
 				//Now, let's edit/add several:
 				contentObj.f = "json";
-				contentObj.title = groupname + "_map_" + new Date().toLocaleTimeString();
+				//contentObj.title = groupname + "_map_" + new Date().toLocaleTimeString();
+				contentObj.title = groupname + "_map_";
 				contentObj.tags.push("veldwerk-childmap", "veldwerk-mastermap-for-this-map-ID-"+mastermapid); 
 				contentObj.tags = (contentObj.tags).join(",");
 				contentObj.text = JSON.stringify(itemRequestDataResp);
