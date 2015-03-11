@@ -20,6 +20,7 @@ define([
   config
 
 ) {
+	esri.config.defaults.io.proxyUrl = "http://dennishunink.nl/playground/veldwerk/proxy.php";
 
     return declare([], {
 		//questionLayerAllowedStrings: ['vragen', 'VRAGEN'];
@@ -408,6 +409,7 @@ define([
 			  
 			).then(
 			  function(itemRequestAddItemResp){
+				console.log('item toegevoegd');
 				//console.log('itemRequestAddItemResp:', itemRequestAddItemResp);
 	
 				//Add label refering to the masterwebmap to the group (can run asynch so not deferred)
@@ -490,7 +492,7 @@ define([
 			).then(
 			  function(fsRequestQueryResult)
 			  {
-
+				  console.log('fsRequestQueryResult: ', fsRequestQueryResult)
 				  var features = fsRequestQueryResult.features;
 				  features.forEach( function (feature)
 				  {
@@ -515,7 +517,7 @@ define([
 			).then(
 			  function(fsRequestAddFeaturesResponse)
 			  {
-				  console.log(fsRequestAddFeaturesResponse);
+				  console.log('fsRequestAddFeaturesResponse: ',fsRequestAddFeaturesResponse);
 				  deferred.resolve('vragen zijn gekopieerd');
 			  }
 			);
