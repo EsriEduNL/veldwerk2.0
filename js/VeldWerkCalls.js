@@ -375,8 +375,9 @@ define([
 				        {
 				            opLayer.layerDefinition.definitionExpression = "";
 				        }
-				        opLayer.layerDefinition.definitionExpression = "GROUPID = '" + groupname + "'";
+				        opLayer.layerDefinition.definitionExpression = "GROUPID = '" + groupid + "'";
 				    }
+	//@TODO: implement a check if a questions layers can be found
   				}
 				
 				var contentObj = itemRequestItemResp;//Copy the values
