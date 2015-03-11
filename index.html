@@ -562,9 +562,23 @@
         <div class="modal-body">
           
           <input type="hidden" name="groupid"/>
-          <p>U staat op het punt om de groep <em><span class="groupname"></span> te verwijderen</em></p>
+          <p>U staat op het punt om de groep <em><span class="groupname"></span></em> te verwijderen uit ArcGIS Online.</p>
           
-          <label>Wilt u de gebruikers van deze groep verwijderen</label>
+          <label>Wilt u de kaart die hoort bij deze groep verwijderen?</label>
+          <div class="radio">
+            <label>
+              <input type="radio" name="delete-map" id="donot-delete-map" value="no">
+              Nee
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="delete-map" id="do-delete-map" value="yes">
+              Ja, verwijder de kaart van deze groep
+            </label>
+          </div>
+          
+          <label>Wilt u de gebruikers van deze groep verwijderen?</label>
           <div class="radio">
             <label>
               <input type="radio" name="delete-users" id="donot-delete-users" value="no" checked>
@@ -578,7 +592,7 @@
             </label>
           </div>
           
-          <label>Wilt u de beantwoorde vragen van deze groep verwijderen</label>
+          <label>Wilt u de beantwoorde vragen van deze groep verwijderen?</label>
           <div class="radio">
             <label>
               <input type="radio" name="delete-questions" id="donot-delete-questions" value="no" checked>

@@ -195,8 +195,13 @@ define([
         deleteGroup: function(groupid)
         {
             requestUrl = portalUrl + "/sharing/rest/community/groups/"+groupid+"/delete"
-            //Delete AOL group
-            return true;//Return true if function has finished succesfully 
+			var itemRequest = esriRequest({
+                    url: requestUrl,
+                    content: { f: "json"},
+                    handleAs: "json"
+            }, {usePost: true});
+			return itemRequest;
+
         },
         
         
@@ -259,8 +264,9 @@ define([
 		},
         
         
-        deleteUser: function(userid)
+        deleteUser: function(username)
         {
+			console.log('start delete user ', username);
             //Delete AOL user account with userid
             return true;//Return true if function has finished succesfully 
         },
@@ -357,7 +363,8 @@ define([
                 {
 				    var opLayer = itemRequestDataResp.operationalLayers[i];
 				  
-				    if(opLayer.title.toUpperCase()== "VRAGEN" || opLayer.title.toUpperCase() == "OPGAVEN" || opLayer.title.toUpperCase() == "OPDRACHTEN" )
+				    //if(opLayer.title.toUpperCase()== "VRAGEN" || opLayer.title.toUpperCase() == "OPGAVEN" || opLayer.title.toUpperCase() == "OPDRACHTEN" )
+					if( opLayer.title.match(/vragen/i) || opLayer.title.match(/opgaven/i) || opLayer.title.match(/opdrachten/i) )
 				    {
 						console.log('vragenlayer gevonden');
 				        if (!opLayer.layerDefinition)
@@ -515,8 +522,9 @@ define([
 			return deferred.promise;
 		},
 		
-		deleteQuestionsForGroup: function(groupid)
+		deleteQuestionsForGroup: function(mapid, groupid)
 		{
+			console.log('start function deleteQuestionsForGroup');
 			return true;
 		},
         
@@ -525,9 +533,15 @@ define([
         {
 			username = portal.user.username;
             requestUrl = portalUrl+"/sharing/rest/content/users/" + username + "/items/"+mapid +"/delete"
-
-            //Delete map with mapid from AOL
-            return true;//Return true if function has finished succesfully 
+			var itemRequest = esriRequest({
+                url: requestUrl,
+                content: { f: "json"},
+                handleAs: "json",
+				usePost: true
+				},
+				{ usePost: true
+			});
+			return itemRequest;
         },
 		
 		

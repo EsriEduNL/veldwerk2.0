@@ -311,75 +311,65 @@ require([
 				
 				  var getUsersForGroupResp = results[0],
 				  getMapsForGroupResp = results[1]
+	
+				  //var allvCallsStr = ["vCalls.deleteGroup("+groupid+")", "vCalls.deleteMap( "+getMapsForGroupResp.items[0].id +")"];
+				  var allvCallsStr = 'vCalls.deleteGroup('+groupid+'), vCalls.deleteMap( '+getMapsForGroupResp.items[0].id +')';
+				  //'{"firstname":"Jesper","surname":"Aaberg","phone":["555-0100","555-0120"]}';
+				  //var allvCallsArr = [vCalls.deleteGroup(groupid), vCalls.deleteMap( getMapsForGroupResp.items[0].id )];
+				  console.log(allvCallsStr);
+				  //return All(allvCallsStr.split(','));
 				  
-				  //3. delete map (async)
-				  //4. delete group (async)
-				  //5. and 6.: if selected, delete users (async) and questions (async)
+				  var array_of_functions = [
+					function() { vCalls.deleteGroup("+groupid+") },
+					function() { vCalls.deleteMap( "+getMapsForGroupResp.items[0].id +") }
+				  ]
 				  
-	//@TODO: find a way to dynamicly fill a All[] arr with all functions that need to be executed next
+				  return All(array_of_functions);
+				
+				return false;
 				  
-				  var allObjArr = ["vCalls.deleteMap("+getMapsForGroupResp.items.id+")", "vCalls.deleteGroup("+groupid+")"];
-				  
-				  if($('#modal-delete-group input[name=delete-users]').val() && getUsersForGroupResp.users)
+				  //If we should delete the map(s), add that task to the vCalls Array
+				  if( $('#modal-delete-group input[name=delete-map]').val() == 'yes' )
 				  {
-					  $(getUsersForGroupResp.users).each(function(i, username)
-					  {
+				    $(getMapsForGroupResp.items).each(function(i, itemId)
+				    {
+						  allvCallsArr.push(vCalls.deleteMap(itemId));
+                    }
+				    );
+				  }
+				  
+				  //If we should delete questions, add that task to the vCalls array
+				  if($('#modal-delete-group input[name=delete-questions]').val() == 'yes')
+				  {
+	//@TODO: make functuon deleteQuestionsForGroup work
+	console.log('we gaan delete-qeustions vall toevoegen');
+					  allvCallsArr.push(vCalls.deleteQuestionsForGroup(getMapsForGroupResp.items[0].id, groupid));
+				  }
+				  
+				  //If we should delete users, add every call to the vCalls array
+				  if($('#modal-delete-group input[name=delete-users]').val() == 'yes')
+				  {  
+				     $(getUsersForGroupResp.users).each(function(i, username)
+				     {
 	//@TODO: make function deleteUser work
-						console.log("@TODO: make function deleteUser work");
-						allObjArr.push("vCalls.deleteUser("+username+")");
-                      });
+						  allvCallsArr.push(vCalls.deleteUser(username));
+                     }
+				     );
 				  }
 				  
-				  if($('#modal-delete-group input[name=delete-questions]').val())
-				  {
-					  allObjArr.push("vCalls.deleteQuestionsForGroup("+groupid+")");
-				  }
-				  console.log(allObjArr);
-				  return All(allObjArr);
-				  //return All([vCalls.getUsersForGroup(groupid), vCalls.getMapsForGroup(groupid)]);
+				  return All(allvCallsArr);
+				 
 			    },
 				function(err)
 				{
 					alert('Fout, niets verwijderd. Error details: ', err);
 				}
 			  ).then(
-			    function(result)
+			    function(allvCallsArrResp)
 				{
-					console.log("second All is done");
-					console.log(result);
-				}
-			  );
-			  
-			  return false;
-			  
-			  if('#modal-delete-group input[name=delete-users]')
-			  {
-				  vCalls.getUsersForGroup(groupid)
-				  .then(
-				    function (getUsersForGroupResult){
-					  $.each(getUsersForGroupResult, u)
-					  {
-					    vCalls.deleteStudentUser(u)
-					  }
-					}
-				  );
-			  }
-			  
-//@TODO: wait on the functions above to finish before really deleting the question
-			  
-			  //Delete the map
-			  vCalls.deleteMap()
-			  .then(
-			    function(deleteMapResponse)
-			    {
-					return vCalls.deleteQuestionsForGroup(groupid);
-			    },
-				function(err){
-					//do something
-				}
-			  ).then(
-			    function(deleteQuestionsForGroupResponse)
-				{
+					console.log('resp', allvCallsArrResp);
+					
+					//@TODO: remove group from UI
 				}
 			  );
 
