@@ -64,6 +64,7 @@ require([
           
 		  
           vCalls = new VeldWerkCalls();
+		  esri.config.defaults.io.proxyUrl = "/proxy.php";
 
           if(vCalls.signInCheck()) {
               logIn();/*Handels login, get webmaps, get users*/
