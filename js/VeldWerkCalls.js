@@ -20,7 +20,7 @@ define([
   config
 
 ) {
-	esri.config.defaults.io.proxyUrl = "http://dennishunink.nl/playground/veldwerk/proxy.php";
+	esri.config.defaults.io.proxyUrl = "http://178.62.235.101/proxy.php";
 
     return declare([], {
 		//questionLayerAllowedStrings: ['vragen', 'VRAGEN'];
@@ -195,6 +195,7 @@ define([
 		
         deleteGroup: function(groupid)
         {
+        	console.log('group ' + groupid + 'is deleted');
             requestUrl = portalUrl + "/sharing/rest/community/groups/"+groupid+"/delete"
 			var itemRequest = esriRequest({
                     url: requestUrl,
@@ -289,6 +290,8 @@ define([
         
         addStudentUserToGroup: function(username, groupid)
         {
+        	console.log('assign user ' + username + ' to group ' + groupid);
+        
 			var deferred = new Deferred();
 			
             requestUrl = portalUrl + "/sharing/rest/community/groups/" + groupid + "/addUsers"
@@ -308,11 +311,22 @@ define([
         
         removeStudentUserFromGroup: function(username, groupid)
         {
+        	console.log('remove user ' + username + ' to group ' + groupid);
+        
+			var deferred = new Deferred();
+			
             requestUrl = portalUrl + "/sharing/rest/community/groups/" + groupid + "/removeUsers"
-            contentString = { users: username }
-            //TODO: request
-            //revoce access of user with userid to group with groupid
-            return true;//Return true if function has finished succesfully 
+            contentStr = { f:"json", users: username };
+            var itemRequest = esriRequest({
+                url: requestUrl,
+                content: contentStr,
+                usePost: true
+            }, { usePost: true });
+
+            return itemRequest;
+			
+			deferred.resolve;
+			return deferred.promise;
         },
         
         
@@ -428,8 +442,8 @@ define([
 					content: { f:"json", everyone: false, org: false, groups: groupid},
 					usePost: true
 				}, { usePost: true });
-				
 				return itemRequestShareItem;
+				
 				
 			  },
 			  function error(err){
@@ -534,6 +548,7 @@ define([
         
         deleteMap: function(mapid)
         {
+        	console.log('map ' + mapid + 'is deleted;');
 			username = portal.user.username;
             requestUrl = portalUrl+"/sharing/rest/content/users/" + username + "/items/"+mapid +"/delete"
 			var itemRequest = esriRequest({
@@ -584,8 +599,10 @@ define([
 			
 			return deferred.promise;
 			
-		}
-        
+		},
+     
+
+
         
 
 

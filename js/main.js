@@ -1,3 +1,7 @@
+console.clear();
+
+
+
 require([
           
     "dojo/ready",
@@ -14,7 +18,7 @@ require([
     
     "esri/config",
     
-    "js/VeldWerkCalls",
+    "/js/VeldWerkCalls.js",
 
   ], function (
     
@@ -71,7 +75,8 @@ require([
           };
           
           //POC:
-          on(dom.byId('btnPOCDuplicatMap'), 'click', PocDuplicateMap);
+//heeft niet uit gezet
+//          on(dom.byId('btnPOCDuplicatMap'), 'click', PocDuplicateMap);
           
           //search when enter key is pressed or button is clicked
           on(dom.byId('loginLink'), 'click', logIn);
@@ -141,12 +146,17 @@ require([
 		  
 		  //On opening delete user modal: copy group name and username
 		  $('#modal-delete-user').on('show.bs.modal', function(e){
-			  var groupname = $(e.relatedTarget).parent('li').data('groupname');
-			  var groupid = $(e.relatedTarget).parent('li').data('groupid');
+			  var groupname = $(e.relatedTarget).parent().parent().parent().data('groupname');
+			  var groupid = $(e.relatedTarget).parent().parent().parent().data('groupid');
+			  var username = $(e.relatedTarget).parent('li').data('username');
 	
-			  $('#modal-delete-user span.groupname').text(groupname);
+	
+				console.log($(e.relatedTarget).parent().parent().parent());
+				console.log('' + groupname + '-' + groupid + '-' + username);
+	
+			  $('#modal-delete-user span.groupname').html(groupname);
 			  $('#modal-delete-user input[name=groupid]').val(groupid);
-			  $('#modal-delete-user span.username').val(username);
+			  $('#modal-delete-user span.username').html(username);
 			  $('#modal-delete-user input[name=username]').val(username);
 		  });
 		  
@@ -222,18 +232,29 @@ require([
 		  
 		  ////////////////////
 		  //Modal: add-group//
-          $('#modal-add-group .btn-primary').on('click', function(){
+          $('#modal-add-group .btn-primary').on('click', function() {
+          	createNewGroupAndStuff($('#modal-add-group input[name=groupname]').val());
+          	$('#modal-add-group').modal('hide');
+          });
+          
+          
+        createNewGroupAndStuff = function(groupName){
+
     //@TODO: move all stuff below regarding vCalls.createGroup to a seperate function in main.js (so it can also be triggered by different actions)
+    //niels: zojuist gedaan
+    
+    
+    
             $(this).button('loading');
 			
-            var name = $('#modal-add-group input[name=groupname]').val();
+            var name = groupName;
 			var groupid = '';
 			
 			if(!name){
 			  alert('U heeft geen naam ingevoerd');
               $(this).button('reset');
 			}
-			
+			else {
 			var stored = store.get('veldwerkWorkflowProgress');
 			
 			vCalls.createGroup(name)
@@ -242,15 +263,20 @@ require([
 			  { 
 			    groupid = createGroupResults.group.id
 				console.log('createGroup done, proceeding to createMap');
-				
+				//update UI
+				var objForUI = {};
+				objForUI[0] = {groupid: createGroupResults.group.id, groupname: createGroupResults.group.title};
+				addGroupsToUI(objForUI, false);
+				//$('#modal-add-group .btn-primary').button('reset');
+				//$('#modal-add-group').modal('hide');
+
 		//TODO: check if a map exists that has a title which refers to this groups tile
 				
 				
 					
-		  //if not, create one:	
+		  //if not, create one:
 				return vCalls.createMap(stored.webmapid, createGroupResults.group.id, createGroupResults.group.title); 
-				
-				$('#groups-list').append('<li data-groupid="'+createGroupResults.group.id+'" data-groupname="'+createGroupResults.group.title+'><a href="#group-'+createGroupResults.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+createGroupResults.group.id+'">'+createGroupResults.group.title+' <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span></a><ul id="group-'+createGroupResults.group.id+'" class="collapse" data-groupid="'+createGroupResults.group.id+'"></ul></li>');
+				$('#groups-list').append('<li data-listSearchValue="'+createGroupResults.group.title + createGroupResults.group.id+'" data-groupid="'+createGroupResults.group.id+'" data-groupname="'+createGroupResults.group.title+'><a href="#group-'+createGroupResults.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+createGroupResults.group.id+'">'+createGroupResults.group.title+' <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span></a><ul id="group-'+createGroupResults.group.id+'" class="collapse" data-groupid="'+createGroupResults.group.id+'"></ul></li>');
 				
 				//Add to the dropdown buttons
 				$('select[name=add-to-group]').append('<option value="'+createGroupResults.group.id+'">'+createGroupResults.group.title+'</option>');
@@ -271,17 +297,25 @@ require([
 				}
 			  }
 			).then(
+			/*
 			  function(duplicateQuestionsResult)
 			  {
 				  console.log('duplicateQuestionsResult:', duplicateQuestionsResult);
-				  //Close the modal
-				$('#modal-add-group').modal('hide');
+
 			  }
+			  */
+			).then(function () {
+				//Close the modal
+				
+				
+
+
+			}
 			);
 			
-			$(this).button('reset');
-
-          });//End modal-add-group .btn-primary .on click
+          }
+          return groupid;
+          };//function createNewGroupAndStuff
 		  
 		  ////////////////////
 		  //Modal edit group//
@@ -296,6 +330,24 @@ require([
 				$('#modal-edit-group').modal('hide');
 			  }
 			);  
+		  });//End #modal-edit-group on click
+
+
+		  ////////////////////
+		  //Modal delete user//
+		  $('#modal-delete-user .btn-primary').on('click', function(){
+			  var group = $('#modal-delete-user input[name=groupid]').val();
+			  var user = $('#modal-delete-user input[name=username]').val();
+			  console.log('remove user ' + user + ' from group ' + group);
+			vCalls.removeStudentUserFromGroup(user, group).then(
+			  function(result){ 
+				  $('#' + group).children('li[data-username='+user+']').remove();
+				  
+				  $('#modal-delete-user').modal('hide');
+				  $("ul[data-groupid='"+group+"'] li[data-username='"+user+"']").remove();
+			  }
+			);  
+			
 		  });//End #modal-edit-group on click
 		  
 		  //////////////////////
@@ -312,68 +364,54 @@ require([
 				
 				  var getUsersForGroupResp = results[0],
 				  getMapsForGroupResp = results[1]
-	
-				  //var allvCallsStr = ["vCalls.deleteGroup("+groupid+")", "vCalls.deleteMap( "+getMapsForGroupResp.items[0].id +")"];
-				  var allvCallsStr = 'vCalls.deleteGroup('+groupid+'), vCalls.deleteMap( '+getMapsForGroupResp.items[0].id +')';
-				  //'{"firstname":"Jesper","surname":"Aaberg","phone":["555-0100","555-0120"]}';
-				  //var allvCallsArr = [vCalls.deleteGroup(groupid), vCalls.deleteMap( getMapsForGroupResp.items[0].id )];
-				  console.log(allvCallsStr);
-				  //return All(allvCallsStr.split(','));
-				  
-				  var array_of_functions = [
-					function() { vCalls.deleteGroup("+groupid+") },
-					function() { vCalls.deleteMap( "+getMapsForGroupResp.items[0].id +") }
-				  ]
-				  
-				  return All(array_of_functions);
-				
-				return false;
+					  
+				  vCalls.deleteGroup(groupid);
+				  vCalls.deleteMap(getMapsForGroupResp.items[0].id);
 				  
 				  //If we should delete the map(s), add that task to the vCalls Array
-				  if( $('#modal-delete-group input[name=delete-map]').val() == 'yes' )
+				  console.log('should we delete maps: ' + $('#modal-delete-group input[name=delete-map]:checked').val() );
+				  if( $('#modal-delete-group input[name=delete-map]:checked').val() == 'yes' )
 				  {
 				    $(getMapsForGroupResp.items).each(function(i, itemId)
 				    {
-						  allvCallsArr.push(vCalls.deleteMap(itemId));
+						  vCalls.deleteMap(itemId);
                     }
 				    );
 				  }
 				  
 				  //If we should delete questions, add that task to the vCalls array
-				  if($('#modal-delete-group input[name=delete-questions]').val() == 'yes')
+				  console.log('should we delete questions: ' + $('#modal-delete-group input[name=delete-questions]:checked').val() );
+				  if($('#modal-delete-group input[name=delete-questions]:checked').val() == 'yes')
 				  {
 	//@TODO: make functuon deleteQuestionsForGroup work
 	console.log('we gaan delete-qeustions vall toevoegen');
-					  allvCallsArr.push(vCalls.deleteQuestionsForGroup(getMapsForGroupResp.items[0].id, groupid));
+					  vCalls.deleteQuestionsForGroup(getMapsForGroupResp.items[0].id, groupid);
 				  }
 				  
 				  //If we should delete users, add every call to the vCalls array
-				  if($('#modal-delete-group input[name=delete-users]').val() == 'yes')
+				  console.log('should we delete users: ' + $('#modal-delete-group input[name=delete-users]:checked').val());
+				  if($('#modal-delete-group input[name=delete-users]:checked').val() == 'yes')
 				  {  
 				     $(getUsersForGroupResp.users).each(function(i, username)
 				     {
 	//@TODO: make function deleteUser work
-						  allvCallsArr.push(vCalls.deleteUser(username));
+						  vCalls.deleteUser(username);
                      }
 				     );
 				  }
 				  
-				  return All(allvCallsArr);
+				  	//UI update
+					$('#modal-delete-group').modal('hide');
+					$('#groups-list li[data-groupid='+groupid+']').remove();
+					$('select[name=add-to-group] option[data-groupid='+groupid+']').remove();
+  
 				 
 			    },
 				function(err)
 				{
 					alert('Fout, niets verwijderd. Error details: ', err);
 				}
-			  ).then(
-			    function(allvCallsArrResp)
-				{
-					console.log('resp', allvCallsArrResp);
-					
-					//@TODO: remove group from UI
-				}
-			  );
-
+			  )
 			  
 		  });//End #modal-add-group on click
 		  
@@ -554,8 +592,12 @@ require([
 		  );
 	  }
 
+		
+
       function selectWebmap(webmapid)
       {
+      
+      currentWebmapId = webmapid;
           
 //@TODO: create a check: each webmap needs to have 1 layer with the word 'vragen' in it's title
 		  vCalls.getVragenLayer(webmapid)
@@ -579,7 +621,7 @@ require([
 			{ 
 			  if(response.total == 0)
 			  {
-				  $('ul#groups-list').html("<li><strong>Geen</strong> groepen gevonden voor deze webmap</li>");
+				  $('ul#groups-list').html('<li data-listSearchValue=""><strong>Geen</strong> groepen gevonden voor deze webmap</li>');
 			  }else
 			  {
 				  var objForUI = {};
@@ -604,7 +646,7 @@ require([
           
       }
 	  
-	  function addGroupsToUI(obj)
+	  function addGroupsToUI(obj, removeAllOthers)
 	  {
 		  //Each sub-object need at least has variables: groupid and groupname
 		  var listForCollapseView = ''; var listForAddAOLusers = '';
@@ -612,14 +654,22 @@ require([
 		  {
 			if (obj.hasOwnProperty(key)) 
 			{
-			  listForCollapseView += '<li data-groupid="'+obj[key].groupid+'" data-groupname="'+obj[key].groupname+'"><a href="#group-'+obj[key].groupid+'" data-parent="groups-list" data-toggle="collapse" > '+obj[key].groupname+'</a> <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span><ul id="group-'+obj[key].groupid+'" class="collapse" data-groupid="'+obj[key].groupid+'"><li><span class="glyphicon glyphicon-repeat spin-icon"></span> Bezig...</li></ul></li>';
-			  listForAddAOLusers += '<option value="' + obj[key].groupid + '">' + obj[key].groupname + '</option>';
+			  listForCollapseView += '<li data-listSearchValue="'+obj[key].groupname+obj[key].groupid+'" data-groupid="'+obj[key].groupid+'" data-groupname="'+obj[key].groupname+'"><a href="#group-'+obj[key].groupid+'" data-parent="groups-list" data-toggle="collapse" > '+obj[key].groupname+'</a> <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span><ul id="group-'+obj[key].groupid+'" class="collapse" data-groupid="'+obj[key].groupid+'"><li><span class="glyphicon glyphicon-repeat spin-icon"></span> Bezig...</li></ul></li>';
+			  listForAddAOLusers += '<option data-groupid="'+obj[key].groupid+'" value="' + obj[key].groupid + '">' + obj[key].groupname + '</option>';
 			}
 		  }
 		  
-		  $('ul#groups-list').html(listForCollapseView);
-		  $('select[name=add-to-group]').html(listForAddAOLusers);
+		  if(typeof removeAllOthers == "undefined" || removeAllOthers == true) {
+			  $('ul#groups-list').html(listForCollapseView);
+			  $('select[name=add-to-group]').html(listForAddAOLusers);
+			}
+			else {
+			  $('ul#groups-list').html($('ul#groups-list').html() + listForCollapseView);
+			  $('select[name=add-to-group]').html($('select[name=add-to-group]').html() + listForAddAOLusers);
+			}
 	  }
+	  
+
 	  
 	  function addGroupUsersToUI(users, groupid)
 	  {
@@ -644,7 +694,6 @@ require([
 		  $('ul#group-'+groupid+' li span.glyphicon-repeat').parent('li').hide();
 	  }
 
-      
 
       function LogMessage(msg)
       {
@@ -666,5 +715,277 @@ require([
           var groupName = "TEST2";
           vCalls.createMap(mapId, groupId, groupName);
       }
+      
+      
+      var initAssiningUsersToGroup = function() {
+      	console.log('lets go initAssiningUsersToGroup');
+      	
+		allTheUsers = {};
+		usersInAGroup = [];
+		//put users in array
+      	vCalls.getPortalUsers().then(
+			function(response) {
+				allTheUsers = {};
+				$.each( response.users, function( key, value ) {
+					allTheUsers[value.username] = value;
+				});
+			}
+		).then( function() {
+		
+				//put other users in UI
+				$('#assiningUsersToGroupUsers').html(null);	
+				console.log(usersInAGroup);
+				$.each( allTheUsers, function( key, value ) {
+					$('#assiningUsersToGroupUsers').html($('#assiningUsersToGroupUsers').html() + '<li class="list-group-item" data-user-id="'+ value.username +'" data-listSearchValue="' + value.fullName + '" style="z-index: 1051">' + value.fullName + '</li>');
+				});	
+
+			vCalls.getGroupsForMap(currentWebmapId).then(
+				function(response) {
+					//put groups in UI
+					$('#assiningUsersToGroupGroups').html(null);
+					$.each( response.results, function( key, value ) {
+				
+					
+					vCalls.getUsersForGroup(value.id).then(
+						function(result1){
+							usersInThisGroupHtml = '';
+							$.each( result1.users, function( key1, value1 ) {	
+								usersInAGroup.push(value1);
+								//niels hier een data-group-id-prev toevoegen
+								usersInThisGroupHtml = usersInThisGroupHtml + '<li class="list-group-item" data-user-id="'+ allTheUsers[value1].username +'" style="z-index: 1051">' + allTheUsers[value1].fullName + '</li>';
+								
+								$('#assiningUsersToGroupUsers').children('li[data-user-id=' + value1 + ']').remove();
+								
+							});
+
+
+							//<span class="badge">' + 1234 + '</span>
+							$('#assiningUsersToGroupGroups').html($('#assiningUsersToGroupGroups').html() + '<li class="list-group-item assiningUsersToGroupGroup" data-group-id="'+ value.id +'" data-listSearchValue="' + value.title + '">' + value.title + '<ul>' +usersInThisGroupHtml +'</ul></li>');
+
+					
+							$("#assiningUsersToGroupGroups .assiningUsersToGroupGroup").droppable({
+								tolerance: "intersect",
+								accept: ".list-group-item",
+		//						activeClass: "ui-state-default",
+		//						hoverClass: "ui-state-hover",
+								drop: function(event, ui) {
+									console.log($(ui.draggable).parent());
+
+									var tmp = $(this).children()[0];
+									$(tmp).append($(ui.draggable));
+									vCalls.addStudentUserToGroup(ui.draggable.attr("data-user-id"), $(this).attr("data-group-id"));
+									
+									//niels als data-group-id-prev -> verwijder van die groep
+									
+									//niels data-group-id-prev maken/updaten
+								}
+							});
+
+							
+							$("#assiningUsersToGroupGroups .assiningUsersToGroupGroup .list-group-item").draggable({
+								appendTo: "body",
+								cursor: "move",
+								helper: 'clone',
+								revert: "invalid"
+							});
+
+						});
+					
+				
+					
+						
+					
+
+					
+					});
+				}
+			);
+			
+			
+
+		
+	
+
+			$("#assiningUsersToGroupUsers .list-group-item").draggable({
+				appendTo: "body",
+				cursor: "move",
+				helper: 'clone',
+				revert: "invalid"
+			});
+		
+		});
+
+
+
+
+
+		$("#assiningUsersToGroupUsers").droppable({
+			tolerance: "intersect",
+			accept: ".list-group-item",
+//			activeClass: "ui-state-default",
+//			hoverClass: "ui-state-hover",
+			drop: function(event, ui) {
+				$("#assiningUsersToGroupUsers").append($(ui.draggable));
+				//niels data-group-id-prev verijwderen
+			}
+		});
+
+      
+      } 
+      $('#initAssiningUsersToGroup').bind('click', initAssiningUsersToGroup);
+      $('#manageUsersDragdrop').bind('click', initAssiningUsersToGroup);
+      
+      
+		var listSearch = function() {
+			
+			var string = $(this).val().toLowerCase();
+			
+			
+			$.each($('#'+$(this).attr('data-listSearch')).children(), function( key, value ) {
+				if($(value).attr('data-listSearchValue').toLowerCase().indexOf(string) >= 0) {
+					$(value).css('display', 'block');
+				}
+				else {
+					$(value).css('display', 'none');
+				}
+			
+			});
+			
+		}
+		$('.listSearch').keyup(listSearch);
+		
+		
+		
+/* set up drag-and-drop event */
+var handleDrop = function(e) {
+
+	e.stopPropagation();
+	e.preventDefault();
+	var files = e.dataTransfer.files;
+	var i,f;
+	for (i = 0, f = files[i]; i != files.length; ++i) {
+		var reader = new FileReader();
+		var name = f.name;
+		reader.onload = function(e) {
+			var data = e.target.result;
+
+			// if binary string, read with type 'binary'
+			console.log(name);
+			if(name.substring(name.length-5).toLowerCase() == '.xlsx') {
+				workbook = XLSX.read(data, {type: 'binary'});
+			}
+			else {
+				workbook = XLS.read(data, {type: 'binary'});
+			}
+			
+			console.log(workbook);
+			// DO SOMETHING WITH workbook HERE
+			$('#groupBulkExcelLoaded').css('visibility', 'visible');
+			$('#groupBulkExcelLoadedName').html(name);
+			$('#groupBulkExcelColumnselectArea').css('display', 'block');
+			
+			columns = [];
+			alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			numberOfCols = alphabet.indexOf(workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/[a-zA-Z]+/)[0]) + 1;
+			for(var i=1; i<=numberOfCols; i++) {
+				columns.push({
+					id: i,
+					name: workbook.Sheets[workbook.SheetNames[0]][alphabet[i-1]+'1'].v
+				});
+				
+				$('#groupBulkExcelColumnGroups').html('');
+				$('#groupBulkExcelColumnUsers').html('');
+				$.each(columns, function( key, value) {
+					$('#groupBulkExcelColumnGroups').html($('#groupBulkExcelColumnGroups').html() + '<option value='+value.id+'>'+value.name+'</option>');
+					$('#groupBulkExcelColumnUsers').html($('#groupBulkExcelColumnUsers').html() + '<option value='+value.id+'>'+value.name+'</option>');
+					
+				});
+				
+				
+			}
+			console.log(columns);
+		};
+		reader.readAsBinaryString(f);
+	}
+}
+function handleDragover(e) {
+	e.stopPropagation();
+	e.preventDefault();
+	e.dataTransfer.dropEffect = 'copy';
+}
+
+document.getElementById('groupBulkExcelDropArea').addEventListener('dragenter', handleDragover, false);
+document.getElementById('groupBulkExcelDropArea').addEventListener('dragover', handleDragover, false);
+document.getElementById('groupBulkExcelDropArea').addEventListener('drop', handleDrop, false);
+
+var groupBulkExcelColumnSelectDone = function() {
+	$('#groupBulkExcelCheckTable tbody').html('');
+	alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	//numberOfCols = alphabet.indexOf(workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/[a-zA-Z]+/)[0]) + 1;
+	numberOfRows = workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/\d+/)[0];
+	for(var i=2; i<=numberOfRows; i++) {
+		var user = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnUsers').val()-1]+i].v;
+		var group = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnGroups').val()-1]+i].v;
+		$('#groupBulkExcelCheckTable tbody').html($('#groupBulkExcelCheckTable tbody').html() + '<tr><td>'+user+'</td><td>'+group+'</td></tr>');
+	}
+}
+$('#groupBulkExcelColumnGroups').change(groupBulkExcelColumnSelectDone);
+$('#groupBulkExcelColumnUsers').change(groupBulkExcelColumnSelectDone);
+
+var groupBulkExcelDoTheMagic = function() {
+	//get a list of all existing groups
+	var currentGroups = {};
+	vCalls.getGroupsForMap(currentWebmapId).then(function(response) {
+		$.each( response.results, function( key, value ) {
+			currentGroups[value.title] = value.id;
+		});
+	
+		//workbook.Sheets[workbook.SheetNames[0]]['!range'].e.r
+		numberOfRows = workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/\d+/)[0];
+		for(var i=2; i<=numberOfRows; i++) {
+			var user = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnUsers').val()-1]+i].v;
+			var group = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnGroups').val()-1]+i].v;
+	
+			//create new groups if needed
+			if(!(group in currentGroups)) {
+				console.log('have to create a new group: ' + group);
+				tmp = createNewGroupAndStuff(group);
+				currentGroups[group] = tmp;
+				console.log(currentGroups);
+
+			}
+		
+		}
+	});
+
+}
+$('#groupBulkExcelDoTheMagic').bind('click', groupBulkExcelDoTheMagic);
+
+var groupBulkExcelDoTheMagic2 = function() {
+	//get a list of all existing groups
+	var currentGroups = {};
+	vCalls.getGroupsForMap(currentWebmapId).then(function(response) {
+		$.each( response.results, function( key, value ) {
+			currentGroups[value.title] = value.id;
+		});
+		
+		numberOfRows = workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/\d+/)[0];
+		for(var i=2; i<=numberOfRows; i++) {
+			var user = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnUsers').val()-1]+i].v;
+			var group = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnGroups').val()-1]+i].v;
+	
+			//create new groups if needed
+			if(group in currentGroups) {
+				console.log('link user '+user+' to group ' + group);
+				vCalls.addStudentUserToGroup(user, currentGroups[group]);
+			}
+		
+		}
+	});
+
+}
+$('#groupBulkExcelDoTheMagic2').bind('click', groupBulkExcelDoTheMagic2);
+
+
 
   });
