@@ -18,7 +18,7 @@ require([
     
     "esri/config",
     
-    "/js/VeldWerkCalls.js",
+    "/js/VeldWerkCalls.js"
 
   ], function (
     
@@ -345,6 +345,7 @@ require([
 				  
 				  $('#modal-delete-user').modal('hide');
 				  $("ul[data-groupid='"+group+"'] li[data-username='"+user+"']").remove();
+
 			  }
 			);  
 			
@@ -751,8 +752,10 @@ require([
 							usersInThisGroupHtml = '';
 							$.each( result1.users, function( key1, value1 ) {	
 								usersInAGroup.push(value1);
+
 								//niels hier een data-group-id-prev toevoegen
 								usersInThisGroupHtml = usersInThisGroupHtml + '<li class="list-group-item" data-user-id="'+ allTheUsers[value1].username +'" style="z-index: 1051">' + allTheUsers[value1].fullName + '</li>';
+
 								
 								$('#assiningUsersToGroupUsers').children('li[data-user-id=' + value1 + ']').remove();
 								
@@ -763,11 +766,24 @@ require([
 							$('#assiningUsersToGroupGroups').html($('#assiningUsersToGroupGroups').html() + '<li class="list-group-item assiningUsersToGroupGroup" data-group-id="'+ value.id +'" data-listSearchValue="' + value.title + '">' + value.title + '<ul>' +usersInThisGroupHtml +'</ul></li>');
 
 					
+							$("#assiningUsersToGroupGroups .assiningUsersToGroupGroup ul").droppable({
+								tolerance: "intersect",
+								accept: ".list-group-item",
+		//						activeClass: "ui-state-default",
+		//						hoverClass: "ui-state-hover",
+								drop: function(event, ui) {        
+									$(this).append($(ui.draggable));
+									vCalls.addStudentUserToGroup(ui.draggable.attr("data-user-id"), $(this).attr("data-group-id"));
+								}
+							});
+
+/*DEpRECATED
 							$("#assiningUsersToGroupGroups .assiningUsersToGroupGroup").droppable({
 								tolerance: "intersect",
 								accept: ".list-group-item",
 		//						activeClass: "ui-state-default",
 		//						hoverClass: "ui-state-hover",
+
 								drop: function(event, ui) {
 									console.log($(ui.draggable).parent());
 
@@ -779,8 +795,7 @@ require([
 									
 									//niels data-group-id-prev maken/updaten
 								}
-							});
-
+							});*/
 							
 							$("#assiningUsersToGroupGroups .assiningUsersToGroupGroup .list-group-item").draggable({
 								appendTo: "body",
@@ -921,11 +936,13 @@ document.getElementById('groupBulkExcelDropArea').addEventListener('drop', handl
 var groupBulkExcelColumnSelectDone = function() {
 	$('#groupBulkExcelCheckTable tbody').html('');
 	alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
 	//numberOfCols = alphabet.indexOf(workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/[a-zA-Z]+/)[0]) + 1;
 	numberOfRows = workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/\d+/)[0];
 	for(var i=2; i<=numberOfRows; i++) {
 		var user = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnUsers').val()-1]+i].v;
 		var group = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnGroups').val()-1]+i].v;
+
 		$('#groupBulkExcelCheckTable tbody').html($('#groupBulkExcelCheckTable tbody').html() + '<tr><td>'+user+'</td><td>'+group+'</td></tr>');
 	}
 }

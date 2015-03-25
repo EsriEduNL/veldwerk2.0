@@ -311,6 +311,7 @@ define([
         
         removeStudentUserFromGroup: function(username, groupid)
         {
+
         	console.log('remove user ' + username + ' to group ' + groupid);
         
 			var deferred = new Deferred();
