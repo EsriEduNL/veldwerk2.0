@@ -18,7 +18,7 @@ require([
     
     "esri/config",
     
-    "/js/VeldWerkCalls.js"
+    "js/VeldWerkCalls.js"
 
   ], function (
     
@@ -231,10 +231,10 @@ require([
 		  });
 		  
 		  ////////////////////
-		  //Modal: add-group//
-          $('#modal-add-group .btn-primary').on('click', function() {
-          	createNewGroupAndStuff($('#modal-add-group input[name=groupname]').val());
-          	$('#modal-add-group').modal('hide');
+		  //Modal: add-group, tab add-groups-single//
+          $('#modal-add-groups #add-groups-single .btn-primary').on('click', function() {
+          	createNewGroupAndStuff($('#modal-add-groups #add-groups-single input[name=groupname]').val());
+          	$('#modal-add-groups').modal('hide');
           });
           
           

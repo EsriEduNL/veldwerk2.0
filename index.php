@@ -277,9 +277,8 @@
 
         <div class="col-xs-4">
         <h4>Bewerken</h4>
-            <p><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-add-group">Groep toevoegen</button></p>
-            <p><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-add-groups">Groep toevoegen in bulk</button></p>
-            <p><button type="button" class="btn btn-default btn-goto-add-users" data-toggle="modal" data-target="#modal-add-users" id="manageUsersDragdrop">Gebruikers beheren</button></p>
+            <p><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-add-groups">Groep(en) toevoegen</button></p>
+            <p><button type="button" class="btn btn-default btn-goto-add-users" data-toggle="modal" data-target="#modal-manage-users" id="manageUsersDragdrop">Gebruikers beheren</button></p>
         </div>
 
             
@@ -324,6 +323,7 @@
       <div class="row">
         <div class="col-md-6" id="col-section-contact">
           <h3>Contact</h3>
+          <strong>LET OP! Het contactformulier werkt niet naar behoren. Vragen over deze applicatie kunnen door gebruikers van Veldwerk 2.0 gesteld worden via het forum dat aan hen beschikbaar is gesteld. </strong>
           <form role="form">
             <div class="form-group">
               <label for="name">Naam</label>
@@ -365,32 +365,62 @@
   </section>  
 <!-- end section-contact-and-about -->
   
-  <!-- MODALS -->
-  <!--
-  START MODAL ADD GROUP
+  <!-- 
+  START MODAL ADD GROUPS
   -->
-  <div class="modal fade" id="modal-add-group" tabindex="-1" role="dialog" aria-labelledby="Groep toevoegen" aria-hidden="true">
-    <div class="modal-dialog">
+  <div class="modal fade" id="modal-add-groups" tabindex="-1" role="dialog" aria-labelledby="Maak groepen" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Sluit</span></button>
-          <h4 class="modal-title">Nieuwe groep aanmaken</h4>
+          <h4 class="modal-title">Groepen toevoegen</h4>
         </div>
         <div class="modal-body">
+          <ul class="nav nav-tabs">
+          <li class="active"><a href="#add-groups-single" data-toggle="tab">Enkele groep</a></li>
+          <li><a href="#add-groups-multiple" data-toggle="tab">Meerdere groepen</a></li>
+          </ul>
           
-          <label>Naam van de groep</label>
-          <input type="text" name="groupname"/>
-          <p class="help-block">Hou de naam kort en krachtig</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
-          <button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Aanmaken</button>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->   
+          <div class="tab-content">
+            <div class="tab-pane active" id="add-groups-single">
+              <label>Naam van de groep</label>
+              <input type="text" name="groupname"/>
+              <p class="help-block">Hou de naam kort en krachtig</p>
+              
+              <button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Aanmaken</button>
+              
+            </div><!-- end tab-pane add-groups-sinle -->
+            <div class="tab-pane" id="add-groups-multiple">
+        
+              <div class="well well-lg" id="groupBulkExcelDropArea">
+                  <p>Sleep een Excel bestand (.xls of .xlsx) vanaf uw computer hier naartoe. <a href="/files/exampleUsersGroups.xls" target="_blank">Een voorbeeld van een geschikt bestand is hier te downloaden.</a></p>
+                  <p id="groupBulkExcelLoaded" style="visibility: hidden">Het bestand <em id="groupBulkExcelLoadedName"></em> is geladen.</p>
+              </div>
+              
+              <div id="groupBulkExcelColumnselectArea" style="display:none">
+                  <table class="table table-hover" id="groupBulkExcelCheckTable">
+                      <thead>
+                          <tr><th>Gebruikersnaam</th><th>Groepsnaam</th></tr>
+                          <tr><td colspan="2"><p>In welke kolom staan de gebruikersnamen (inlognamen) en en welke kolom de groepsnamen?</p></td></tr>
+                          <tr><td><select id="groupBulkExcelColumnUsers"></select></td><td><select id="groupBulkExcelColumnGroups"></select></td></tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                  </table>
+                  <p>Klik op <em>Maak groepen</em> om de groepen uit het Excel-bestand aan te maken. Wilt u ook de gebruikers uit het Excel-bestand toevoegen aan de groepen, kies dan voor <em>Gebruikers koppelen</em>.</p>
+                  <p>
+                  <span class="btn btn-default" id="groupBulkExcelDoTheMagic">Maak groepen</span>
+                  <span class="btn btn-default" id="groupBulkExcelDoTheMagic2">Koppel gebruikers</span>
+                  </p>
+              </div><!-- end #groupBulkExcelColumnselectArea -->
+            </div><!-- end tab-pane #tab-add-groups-multiple -->
+            
+		  </div><!-- end tab-content -->
+        </div><!-- end modal-body -->
+      </div><!-- end modal-content -->
+    </div><!-- end modal-dialog -->
+  </div><!-- END MODAL ADD GROUPS -->
   
-  <!-- MODALS -->
   <!--
   START MODAL EDIT GROUP
   -->
@@ -484,9 +514,9 @@
   </div><!-- /.modal -->   
   
   <!-- 
-  START MODAL ADD USERS
+  START MODAL MANAGE USERS
   -->
-  <div class="modal fade" id="modal-add-users" tabindex="-1" role="dialog" aria-labelledby="Gebruiker(s) toevoegen" aria-hidden="true">
+  <div class="modal fade" id="modal-manage-users" tabindex="-1" role="dialog" aria-labelledby="Gebruiker(s) toevoegen" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -534,9 +564,7 @@
         
                   </div><!-- end col-xs-6 -->    
                 </div><!-- end div row -->
-                
-          
-          
+    
         </div><!-- end #modal-body -->
         
         <div class="modal-footer">
@@ -611,46 +639,7 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal --> 
   
-  <!-- 
-  START MODAL ADD USERS
-  -->
-  <div class="modal fade" id="modal-add-groups" tabindex="-1" role="dialog" aria-labelledby="Maak groepen" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Sluit</span></button>
-          <h4 class="modal-title">Maak groepen</h4>
-        </div>
-        <div class="modal-body">
-        	<div class="well well-lg" id="groupBulkExcelDropArea">
-        		<p>Drop hier een .xls (Excel) bestand. <a href="/files/exampleUsersGroups.xls" target="_blank">Een voorbeeld is hier te downloaden.</a></p>
-        		<p id="groupBulkExcelLoaded" style="visibility: hidden">Het bestand <em id="groupBulkExcelLoadedName"></em> is geladen.</p>
-        	</div>
-        	
-        	<div id="groupBulkExcelColumnselectArea" style="display:none">
-
-
-				<table class="table table-hover" id="groupBulkExcelCheckTable">
-					<thead>
-						<tr><th>Gebruikersnaam</th><th>Groepsnaam</th></tr>
-						<tr><td colspan="2"><p>In welke kolom staan de gebruikersnamen (inlognamen) en en welke kolom de groepsnamen?</p></td></tr>
-						<tr><td><select id="groupBulkExcelColumnUsers"></select></td><td><select id="groupBulkExcelColumnGroups"></select></td></tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-				<p>Klik op <em>Maak groepen</em> om de groepen uit het Excel-bestand aan te maken. Wilt u ook de gebruikers uit het Excel-bestand toevoegen aan de groepen, kies dan voor <em>Gebruikers koppelen</em>.</p>
-				<p>
-				<span class="btn btn-default" id="groupBulkExcelDoTheMagic">Maak groepen</span>
-				<span class="btn btn-default" id="groupBulkExcelDoTheMagic2">Koppel gebruikers</span>
-				</p>
-        	</div>
-
-        
-        </div>
-      </div>
-    </div>
-  </div>
+  
               
   
   <!-- Default JS Stuff -->  

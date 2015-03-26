@@ -382,11 +382,14 @@ div.selected-webmap-groups{
 ////////*/
 
 /*//////////////////
-//Modal add-group*/
-#modal-add-group input{
+//Modal add-groups*/
+#modal-add-groups .tab-content{
+	padding-top:10px;
+}
+#modal-add-groups #add-groups-single input{
 	display:block;
 }
-#modal-add-group p.help-block{
+#modal-add-groups #add-groups-single p.help-block{
 	font-size:14px;
 }
 
