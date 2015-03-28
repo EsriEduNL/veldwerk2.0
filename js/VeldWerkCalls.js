@@ -20,7 +20,10 @@ define([
   config
 
 ) {
-	esri.config.defaults.io.proxyUrl = "http://178.62.235.101/proxy.php";
+	//fixed
+	//esri.config.defaults.io.proxyUrl = "http://178.62.235.101/proxy.php";
+	//use current server
+	esri.config.defaults.io.proxyUrl = window.location.protocol + '//' + window.location.host + window.location.pathname + '/proxy.php';
 
     return declare([], {
 		//questionLayerAllowedStrings: ['vragen', 'VRAGEN'];
