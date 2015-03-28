@@ -384,7 +384,7 @@
           <div class="tab-content">
             <div class="tab-pane active" id="add-groups-single">
               <label>Naam van de groep</label>
-              <input type="text" name="groupname"/>
+              <input type="text" name="groupname" autocomplete="off"/>
               <p class="help-block">Hou de naam kort en krachtig</p>
               
               <button type="button" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-repeat spin-icon'></span> Bezig..." autocomplete="off">Aanmaken</button>
@@ -398,10 +398,10 @@
                   <p><a href="/files/exampleUsersGroups.xls" target="_blank">Een voorbeeld van een geschikt Excel bestand is hier te downloaden.</a></p>
                   <p id="groupBulkExcelLoaded" style="visibility: hidden">Het bestand <em id="groupBulkExcelLoadedName"></em> is geladen.</p>
               </div>
-			  <p>Of selecteer een bestand van uw computer <input type="file" id="groupBulkExcelBrowse"/></p>
+			  <p>Of selecteer een bestand van uw computer <input type="file" id="groupBulkExcelInput" autocomplete="off"/></p>
               
               <div>
-                <form id="groupBulkExcel-formGroups">
+                <form id="groupBulkExcel-formGroupsColumn">
                   <div class="form-group">
                     <label for="groupBulkExcelColumnGroups">In welke kolom bevinden zich de groepsnamen?</label>
                     <div class="row">
