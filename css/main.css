@@ -392,7 +392,8 @@ div.selected-webmap-groups{
 #modal-add-groups #add-groups-single p.help-block{
 	font-size:14px;
 }
-#modal-add-groups #add-groups-multiple #groupBulkExcel-formGroupsColumn{
+#modal-add-groups #add-groups-multiple #groupBulkExcel-formGroupsColumn,
+#modal-add-groups #add-groups-multiple #groupBulkExcel-formUsers{
 	display:none;
 }
 

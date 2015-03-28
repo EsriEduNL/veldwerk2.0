@@ -255,11 +255,10 @@ require([
 			createGroupsFromExcel();
 		  });
 		  
-		  //$('#groupBulkExcelColumnGroups').on('change', function(){ groupBulkExcelColumnSelectDone(); });
-		  /*$('#groupBulkExcelColumnUsers').on('change', function()
-		  { 
-		    createGroupsFromExcel(); 
-		  });*/
+		  $('input[name=wantToAddUsersToGroup]').on('change', function()
+		  {
+//@TODO: toggle #groupBulkExcel-formUsersColumn
+		  });
 	  
 
 
@@ -932,6 +931,7 @@ require([
 
 		function createGroupsFromExcel(){
 		  var currentGroups = {};
+		  $('#groupBulkExcel-resultList').html('');
 		  vCalls.getGroupsForMap(currentWebmapId).then(function(response) {
 		    $.each( response.results, function( key, value ) 
 		    {
@@ -939,18 +939,29 @@ require([
 		    });
 			
 			numberOfRows = workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/\d+/)[0];
-			for(var i=2; i<=numberOfRows; i++) {
-				var group = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnGroups').val()-1]+i].v;
+			console.log(numberOfRows);
+			$('#groupBulkExcelGroups-resultArea').html('<p><strong>' + (numberOfRows-1) + ' groepen gevonden om aan te maken</strong></p><ul class="list-group" id="groupBulkExcelGroups-resultList">');
+			for(var i=2; i<=numberOfRows; i++) 
+			{//i=1 = first row with column headings, therefore i =2
+				var groupName = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnGroups').val()-1]+i].v;
 		
 				//create new groups if needed
-				if(!(group in currentGroups)) 
+				if(!(groupName in currentGroups)) 
 				{
-					console.log('have to create a new group: ' + group);
-					tmp = createNewGroupAndDependencies(group);
-					currentGroups[group] = tmp;
-					console.log(currentGroups);
+				  console.log('have to create a new group: ' + groupName);
+				  tmp = createNewGroupAndDependencies(groupName);
+				  console.log('tmp:',tmp);
+				  currentGroups[group] = tmp;
+				  console.log('currentGroups:', currentGroups);
+				  $('#groupBulkExcelGroups-resultArea ul').append('<li class="list-group-item list-group-item-success">('+(i-1)+' van ' + (numberOfRows-1) + ') Groep <strong>'+groupName+'</strong> is aangemaakt</li>');
+				}else
+				{
+				  console.log('Group not created, because it already exists: ', groupName);
+				  $('#groupBulkExcelGroups-resultArea ul').append('<li class="list-group-item list-group-item-success">('+(i-1)+' van ' + (numberOfRows-1) + ') Groep <strong>'+groupName+'</strong> bestaat al en is daarom niet aangemaakt</li>');
 				}
 			}
+			$('#groupBulkExcelGroups-resultArea').append('</ul><p>Alle groepen uit uw Excel bestand zijn verwerkt. Het resultaat daarvan is hierboven getoond.</p>');
+			$('#groupBulkExcel-formUsers').show();
 		  });
 		}//end function createGroupsFromExcel
 

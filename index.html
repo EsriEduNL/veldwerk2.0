@@ -413,26 +413,28 @@
                   <button type="submit" class="btn btn-default">Start groepen aanmaken</button>
                   <!--<span class="btn btn-default" id="groupBulkExcelDoTheMagic">Start groepen aanmaken</span>-->
                 </form>
+                
+                <div id="groupBulkExcelGroups-resultArea">
+                </div>
                   
-                  
-<p>@TODO: wanneer groepen aanmaken klaar is volgende tonen</p>
-                  
-                  <form id="groupBulkExcel-formUsers">
+                <form id="groupBulkExcel-formUsers">
                     <div class="form-group">
                       <label for="">Wilt u bestaande ArcGIS Online gebruikers aan de nieuwe groepen toewijzen?</label>
                       <div class="radio">
                           <label>
-                            <input type="radio" name="optionsRadios" id="optionsRadios1" value="no" checked>
+                            <input type="radio" name="wantToAddUsersToGroup" id="wantToAddUsersToGroup-no" value="no">
                             Nee
                           </label>
                         </div>
                         <div class="radio">
                           <label>
-                            <input type="radio" name="optionsRadios" id="optionsRadios2" value="yes">
+                            <input type="radio" name="wantToAddUsersToGroup" id="wantToAddUsersToGroup-yes" value="yes" checked>
                             Ja
                           </label>
                         </div>
                     </div>
+                </form>
+                <form id="groupBulkExcel-formUsersColumn">
  <p>@TODO: if yes: show below</p>
                     <div class="form-group">
                       <label for="groupBulkExcelColumnUsers" >In welke kolom bevinden zich de gebruikersnamen?</label>
@@ -448,6 +450,11 @@
                     
                 </form>
 <p>@TODO: if no: show success message, you're done</p>
+                
+                <div id="groupBulkExcel-resultArea">
+                </div>
+                <ul class="list-group" id="groupBulkExcel-resultList">
+                </ul>
                 
               </div>
               
