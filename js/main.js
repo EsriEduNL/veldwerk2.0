@@ -582,6 +582,7 @@ require([
 				  initAssiningUsersToGroup();//FOR NOW!!! This function should be moved to here, since several calls in that funtion are already done here
 //@TODO: load users and assign them to groups; the getGroupsForMap result is available as getGroupsForMapResponse();
 //We possibly have to add vCalls.getPortalUsers().then as a call that needs to be performed in the start of this function(use All([]))
+//Niels: maybe we should wait to fix this nice-to-have-things untill we have AngularJs:)
 				  
 			  }
 			  query(".webmap-list-container").style("display", 'none');
@@ -776,8 +777,7 @@ require([
 					$.each( result1.users, function( key1, value1 ) 
 					{	
 					  usersInAGroup.push(value1);
-//@TODO: niels hier een data-group-id-prev toevoegen
-				      usersInThisGroupHtml = usersInThisGroupHtml + '<li class="list-group-item" data-user-id="'+ allTheUsers[value1].username +'" style="z-index: 1051">' + allTheUsers[value1].fullName + '</li>';
+				      usersInThisGroupHtml = usersInThisGroupHtml + '<li data-group-id-prev="'+ value.id +'" class="list-group-item" data-user-id="'+ allTheUsers[value1].username +'" style="z-index: 1051">' + allTheUsers[value1].fullName + '</li>';
 					  $('#assiningUsersToGroupUsers').children('li[data-user-id=' + value1 + ']').remove();
 								
 					});
@@ -794,12 +794,19 @@ require([
 
 					  drop: function(event, ui) 
 					    {
-						  console.log($(ui.draggable).parent());
+					      //remove
+						  if(ui.draggable.attr("data-group-id-prev")) {
+						  	//hiero
+						  	console.log('should remove user ' + ui.draggable.attr("data-user-id") + ' from group '+ ui.draggable.attr("data-group-id-prev"));
+						  	vCalls.removeStudentUserFromGroup(ui.draggable.attr("data-user-id"), ui.draggable.attr("data-group-id-prev"));
+						  }
+							ui.draggable.attr("data-group-id-prev",  $(this).attr("data-group-id"));
+						 //add
 						  var tmp = $(this).children()[0];
 						  $(tmp).append($(ui.draggable));
 						  vCalls.addStudentUserToGroup(ui.draggable.attr("data-user-id"), $(this).attr("data-group-id"));
-//@TODO niels als data-group-id-prev -> verwijder van die groep	
-//@TODO niels data-group-id-prev maken/updaten
+
+
 					    }
 					});
 							
@@ -833,13 +840,20 @@ require([
 			drop: function(event, ui) 
 			{
 				$("#assiningUsersToGroupUsers").append($(ui.draggable));
-				//niels data-group-id-prev verijwderen
+			  if(ui.draggable.attr("data-group-id-prev")) {
+				//hiero
+				console.log('should remove user ' + ui.draggable.attr("data-user-id") + ' from group '+ ui.draggable.attr("data-group-id-prev"));
+				vCalls.removeStudentUserFromGroup(ui.draggable.attr("data-user-id"), ui.draggable.attr("data-group-id-prev"));
+			  }
+				ui.draggable.attr("data-group-id-prev",  null);
+				console.log('should have removed data-group-id-prev: ' + ui.draggable.attr("data-group-id-prev"));
 			}
 		});
 
       }//End ??
 
-	  
+	  //toto niels test stukje hiero onder
+	  $('#ikbenniels').bind('click', initAssiningUsersToGroup);
       
       
 	  var listSearch = function() 
