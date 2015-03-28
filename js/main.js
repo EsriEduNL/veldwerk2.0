@@ -764,9 +764,9 @@ require([
 									$(tmp).append($(ui.draggable));
 									vCalls.addStudentUserToGroup(ui.draggable.attr("data-user-id"), $(this).attr("data-group-id"));
 									
-									//niels als data-group-id-prev -> verwijder van die groep
+	//niels als data-group-id-prev -> verwijder van die groep
 									
-									//niels data-group-id-prev maken/updaten
+	//niels data-group-id-prev maken/updaten
 								}
 							});*/
 							
@@ -824,88 +824,99 @@ require([
       $('#manageUsersDragdrop').bind('click', initAssiningUsersToGroup);
       
       
-		var listSearch = function() {
-			
-			var string = $(this).val().toLowerCase();
-			
-			
-			$.each($('#'+$(this).attr('data-listSearch')).children(), function( key, value ) {
-				if($(value).attr('data-listSearchValue').toLowerCase().indexOf(string) >= 0) {
-					$(value).css('display', 'block');
-				}
-				else {
-					$(value).css('display', 'none');
-				}
-			
-			});
-			
-		}
-		$('.listSearch').keyup(listSearch);
-		
-		
-		
-/* set up drag-and-drop event */
-var handleDrop = function(e) {
+	  var listSearch = function() {
+		  
+		  var string = $(this).val().toLowerCase();
+		  
+		  
+		  $.each($('#'+$(this).attr('data-listSearch')).children(), function( key, value ) {
+			  if($(value).attr('data-listSearchValue').toLowerCase().indexOf(string) >= 0) {
+				  $(value).css('display', 'block');
+			  }
+			  else {
+				  $(value).css('display', 'none');
+			  }
+		  
+		  });
+		  
+	  }
+	  $('.listSearch').keyup(listSearch);
 
-	e.stopPropagation();
-	e.preventDefault();
-	var files = e.dataTransfer.files;
-	var i,f;
-	for (i = 0, f = files[i]; i != files.length; ++i) {
-		var reader = new FileReader();
-		var name = f.name;
-		reader.onload = function(e) {
-			var data = e.target.result;
+		
+	  $("#groupBulkExcelDropArea").on('dragenter', function (e) 
+	  {
+		  e.stopPropagation();
+		  e.preventDefault();
+		  $(this).css('border', '2px solid #CCCCCC');
+		  e.dataTransfer.dropEffect = 'copy';
+	  });
+	  $("#groupBulkExcelDropArea").on('dragover', function (e) 
+	  {
+		   e.stopPropagation();
+		   e.preventDefault();
+		   e.dataTransfer.dropEffect = 'copy';
+	  });
+	  $("#groupBulkExcelDropArea").on('drop', function (e) 
+	  {
+		  $(this).css('border', '2px dotted #0B85A1');
+		  e.stopPropagation();
+		  e.preventDefault();
+		  var files = e.originalEvent.dataTransfer.files;
+		  readExcelFile(files);
+	  });
+	
 
-			// if binary string, read with type 'binary'
-			console.log(name);
-			if(name.substring(name.length-5).toLowerCase() == '.xlsx') {
-				workbook = XLSX.read(data, {type: 'binary'});
-			}
-			else {
-				workbook = XLS.read(data, {type: 'binary'});
-			}
-			
-			console.log(workbook);
-			// DO SOMETHING WITH workbook HERE
-			$('#groupBulkExcelLoaded').css('visibility', 'visible');
-			$('#groupBulkExcelLoadedName').html(name);
-			$('#groupBulkExcelColumnselectArea').css('display', 'block');
-			
-			columns = [];
-			alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-			numberOfCols = alphabet.indexOf(workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/[a-zA-Z]+/)[0]) + 1;
-			for(var i=1; i<=numberOfCols; i++) {
-				columns.push({
-					id: i,
-					name: workbook.Sheets[workbook.SheetNames[0]][alphabet[i-1]+'1'].v
-				});
-				
-				$('#groupBulkExcelColumnGroups').html('');
-				$('#groupBulkExcelColumnUsers').html('');
-				$.each(columns, function( key, value) {
-					$('#groupBulkExcelColumnGroups').html($('#groupBulkExcelColumnGroups').html() + '<option value='+value.id+'>'+value.name+'</option>');
-					$('#groupBulkExcelColumnUsers').html($('#groupBulkExcelColumnUsers').html() + '<option value='+value.id+'>'+value.name+'</option>');
+		var readExcelFile = function(files){
+			var i,f;
+			for (i = 0, f = files[i]; i != files.length; ++i) {
+				var reader = new FileReader();
+				var name = f.name;
+				reader.onload = function(e) {
+					var data = e.target.result;
+		
+					// if binary string, read with type 'binary'
+					//console.log(name);
+					if(name.substring(name.length-5).toLowerCase() == '.xlsx') {
+						workbook = XLSX.read(data, {type: 'binary'});
+					}
+					else if(name.substring(name.length-4).toLowerCase() == '.xls'){
+						workbook = XLS.read(data, {type: 'binary'});
+					}else{
+						alert("Het bestand wordt niet herkend als een Excel bestand.");
+						return false;
+					}
 					
-				});
-				
-				
+					//console.log(workbook);
+					// DO SOMETHING WITH workbook HERE
+					$('#groupBulkExcelLoaded').css('visibility', 'visible');
+					$('#groupBulkExcelLoadedName').html(name);
+					$('#groupBulkExcelColumnselectArea').css('display', 'block');
+					
+					columns = [];
+					alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+					numberOfCols = alphabet.indexOf(workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/[a-zA-Z]+/)[0]) + 1;
+					for(var i=1; i<=numberOfCols; i++) {
+						columns.push({
+							id: i,
+							name: workbook.Sheets[workbook.SheetNames[0]][alphabet[i-1]+'1'].v
+						});
+						
+						$('#groupBulkExcelColumnGroups').html('<option value="">Selecteer...</option>');
+						$('#groupBulkExcelColumnUsers').html('<option value="">Selecteer...</option>');
+						$.each(columns, function( key, value) {
+							$('#groupBulkExcelColumnGroups').html($('#groupBulkExcelColumnGroups').html() + '<option value='+value.id+'>'+value.name+'</option>');
+							$('#groupBulkExcelColumnUsers').html($('#groupBulkExcelColumnUsers').html() + '<option value='+value.id+'>'+value.name+'</option>');
+							
+						});
+						
+						
+					}
+					//console.log(columns);
+				};
+				reader.readAsBinaryString(f);
 			}
-			console.log(columns);
-		};
-		reader.readAsBinaryString(f);
-	}
-}
-function handleDragover(e) {
-	e.stopPropagation();
-	e.preventDefault();
-	e.dataTransfer.dropEffect = 'copy';
-}
+		}//End function readExcelFile
 
-document.getElementById('groupBulkExcelDropArea').addEventListener('dragenter', handleDragover, false);
-document.getElementById('groupBulkExcelDropArea').addEventListener('dragover', handleDragover, false);
-document.getElementById('groupBulkExcelDropArea').addEventListener('drop', handleDrop, false);
-document.getElementById('groupBulkExcelBrowse').addEventListener('change', handleDrop, false);
 
 var groupBulkExcelColumnSelectDone = function() {
 	$('#groupBulkExcelCheckTable tbody').html('');
