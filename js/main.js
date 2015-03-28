@@ -248,14 +248,18 @@ require([
 		  
 		  $('form#groupBulkExcel-formGroupsColumn').on('submit', function(e){
 		    e.preventDefault();
-			
+			if(!$('#groupBulkExcelColumnGroups').val()){
+				alert('Selecteer de kolom die de aan te maken groepen bevat om door te gaan.');
+				return false;
+		    }
+			createGroupsFromExcel();
 		  });
 		  
 		  //$('#groupBulkExcelColumnGroups').on('change', function(){ groupBulkExcelColumnSelectDone(); });
-		  $('#groupBulkExcelColumnUsers').on('change', function()
+		  /*$('#groupBulkExcelColumnUsers').on('change', function()
 		  { 
 		    createGroupsFromExcel(); 
-		  });
+		  });*/
 	  
 
 
