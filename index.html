@@ -393,16 +393,70 @@
             <div class="tab-pane" id="add-groups-multiple">
         
               <div class="well well-lg" id="groupBulkExcelDropArea">
-                  <p>Sleep een Excel bestand (.xls of .xlsx) vanaf uw computer hier naartoe. <a href="/files/exampleUsersGroups.xls" target="_blank">Een voorbeeld van een geschikt bestand is hier te downloaden.</a></p>
+                  <p>Sleep een Excel bestand (.xls of .xlsx) vanaf uw computer hier naartoe. </p>
+                  <p>Of selecteer een bestand van uw computer <input type="file" id="groupBulkExcelBrowse"/></p>
+                  <p><a href="/files/exampleUsersGroups.xls" target="_blank">Een voorbeeld van een geschikt Excel bestand is hier te downloaden.</a></p>
                   <p id="groupBulkExcelLoaded" style="visibility: hidden">Het bestand <em id="groupBulkExcelLoadedName"></em> is geladen.</p>
               </div>
+			  
+              <div>
+                <form id="groupBulkExcel-formGroups">
+                  <div class="form-group">
+                    <label for="groupBulkExcelColumnGroups">In welke kolom bevinden zich de groepsnamen?</label>
+                    <div class="row">
+  					  <div class="col-xs-5">
+  					    <select id="groupBulkExcelColumnGroups" name="groupBulkExcelColumnGroups" class="form-control"></select>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-default">Start groepen aanmaken</button>
+                  <!--<span class="btn btn-default" id="groupBulkExcelDoTheMagic">Start groepen aanmaken</span>-->
+                </form>
+                  
+                  
+<p>@TODO: wanneer groepen aanmaken klaar is volgende tonen</p>
+                  
+                  <form id="groupBulkExcel-formUsers">
+                    <div class="form-group">
+                      <label for="">Wilt u bestaande ArcGIS Online gebruikers aan de nieuwe groepen toewijzen?</label>
+                      <div class="radio">
+                          <label>
+                            <input type="radio" name="optionsRadios" id="optionsRadios1" value="no" checked>
+                            Nee
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="optionsRadios" id="optionsRadios2" value="yes">
+                            Ja
+                          </label>
+                        </div>
+                    </div>
+ <p>@TODO: if yes: show below</p>
+                    <div class="form-group">
+                      <label for="groupBulkExcelColumnUsers" >In welke kolom bevinden zich de gebruikersnamen?</label>
+                      <div class="row">
+  					    <div class="col-xs-5">
+                      	  <select id="groupBulkExcelColumnUsers" name="groupBulkExcelColumnUsers" class="form-control"></select>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-default">Start gebruikers koppelen aan groepen</button>
+                    <!--<span class="btn btn-default" id="groupBulkExcelDoTheMagic2">Start gebruikers koppellen aan groepen</span>-->
+                    
+                </form>
+<p>@TODO: if no: show success message, you're done</p>
+                
+              </div>
+              
               
               <div id="groupBulkExcelColumnselectArea" style="display:none">
                   <table class="table table-hover" id="groupBulkExcelCheckTable">
                       <thead>
                           <tr><th>Gebruikersnaam</th><th>Groepsnaam</th></tr>
                           <tr><td colspan="2"><p>In welke kolom staan de gebruikersnamen (inlognamen) en en welke kolom de groepsnamen?</p></td></tr>
-                          <tr><td><select id="groupBulkExcelColumnUsers"></select></td><td><select id="groupBulkExcelColumnGroups"></select></td></tr>
+                          <tr><td><select id="groupBulkExcelColumnGroups"></select></td><td><select id="groupBulkExcelColumnUsers"></select></td></tr>
                       </thead>
                       <tbody>
                       </tbody>

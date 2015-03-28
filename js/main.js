@@ -206,29 +206,6 @@ require([
 			$('#users-aol-all').append(parent);
 		  });
 		  
-		  //AOL users form submit
-		  $('#modal-add-users #tab-users-aol .btn-primary').on('click', function(){
-			  var groupid = $('#tab-users-aol select[name=add-to-group]').val();
-			  var listItems = $("#users-aol-selected li");
-			  var usernamesToAdd = [];
-	
-			  listItems.each(function(index,li) {
-				  var username = $(li).children('a').attr('data-username');
-				  var fullname = $(li).children('a').attr('data-fullname');
-				  usernamesToAdd.push({username: username, fullname: fullname});
-			  });
-			  var i = 0;
-			  usernamesToAdd.forEach(function(user, index, usernamesToAdd){
-				  vCalls.addStudentUserToGroup(user.username, groupid)
-				  .then(function(){ 
-				  	$('ul#group-'+groupid).append('<li data-username="'+user.username+'">'+user.fullname+' ('+user.username+') <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></li>');
-					 if (index === usernamesToAdd.length - 1) {
-						 $('#users-aol-selected').html('');
-						 $('#modal-add-users').modal('hide');
-					 }
-				})
-			});
-		  });
 		  
 		  ////////////////////
 		  //Modal: add-group, tab add-groups-single//
@@ -242,8 +219,6 @@ require([
 
     //@TODO: move all stuff below regarding vCalls.createGroup to a seperate function in main.js (so it can also be triggered by different actions)
     //niels: zojuist gedaan
-    
-    
     
             $(this).button('loading');
 			
@@ -267,8 +242,6 @@ require([
 				var objForUI = {};
 				objForUI[0] = {groupid: createGroupResults.group.id, groupname: createGroupResults.group.title};
 				addGroupsToUI(objForUI, false);
-				//$('#modal-add-group .btn-primary').button('reset');
-				//$('#modal-add-group').modal('hide');
 
 		//TODO: check if a map exists that has a title which refers to this groups tile
 				
@@ -932,6 +905,7 @@ function handleDragover(e) {
 document.getElementById('groupBulkExcelDropArea').addEventListener('dragenter', handleDragover, false);
 document.getElementById('groupBulkExcelDropArea').addEventListener('dragover', handleDragover, false);
 document.getElementById('groupBulkExcelDropArea').addEventListener('drop', handleDrop, false);
+document.getElementById('groupBulkExcelBrowse').addEventListener('change', handleDrop, false);
 
 var groupBulkExcelColumnSelectDone = function() {
 	$('#groupBulkExcelCheckTable tbody').html('');
