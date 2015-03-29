@@ -392,6 +392,21 @@
             </div><!-- end tab-pane add-groups-sinle -->
             <div class="tab-pane" id="add-groups-multiple">
         
+        
+        <!-- todo put in css file -->
+        <style>        
+        #groupBulkExcelGroups-step2,
+        #groupBulkExcelGroups-step3,
+        #groupBulkExcelGroups-step4,
+        #groupBulkExcelGroups-stepFinal,
+        #groupBulkExcelUsers-resultArea,
+        #groupBulkExcelGroups-resultArea {
+        	display: none;
+        }
+        
+        </style>
+        
+              <div id="groupBulkExcelGroups-step1">step1
               <div class="well well-lg" id="groupBulkExcelDropArea">
                   <p>Sleep een Excel bestand (.xls of .xlsx) vanaf uw computer hier naartoe. </p>
                   
@@ -399,8 +414,11 @@
                   <p id="groupBulkExcelLoaded" style="visibility: hidden">Het bestand <em id="groupBulkExcelLoadedName"></em> is geladen.</p>
               </div>
 			  <p>Of selecteer een bestand van uw computer <input type="file" id="groupBulkExcelInput" autocomplete="off"/></p>
+              </div> <!-- /step1 -->
+              
               
               <div>
+                <div id="groupBulkExcelGroups-step2">step2
                 <form id="groupBulkExcel-formGroupsColumn">
                   <div class="form-group">
                     <label for="groupBulkExcelColumnGroups">In welke kolom bevinden zich de groepsnamen?</label>
@@ -413,11 +431,13 @@
                   <button type="submit" class="btn btn-default">Start groepen aanmaken</button>
                   <!--<span class="btn btn-default" id="groupBulkExcelDoTheMagic">Start groepen aanmaken</span>-->
                 </form>
+                </div> <!-- /step2 -->
                 
                 <div id="groupBulkExcelGroups-resultArea">
                 </div>
-                  
-                <form id="groupBulkExcel-formUsers">
+                
+                <div id="groupBulkExcelGroups-step3">step3
+                <form>
                     <div class="form-group">
                       <label for="">Wilt u bestaande ArcGIS Online gebruikers aan de nieuwe groepen toewijzen?</label>
                       <div class="radio">
@@ -428,14 +448,16 @@
                         </div>
                         <div class="radio">
                           <label>
-                            <input type="radio" name="wantToAddUsersToGroup" id="wantToAddUsersToGroup-yes" value="yes" checked>
+                            <input type="radio" name="wantToAddUsersToGroup" id="wantToAddUsersToGroup-yes" value="yes">
                             Ja
                           </label>
                         </div>
                     </div>
                 </form>
+                </div><!-- /step3 -->
+                
+                <div id="groupBulkExcelGroups-step4">step4
                 <form id="groupBulkExcel-formUsersColumn">
- <p>@TODO: if yes: show below</p>
                     <div class="form-group">
                       <label for="groupBulkExcelColumnUsers" >In welke kolom bevinden zich de gebruikersnamen?</label>
                       <div class="row">
@@ -449,16 +471,21 @@
                     <!--<span class="btn btn-default" id="groupBulkExcelDoTheMagic2">Start gebruikers koppellen aan groepen</span>-->
                     
                 </form>
-<p>@TODO: if no: show success message, you're done</p>
-                
-                <div id="groupBulkExcel-resultArea">
                 </div>
-                <ul class="list-group" id="groupBulkExcel-resultList">
-                </ul>
                 
-              </div>
+                
+                <div id="groupBulkExcelUsers-resultArea">
+                </div>
+
+                <div id="groupBulkExcelGroups-stepFinal">
+					<p>Klaar</p>
+					<!-- todo sluit knopje -->
+                </div>
+
+                
+              </div><!-- /stepXXXX -->
               
-              
+              <!-- niels: oud
               <div id="groupBulkExcelColumnselectArea" style="display:none">
                   <table class="table table-hover" id="groupBulkExcelCheckTable">
                       <thead>
@@ -474,6 +501,7 @@
                   <span class="btn btn-default" id="groupBulkExcelDoTheMagic">Maak groepen</span>
                   <span class="btn btn-default" id="groupBulkExcelDoTheMagic2">Koppel gebruikers</span>
                   </p>
+                  -->
               </div><!-- end #groupBulkExcelColumnselectArea -->
             </div><!-- end tab-pane #tab-add-groups-multiple -->
             
