@@ -452,8 +452,59 @@
                       </div>
                     </div>
                     
+                    <p style="display:none;">Als een gebruikersnaam niet wordt gevonden, kan automatisch een nieuwe account aangemaakt worden. In dat geval zijn meer gegevens nodig. <a id="toggleColumnsUserDetails">Klik hier</a> om deze op te geven.</p>
+                    
+                    <div id="groupBulkExcelColumnsUserDetails">
+                      <div class="form-group">
+                        <label for="groupBulkExcelColumnUsersFirstname">In welke kolom bevinden zich de voornamen?</label>
+                        <div class="row">
+                          <div class="col-xs-5">
+                            <select id="groupBulkExcelColumnUsersFirstname" name="groupBulkExcelColumnUsersFirstname" class="form-control"></select>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label for="groupBulkExcelColumnUsersLastname">In welke kolom bevinden zich de achternamen?</label>
+                        <div class="row">
+                          <div class="col-xs-5">
+                            <select id="groupBulkExcelColumnUsersLastname" name="groupBulkExcelColumnUsersLastname" class="form-control"></select>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label for="groupBulkExcelColumnUsersPassword">In welke kolom bevinden zich de wachtwoorden?</label>
+                        <div class="row">
+                          <div class="col-xs-5">
+                            <select id="groupBulkExcelColumnUsersPassword" name="groupBulkExcelColumnUsersPassword" class="form-control"></select>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label for="groupBulkExcelColumnUsersEmail">In welke kolom bevinden zich de e-mailadressen?</label>
+                        <div class="row">
+                          <div class="col-xs-5">
+                            <select id="groupBulkExcelColumnUsersEmail" name="groupBulkExcelColumnUsersEmail" class="form-control"></select>
+                            <span id="helpBlock" class="help-block">Beschikt u niet over de e-mailadressen, gebruik in het Excel bestand dan uw eigen e-mailadres.</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label for="groupBulkExcelColumnUsersRole">In welke kolom bevinden zich de gebruikers-rollen?</label>
+                        <div class="row">
+                          <div class="col-xs-5">
+                            <select id="groupBulkExcelColumnUsersRole" name="groupBulkExcelColumnUsersRole" class="form-control"></select>
+                            <span id="helpBlock" class="help-block">Wanneer de in het Excel bestand genoemde rol niet bestaat, krijgt de nieuwe gebruiker de standaard gebruikers-rol toegewezen.</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                    </div>
+                    
                     <button type="submit" class="btn btn-default">Start gebruikers koppelen aan groepen</button>
-                    <!--<span class="btn btn-default" id="groupBulkExcelDoTheMagic2">Start gebruikers koppellen aan groepen</span>-->
                     
                 </form>
                 </div>
@@ -470,23 +521,7 @@
                 
               </div><!-- /stepXXXX -->
               
-              <!-- niels: oud
-              <div id="groupBulkExcelColumnselectArea" style="display:none">
-                  <table class="table table-hover" id="groupBulkExcelCheckTable">
-                      <thead>
-                          <tr><th>Gebruikersnaam</th><th>Groepsnaam</th></tr>
-                          <tr><td colspan="2"><p>In welke kolom staan de gebruikersnamen (inlognamen) en en welke kolom de groepsnamen?</p></td></tr>
-                          <tr><td><select id="groupBulkExcelColumnGroups"></select></td><td><select id="groupBulkExcelColumnUsers"></select></td></tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-                  </table>
-                  <p>Klik op <em>Maak groepen</em> om de groepen uit het Excel-bestand aan te maken. Wilt u ook de gebruikers uit het Excel-bestand toevoegen aan de groepen, kies dan voor <em>Gebruikers koppelen</em>.</p>
-                  <p>
-                  <span class="btn btn-default" id="groupBulkExcelDoTheMagic">Maak groepen</span>
-                  <span class="btn btn-default" id="groupBulkExcelDoTheMagic2">Koppel gebruikers</span>
-                  </p>
-                  -->
+              
               </div><!-- end #groupBulkExcelColumnselectArea -->
             </div><!-- end tab-pane #tab-add-groups-multiple -->
             
@@ -540,13 +575,13 @@
           <label>Wilt u de kaart die hoort bij deze groep verwijderen?</label>
           <div class="radio">
             <label>
-              <input type="radio" name="delete-map" id="donot-delete-map" value="no">
+              <input type="radio" name="delete-map" id="donot-delete-map" value="no" autocomplete="off">
               Nee
             </label>
           </div>
           <div class="radio">
             <label>
-              <input type="radio" name="delete-map" id="do-delete-map" value="yes">
+              <input type="radio" name="delete-map" id="do-delete-map" value="yes" autocomplete="off">
               Ja, verwijder de kaart van deze groep
             </label>
           </div>
@@ -554,13 +589,13 @@
           <label>Wilt u de gebruikers van deze groep verwijderen?</label>
           <div class="radio">
             <label>
-              <input type="radio" name="delete-users" id="donot-delete-users" value="no" checked>
+              <input type="radio" name="delete-users" id="donot-delete-users" value="no" autocomplete="off" checked>
               Nee
             </label>
           </div>
           <div class="radio">
             <label>
-              <input type="radio" name="delete-users" id="do-delete-users" value="yes">
+              <input type="radio" name="delete-users" id="do-delete-users" value="yes" autocomplete="off">
               Ja, verwijder de gebruikers van deze groep
             </label>
           </div>
@@ -568,13 +603,13 @@
           <label>Wilt u de beantwoorde vragen van deze groep verwijderen?</label>
           <div class="radio">
             <label>
-              <input type="radio" name="delete-questions" id="donot-delete-questions" value="no" checked>
+              <input type="radio" name="delete-questions" id="donot-delete-questions" value="no" autocomplete="off" checked>
               Nee
             </label>
           </div>
           <div class="radio">
             <label>
-              <input type="radio" name="delete-questions" id="do-delete-questions" value="yes">
+              <input type="radio" name="delete-questions" id="do-delete-questions" value="yes" autocomplete="off">
               Ja, verwijder de gebruikers van deze groep
             </label>
           </div>

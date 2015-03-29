@@ -257,6 +257,9 @@ define([
 		    if(!data.role)
 			{
 				data.role = 'account_user';
+			}else
+			{
+//@TODO: check if custom role existst for the organisation. If not, data.role = 'account_user';
 			}
 			
 			var contentStr = {

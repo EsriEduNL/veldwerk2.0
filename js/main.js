@@ -267,11 +267,15 @@ require([
 				$('#groupBulkExcelGroups-step4').hide();
 			}
 		  });
-	  
+	  	  $('a#toggleColumnsUserDetails').on('click', function()
+		  {
+			  $('#groupBulkExcelColumnsUserDetails').toggle();
+		  });
+		  
 		  $('form#groupBulkExcel-formUsersColumn').on('submit', function(e){
 		    e.preventDefault();
 			if(!$('#groupBulkExcelColumnUsers').val()){
-				alert('Selecteer de kolom die de gebruikersname bevat om door te gaan.');
+				alert('Selecteer de kolom die de gebruikersnamen bevat om door te gaan.');
 				return false;
 		    }
 			createUsersFromExcel();
@@ -889,63 +893,61 @@ require([
 	  }
 	  $('.listSearch').keyup(listSearch);
 
-		function readExcelFile(files)
-		{
-			var i,f;
-			for (i = 0, f = files[i]; i != files.length; ++i) 
-			{
-				var reader = new FileReader();
-				var name = f.name;
-				reader.onload = function(e) 
-				{
-					var data = e.target.result;
-		
-					// if binary string, read with type 'binary'
-					if(name.substring(name.length-5).toLowerCase() == '.xlsx') 
-					{
-						workbook = XLSX.read(data, {type: 'binary'});
-					}
-					else if(name.substring(name.length-4).toLowerCase() == '.xls')
-					{
-						workbook = XLS.read(data, {type: 'binary'});
-					}else
-					{
-						alert("Het bestand wordt niet herkend als een Excel bestand.");
-						return false;
-					}
-					
-					$('#groupBulkExcelLoaded').css('visibility', 'visible');
-					$('#groupBulkExcelLoadedName').html(name);
-					$('#groupBulkExcelGroups-step2').show();
-					$('#groupBulkExcelGroups-resultArea').html('');
-					$('#groupBulkExcelGroups-step3').hide();
-					$('#groupBulkExcelGroups-step4').hide();
-					$('#groupBulkExcelUsers-resultArea').html('');
-					$('#groupBulkExcelGroups-stepFinal').hide();
-					
-					columns = [];
-					alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-					numberOfCols = alphabet.indexOf(workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/[a-zA-Z]+/)[0]) + 1;
-					for(var i=1; i<=numberOfCols; i++) 
-					{
-						columns.push({
-							id: i,
-							name: workbook.Sheets[workbook.SheetNames[0]][alphabet[i-1]+'1'].v
-						});
-						
-						$('#groupBulkExcelColumnGroups').html('<option value="">Selecteer...</option>');
-						$('#groupBulkExcelColumnUsers').html('<option value="">Selecteer...</option>');
-						$.each(columns, function( key, value) 
-						{
-							$('#groupBulkExcelColumnGroups').html($('#groupBulkExcelColumnGroups').html() + '<option value='+value.id+'>'+value.name+'</option>');
-							$('#groupBulkExcelColumnUsers').html($('#groupBulkExcelColumnUsers').html() + '<option value='+value.id+'>'+value.name+'</option>');
-							
-						});
-					}
-					//console.log(columns);
-				};
-				reader.readAsBinaryString(f);
-			}
+	  function readExcelFile(files)
+	  {
+		  var i,f;
+		  for (i = 0, f = files[i]; i != files.length; ++i) 
+		  {
+			  var reader = new FileReader();
+			  var name = f.name;
+			  reader.onload = function(e) 
+			  {
+				  var data = e.target.result;
+	  
+				  // if binary string, read with type 'binary'
+				  if(name.substring(name.length-5).toLowerCase() == '.xlsx') 
+				  {
+					  workbook = XLSX.read(data, {type: 'binary'});
+				  }
+				  else if(name.substring(name.length-4).toLowerCase() == '.xls')
+				  {
+					  workbook = XLS.read(data, {type: 'binary'});
+				  }else
+				  {
+					  alert("Het bestand wordt niet herkend als een Excel bestand.");
+					  return false;
+				  }
+				  
+				  $('#groupBulkExcelLoaded').css('visibility', 'visible');
+				  $('#groupBulkExcelLoadedName').html(name);
+				  $('#groupBulkExcelGroups-step2').show();
+				  $('#groupBulkExcelGroups-resultArea').html('');
+				  $('#groupBulkExcelGroups-step3').hide();
+				  $('#groupBulkExcelGroups-step4').hide();
+				  $('#groupBulkExcelUsers-resultArea').html('');
+				  $('#groupBulkExcelGroups-stepFinal').hide();
+				  
+				  columns = [];
+				  alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+				  numberOfCols = alphabet.indexOf(workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/[a-zA-Z]+/)[0]) + 1;
+				  for(var i=1; i<=numberOfCols; i++) 
+				  {
+					  columns.push({
+						  id: i,
+						  name: workbook.Sheets[workbook.SheetNames[0]][alphabet[i-1]+'1'].v
+					  });
+					  
+					  $('#groupBulkExcelColumnGroups, #groupBulkExcelColumnUsers, #groupBulkExcelColumnUsersFirstname, #groupBulkExcelColumnUsersLastname, #groupBulkExcelColumnUsersPassword, #groupBulkExcelColumnUsersEmail, #groupBulkExcelColumnUsersRole').html('<option value="">Selecteer...</option>');
+					  
+					  $.each(columns, function( key, value) 
+					  {
+						  $('#groupBulkExcelColumnGroups, #groupBulkExcelColumnUsers, #groupBulkExcelColumnUsersFirstname, #groupBulkExcelColumnUsersLastname, #groupBulkExcelColumnUsersPassword, #groupBulkExcelColumnUsersEmail, #groupBulkExcelColumnUsersRole').html($('#groupBulkExcelColumnGroups').html() + '<option value='+value.id+'>'+value.name+'</option>');  
+					  });
+				  }
+				  //console.log(columns);
+			  };
+			  reader.readAsBinaryString(f);
+		  }
 		}//End function readExcelFile
 
   		/*function groupBulkExcelColumnSelectDone() {
