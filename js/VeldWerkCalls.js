@@ -213,13 +213,32 @@ define([
 		getPortalUsers: function()
 		{
 			var deferred = new Deferred();
-			
+//@TODO: get ALL users, in chuncks of 50 per request, and return all the API responses			
 			var requestUrl = portalUrl + "/sharing/rest/portals/"+portal.id+"/users";
             var itemRequest = esriRequest({
                     url: requestUrl,
-                    content: { f: "json"},
+                    content: { f: "json", num: 50, start:1},
                     handleAs: "json"
             }, {usePost: true});
+			
+			itemRequest.then(function(result)
+			{
+				for(var i=51; i<=result.nextStart; i=i+50)
+				{
+					console.log('we need to fetch again. i=', i);
+					var itemRequest2 = esriRequest({
+                    	url: requestUrl,
+                    	content: { f: "json", num: 50, start:i},
+                    	handleAs: "json"
+            		}, {usePost: true});
+					itemRequest2.then(function(result2)
+					{
+						console.log(result2)
+					});
+				}
+				
+				console.log(result.total, result.nextStart)
+			});
 
 			return itemRequest;
 			

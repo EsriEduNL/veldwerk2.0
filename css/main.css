@@ -70,6 +70,25 @@ form label{
 	font-size: .875em;
     line-height: 1.71429em;
 }
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
 
 /*
 //Navigation
@@ -319,6 +338,7 @@ ul.webmap-meta li{
 
 div.selected-webmap-groups{
   	padding:10px;
+	margin-top:10px;
 }
 #groups-list,
 #groups-list ul{
@@ -391,6 +411,29 @@ div.selected-webmap-groups{
 }
 #modal-add-groups #add-groups-single p.help-block{
 	font-size:14px;
+}
+#groupBulkExcelGroups-step1 #groupBulkExcelLoaded,
+#groupBulkExcelGroups-step2,
+#groupBulkExcelGroups-step3,
+#groupBulkExcelGroups-step4,
+#groupBulkExcelGroups-stepFinal,
+#groupBulkExcelUsers-resultArea,
+#groupBulkExcelGroups-resultArea {
+	display: none;
+}
+#groupBulkExcelGroups-step1 .well{
+	border-style:dashed;
+	border-color:#aaa;
+	border-width:2px;
+	background:none;
+}
+
+#groupBulkExcelGroups-resultList,
+#groupBulkExcelUsers-resultList{
+	margin-top:10px;
+}
+#groupBulkExcelGroups-stepFinal{
+	margin-top:10px;
 }
 
 /*/////////////////

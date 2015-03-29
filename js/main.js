@@ -164,9 +164,9 @@ require([
 		  
 
           
-          //
-          //MODALS
-          //
+          //////////
+          //MODALS//
+          //////////
 		  
 		  ///////////////////
           //Modal add-users//
@@ -222,7 +222,7 @@ require([
 		  {
 			  e.stopPropagation();
 			  e.preventDefault();
-			  $(this).css('border', '2px solid #CCCCCC');
+			  $(this).css('border', '2px dashed #0B85A1');
 			  e.originalEvent.dataTransfer = 'copy';
 		  });
 		  $("#groupBulkExcelDropArea").on('dragover', function (e) 
@@ -233,7 +233,7 @@ require([
 		  });
 		  $("#groupBulkExcelDropArea").on('drop', function (e) 
 		  {
-			  $(this).css('border', '2px dotted #0B85A1');
+			  $(this).css('border', '2px dashed #0B85A1');
 			  e.stopPropagation();
 			  e.preventDefault();
 			  var files = e.originalEvent.dataTransfer.files;
@@ -254,7 +254,19 @@ require([
 		    }
 			createGroupsFromExcel();
 		  });
-
+		  
+		  $('input[name=wantToAddUsersToGroup]').on('change', function() 
+		  {
+			if($('input[name=wantToAddUsersToGroup]:checked').val() == 'yes') 
+			{
+				$('#groupBulkExcelGroups-step4').show();
+				$('#groupBulkExcelGroups-stepFinal').hide();
+			}else 
+			{
+				$('#groupBulkExcelGroups-stepFinal').show();
+				$('#groupBulkExcelGroups-step4').hide();
+			}
+		  });
 	  
 		  $('form#groupBulkExcel-formUsersColumn').on('submit', function(e){
 		    e.preventDefault();
@@ -936,7 +948,7 @@ require([
 			}
 		}//End function readExcelFile
 
-  		function groupBulkExcelColumnSelectDone() {
+  		/*function groupBulkExcelColumnSelectDone() {
 		  $('#groupBulkExcelCheckTable tbody').html('');
 		  alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 			
@@ -948,7 +960,7 @@ require([
 
 		    $('#groupBulkExcelCheckTable tbody').html($('#groupBulkExcelCheckTable tbody').html() + '<tr><td>'+user+'</td><td>'+group+'</td></tr>');
 		  }
-		}//End function groupBulkExcelColumnSelectDone
+		}//End function groupBulkExcelColumnSelectDone*/
 
 		function createGroupsFromExcel(){
 		  var currentGroups = {};
@@ -962,7 +974,7 @@ require([
 			numberOfRows = workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/\d+/)[0];
 			console.log(numberOfRows);
 			$('#groupBulkExcelGroups-resultArea').show();
-			$('#groupBulkExcelGroups-resultArea').html('<p><strong>' + (numberOfRows-1) + ' groepen gevonden om aan te maken</strong></p><ul class="list-group" id="groupBulkExcelGroups-resultList">');
+			$('#groupBulkExcelGroups-resultArea').html('<ul class="list-group" id="groupBulkExcelGroups-resultList"><li class="list-group-item"><strong>' + (numberOfRows-1) + ' groepen gevonden om aan te maken</strong></li>');
 			for(var i=2; i<=numberOfRows; i++) 
 			{//i=1 = first row with column headings, therefore i =2
 				var groupName = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnGroups').val()-1]+i].v;
@@ -983,74 +995,72 @@ require([
 				  $('#groupBulkExcelGroups-resultList').append('<li class="list-group-item list-group-item-warning">('+(i-1)+' van ' + (numberOfRows-1) + ') Groep <strong>'+groupName+'</strong> bestaat al en is daarom niet aangemaakt.</li>');
 				}
 			}
-			$('#groupBulkExcelGroups-resultArea').append('</ul><p>Alle groepen uit uw Excel bestand zijn verwerkt. Het resultaat daarvan is hierboven getoond.</p>');
+			$('#groupBulkExcelGroups-resultArea').append('<li class="list-group-item"><strong><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Alle groepen uit uw Excel bestand zijn verwerkt.</strong></li></ul>');
 			$('#groupBulkExcelGroups-step3').show();
 		  });
 		  
-		//make a fresh list of all current groups so we can use it it in createUsersFromExcel() later on
-		window.currentGroups = {};
-		vCalls.getGroupsForMap(currentWebmapId).then(function(response) {
-			$.each( response.results, function( key, value ) {
+		  //make a fresh list of all current groups so we can use it it in createUsersFromExcel() later on
+		  window.currentGroups = {};
+		  vCalls.getGroupsForMap(currentWebmapId).then(function(response) 
+		  {
+			$.each( response.results, function( key, value ) 
+			{
 				window.currentGroups[value.title] = value.id;
 			});
-		});	
+		  });	
 		  
 		}//end function createGroupsFromExcel
 		
-		$('input[name=wantToAddUsersToGroup]').bind('change', function() {
-			if($('input[name=wantToAddUsersToGroup]:checked').val() == 'yes') {
-				$('#groupBulkExcelGroups-step4').show();
-				$('#groupBulkExcelGroups-stepFinal').hide();
-			}
-			else {
-				$('#groupBulkExcelGroups-stepFinal').show();
-				$('#groupBulkExcelGroups-step4').hide();
-			}
-		});
+		
 
-var createUsersFromExcel = function() {
+		function createUsersFromExcel() 
+		{
 		
-		numberOfRows = workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/\d+/)[0];
-		$('#groupBulkExcelUsers-resultArea').show();
-		$('#groupBulkExcelUsers-resultArea').html('<p><strong>' + (numberOfRows-1) + ' gebruikers gevonden om toe te voegen</strong></p><ul class="list-group" id="groupBulkExcelUsers-resultList"></ul>');
+		  numberOfRows = workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/\d+/)[0];
+		  
+		  $('#groupBulkExcelUsers-resultArea').show();
+		  $('#groupBulkExcelUsers-resultArea').html('<ul class="list-group" id="groupBulkExcelUsers-resultList"><li class="list-group-item"><strong>' + (numberOfRows-1) + ' gebruikers gevonden om toe te wijzen aan een groep</strong></li>');
 		
-		vCalls.getPortalUsers().then(function(response) {
+		  vCalls.getPortalUsers()
+		  .then(function(response) 
+		  {
 			allTheUsers = [];
-			$.each( response.users, function( key, value ) {
+			$.each( response.users, function( key, value ) 
+			{
 				allTheUsers.push(value.username);
 			});
-		}).then(function() {
-		
-			for(var i=2; i<=numberOfRows; i++) {
-				var user = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnUsers').val()-1]+i].v;
-				var groupName = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnGroups').val()-1]+i].v;
-				console.log('link user ' + user + ' to group ' + groupName + ' ' + window.currentGroups[groupName]);
-				$('#groupBulkExcelUsers-resultArea ul').append('<li class="list-group-item list-group-item-success">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is toegevoegd aan groep <strong>'+groupName+'</strong>.</li>');
+		  })
+		  .then(function() 
+		  {
+			for(var i=2; i<=numberOfRows; i++) 
+			{
+			  var user = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnUsers').val()-1]+i].v;
+			  var groupName = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnGroups').val()-1]+i].v;
+			  console.log('link user ' + user + ' to group ' + groupName + ' ' + window.currentGroups[groupName]);
+			  
 	
-				
-	
-				if((user in allTheUsers)) {
-					//add user to groep if group exsists
-					if(group in window.currentGroups) {
-						vCalls.addStudentUserToGroup(user, window.currentGroups[groupName]);
-					}
-					else {
-						//group of user not found
-						$('#groupBulkExcelUsers-resultArea ul').append('<li class="list-group-item list-group-item-danger">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is niet toegevoegd, want groep <strong>'+groupName+'</strong> bestaat niet.</li>');
-					}
+			  if((user in allTheUsers)) 
+			  {
+			    //add user to groep if group exsists
+				if(group in window.currentGroups)
+				{
+				  vCalls.addStudentUserToGroup(user, window.currentGroups[groupName]);
+				  $('#groupBulkExcelUsers-resultArea').append('<li class="list-group-item list-group-item-success">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is toegevoegd aan groep <strong>'+groupName+'</strong>.</li>');
+				}else 
+				{
+				  //group of user not found
+				  $('#groupBulkExcelUsers-resultArea ul').append('<li class="list-group-item list-group-item-danger">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is niet toegevoegd aan de groep '+groupName+' omdat deze groep niet bestaat.</li>');
 				}
-				else {
-					//user does not exist in arcgis
-					$('#groupBulkExcelUsers-resultArea ul').append('<li class="list-group-item list-group-item-danger">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is niet toegevoegd aan groep <strong>'+groupName+'</strong>, want de gebruiker bestaat niet in ArgGisOnline.</li>');
-				}
-		
-			}
-		});
-
-	$('#groupBulkExcelGroups-stepFinal').show();
-
-}
-
+			  }else 
+			  {
+				//user does not exist in arcgis
+				$('#groupBulkExcelUsers-resultArea ul').append('<li class="list-group-item list-group-item-danger">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is niet toegevoegd aan groep <strong>'+groupName+'</strong> omdat de gebruiker niet bestaat in ArgGisOnline.</li>');
+			  }
+			}//End for loop
+			$('#groupBulkExcelUsers-resultArea').append('<li class="list-group-item"><strong><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Alle gebruikers uit uw Excel bestand zijn verwerkt.</strong></li></ul>');
+		  });//End .then
+		  $('#groupBulkExcelGroups-stepFinal').show();
+		}//End function  createUsersFromExcel
 
 
-  });
+});
