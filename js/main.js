@@ -1037,12 +1037,11 @@ require([
 			  var user = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnUsers').val()-1]+i].v;
 			  var groupName = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnGroups').val()-1]+i].v;
 			  console.log('link user ' + user + ' to group ' + groupName + ' ' + window.currentGroups[groupName]);
-			  
-	
-			  if((user in allTheUsers)) 
+
+			  if(allTheUsers.indexOf(user) > -1) 
 			  {
 			    //add user to groep if group exsists
-				if(group in window.currentGroups)
+				if(groupName in window.currentGroups)
 				{
 				  vCalls.addStudentUserToGroup(user, window.currentGroups[groupName]);
 				  $('#groupBulkExcelUsers-resultArea').append('<li class="list-group-item list-group-item-success">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is toegevoegd aan groep <strong>'+groupName+'</strong>.</li>');
@@ -1054,6 +1053,8 @@ require([
 			  }else 
 			  {
 				//user does not exist in arcgis
+//@TODO: we should create it. Therefore, we DO need to ask a bit more details from the user, to identify the correct excel columns
+//createStudentUser([username: '..', password: '..', fisrtname:'..', lastname: '..', email: '..', role: '..']);				
 				$('#groupBulkExcelUsers-resultArea ul').append('<li class="list-group-item list-group-item-danger">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is niet toegevoegd aan groep <strong>'+groupName+'</strong> omdat de gebruiker niet bestaat in ArgGisOnline.</li>');
 			  }
 			}//End for loop

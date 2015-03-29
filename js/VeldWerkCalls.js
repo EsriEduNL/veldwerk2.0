@@ -217,18 +217,18 @@ define([
 			var requestUrl = portalUrl + "/sharing/rest/portals/"+portal.id+"/users";
             var itemRequest = esriRequest({
                     url: requestUrl,
-                    content: { f: "json", num: 50, start:1},
+                    content: { f: "json", num: 100, start:1},
                     handleAs: "json"
             }, {usePost: true});
 			
 			itemRequest.then(function(result)
 			{
-				for(var i=51; i<=result.nextStart; i=i+50)
+				for(var i=101; i<=result.nextStart; i=i+100)
 				{
 					console.log('we need to fetch again. i=', i);
 					var itemRequest2 = esriRequest({
                     	url: requestUrl,
-                    	content: { f: "json", num: 50, start:i},
+                    	content: { f: "json", num: 100, start:i},
                     	handleAs: "json"
             		}, {usePost: true});
 					itemRequest2.then(function(result2)
@@ -254,11 +254,15 @@ define([
 			$.each($(data), function() {
 				dataObj[this.name] = this.value;
 			});
-		
+		    if(!data.role)
+			{
+				data.role = 'account_user';
+			}
+			
 			var contentStr = {
 				f: "json", 
 				invitationList: JSON.stringify({"invitations": [
-				  {"username": data.username, "password": data.password, "firstname": dataObj.firstname, "lastname": dataObj.lastname, "fullname": dataObj.firstname+' '+dataObj.lastname, "email": dataObj.email, "role":"account_user"}
+				  {"username": data.username, "password": data.password, "firstname": dataObj.firstname, "lastname": dataObj.lastname, "fullname": dataObj.firstname+' '+dataObj.lastname, "email": dataObj.email, "role":dataObj.role}
 				] })
 			};
 
