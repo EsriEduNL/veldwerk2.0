@@ -966,6 +966,7 @@ require([
 
 		function createGroupsFromExcel(){
 		  var currentGroups = {};
+		  var groupsJustCreated = {};
 		  $('#groupBulkExcel-resultList').html('');
 		  vCalls.getGroupsForMap(currentWebmapId).then(function(response) {
 		    $.each( response.results, function( key, value ) 
@@ -976,28 +977,34 @@ require([
 			numberOfRows = workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/\d+/)[0];
 			console.log(numberOfRows);
 			$('#groupBulkExcelGroups-resultArea').show();
-			$('#groupBulkExcelGroups-resultArea').html('<ul class="list-group" id="groupBulkExcelGroups-resultList"><li class="list-group-item"><strong>' + (numberOfRows-1) + ' groepen gevonden om aan te maken</strong></li>');
-			for(var i=2; i<=numberOfRows; i++) 
-			{//i=1 = first row with column headings, therefore i =2
+			$('#groupBulkExcelGroups-resultArea').html('<ul class="list-group" id="groupBulkExcelGroups-resultList"><li class="list-group-item"><strong><span class="groupBulkExcelGroups-resultListAmount"></span> groepen gevonden om aan te maken</strong></li>');
+			var groupBulkExcelGroupsResultListAmount = 0;
+			for(var i=2; i<=numberOfRows; i++) {//i=1 = first row with column headings, therefore i =2
 				var groupName = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnGroups').val()-1]+i].v;
-		
+				
 				//create new groups if needed
-				if(!(groupName in currentGroups)) 
-				{
+				if(!(groupName in currentGroups)) {
 				  console.log('have to create a new group: ' + groupName);
 				  tmp = createNewGroupAndDependencies(groupName);
 				  //console.log('tmp:',tmp);
 				  //currentGroups[group] = tmp;
 				  //console.log('currentGroups:', currentGroups);
-				  currentGroups[groupName] = 1;
-				  $('#groupBulkExcelGroups-resultList').append('<li class="list-group-item list-group-item-success">('+(i-1)+' van ' + (numberOfRows-1) + ') Groep <strong>'+groupName+'</strong> is aangemaakt.</li>');
+				  currentGroups[groupName] = 1; //1 means just created
+				  groupsJustCreated[groupName] = 1;
+				  //('+(i-1)+' van <span class="groupBulkExcelGroups-resultListAmount"></span>)
+				  $('#groupBulkExcelGroups-resultList').append('<li class="list-group-item list-group-item-success">Groep <strong>'+groupName+'</strong> is aangemaakt.</li>');
+				  groupBulkExcelGroupsResultListAmount = groupBulkExcelGroupsResultListAmount + 1
 				}else
 				{
-				  console.log('Group not created, because it already exists: ', groupName);
-				  $('#groupBulkExcelGroups-resultList').append('<li class="list-group-item list-group-item-warning">('+(i-1)+' van ' + (numberOfRows-1) + ') Groep <strong>'+groupName+'</strong> bestaat al en is daarom niet aangemaakt.</li>');
+					if(!(groupName in groupsJustCreated)) {
+					  console.log('Group not created, because it already exists: ', groupName);
+					  //('+(i-1)+' van <span class="groupBulkExcelGroups-resultListAmount"></span>)
+					  $('#groupBulkExcelGroups-resultList').append('<li class="list-group-item list-group-item-warning">Groep <strong>'+groupName+'</strong> bestaat al en is daarom niet aangemaakt.</li>');
+					}
 				}
 			}
-			$('#groupBulkExcelGroups-resultArea').append('<li class="list-group-item"><strong><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Alle groepen uit uw Excel bestand zijn verwerkt.</strong></li></ul>');
+			$('.groupBulkExcelGroups-resultListAmount').html(groupBulkExcelGroupsResultListAmount);
+			$('#groupBulkExcelGroups-resultList').append('<li class="list-group-item"><strong><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Alle groepen uit uw Excel bestand zijn verwerkt.</strong></li></ul>');
 			$('#groupBulkExcelGroups-step3').show();
 		  });
 		  
@@ -1022,7 +1029,7 @@ require([
 		  
 		  $('#groupBulkExcelUsers-resultArea').show();
 		  $('#groupBulkExcelUsers-resultArea').html('<ul class="list-group" id="groupBulkExcelUsers-resultList"><li class="list-group-item"><strong>' + (numberOfRows-1) + ' gebruikers gevonden om toe te wijzen aan een groep</strong></li>');
-		
+		  var groupBulkExcelUsersResultList = {};
 		  vCalls.getPortalUsers()
 		  .then(function(response) 
 		  {
@@ -1046,21 +1053,29 @@ require([
 				if(groupName in window.currentGroups)
 				{
 				  vCalls.addStudentUserToGroup(user, window.currentGroups[groupName]);
-				  $('#groupBulkExcelUsers-resultArea').append('<li class="list-group-item list-group-item-success">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is toegevoegd aan groep <strong>'+groupName+'</strong>.</li>');
+				  //$('#groupBulkExcelUsers-resultList').append('<li class="list-group-item list-group-item-success">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is toegevoegd aan groep <strong>'+groupName+'</strong>.</li>');
+				  groupBulkExcelUsersResultList[i] = '<li class="list-group-item list-group-item-success">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is toegevoegd aan groep <strong>'+groupName+'</strong>.</li>';
 				}else 
 				{
 				  //group of user not found
-				  $('#groupBulkExcelUsers-resultArea ul').append('<li class="list-group-item list-group-item-danger">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is niet toegevoegd aan de groep '+groupName+' omdat deze groep niet bestaat.</li>');
+				  //$('#groupBulkExcelUsers-resultList').append('<li class="list-group-item list-group-item-danger">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is niet toegevoegd aan de groep '+groupName+' omdat deze groep niet bestaat.</li>');
+				  groupBulkExcelUsersResultList[i] = '<li class="list-group-item list-group-item-danger">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is niet toegevoegd aan de groep '+groupName+' omdat deze groep niet bestaat.</li>';
 				}
 			  }else 
 			  {
 				//user does not exist in arcgis
 //@TODO: we should create it. Therefore, we DO need to ask a bit more details from the user, to identify the correct excel columns
 //createStudentUser([username: '..', password: '..', fisrtname:'..', lastname: '..', email: '..', role: '..']);				
-				$('#groupBulkExcelUsers-resultArea ul').append('<li class="list-group-item list-group-item-danger">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is niet toegevoegd aan groep <strong>'+groupName+'</strong> omdat de gebruiker niet bestaat in ArgGisOnline.</li>');
+				//$('#groupBulkExcelUsers-resultList').append('<li class="list-group-item list-group-item-danger">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is niet toegevoegd aan groep <strong>'+groupName+'</strong> omdat de gebruiker niet bestaat in ArgGisOnline.</li>');
+				groupBulkExcelUsersResultList[i] = '<li class="list-group-item list-group-item-danger">('+(i-1)+' van ' + (numberOfRows-1) + ') Gebruiker <strong>'+user+'</strong> is niet toegevoegd aan groep <strong>'+groupName+'</strong> omdat de gebruiker niet bestaat in ArgGisOnline.</li>';
 			  }
 			}//End for loop
-			$('#groupBulkExcelUsers-resultArea').append('<li class="list-group-item"><strong><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Alle gebruikers uit uw Excel bestand zijn verwerkt.</strong></li></ul>');
+			
+			for(var i=2; i<=numberOfRows; i++) {
+				$('#groupBulkExcelUsers-resultList').append(groupBulkExcelUsersResultList[i]);
+			}
+			
+			$('#groupBulkExcelUsers-resultList').append('<li class="list-group-item"><strong><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Alle gebruikers uit uw Excel bestand zijn verwerkt.</strong></li></ul>');
 		  });//End .then
 		  $('#groupBulkExcelGroups-stepFinal').show();
 		}//End function  createUsersFromExcel
