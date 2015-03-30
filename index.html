@@ -586,10 +586,10 @@
             </label>
           </div>
           
-          <label>Wilt u de gebruikers van deze groep verwijderen?</label>
+          <label>Wilt u de gebruikers die lid zijn van deze groep verwijderen uit ArcGIS Online?</label>
           <div class="radio">
             <label>
-              <input type="radio" name="delete-users" id="donot-delete-users" value="no" autocomplete="off" checked>
+              <input type="radio" name="delete-users" id="donot-delete-users" value="no" autocomplete="off">
               Nee
             </label>
           </div>
@@ -600,17 +600,17 @@
             </label>
           </div>
           
-          <label>Wilt u de beantwoorde vragen van deze groep verwijderen?</label>
+          <label>Wilt u de vragen van deze groep verwijderen uit de kaartlaag?</label>
           <div class="radio">
             <label>
-              <input type="radio" name="delete-questions" id="donot-delete-questions" value="no" autocomplete="off" checked>
+              <input type="radio" name="delete-questions" id="donot-delete-questions" value="no" autocomplete="off">
               Nee
             </label>
           </div>
           <div class="radio">
             <label>
               <input type="radio" name="delete-questions" id="do-delete-questions" value="yes" autocomplete="off">
-              Ja, verwijder de gebruikers van deze groep
+              Ja, verwijder de vragen van deze groep
             </label>
           </div>
           
@@ -687,6 +687,7 @@
   <!--
   START MODAL DELETE USER
   -->
+  <!-- CURRENTLY NOT USED -->
   <div class="modal fade" id="modal-delete-user" tabindex="-1" role="dialog" aria-labelledby="Gebruiker verwijderen" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -703,13 +704,13 @@
           <label>Wilt u het account van deze gebruiker ook verwijderen uit ArcGIS Online?</label>
           <div class="radio">
             <label>
-              <input type="radio" name="delete-users" id="donot-delete-users" value="no" checked>
+              <input type="radio" name="delete-users" id="donot-delete-users" value="no" autocomplete="off" checked>
               Nee
             </label>
           </div>
           <div class="radio">
             <label>
-              <input type="radio" name="delete-users" id="do-delete-users" value="yes">
+              <input type="radio" name="delete-users" id="do-delete-users" value="yes" autocomplete="off">
               Ja, verwijder de gebruiker uit ArcGIS Online
             </label>
           </div>

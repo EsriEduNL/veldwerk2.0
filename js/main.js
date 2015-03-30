@@ -318,7 +318,7 @@ require([
 		  //////////////////////
 		  //Modal delete group//
 		  $('#modal-delete-group .btn-primary').on('click', function(){
-	
+//@TODO: check if all radio's have a :checked; since autocomplete="off" the don't have on by default	
 			  var groupid = $('#modal-delete-group input[name=groupid]').val();
 			  
 			  All([vCalls.getUsersForGroup(groupid), vCalls.getMapsForGroup(groupid)])
@@ -330,30 +330,36 @@ require([
 				  var getUsersForGroupResp = results[0],
 				  getMapsForGroupResp = results[1]
 					  
-				  vCalls.deleteGroup(groupid);
-				  vCalls.deleteMap(getMapsForGroupResp.items[0].id);
+			// vCalls.deleteGroup(groupid).then(function(deleteGroupResults){console.log('deleteGroup is done. Result:', deleteGroupResults)});
 				  
-				  //If we should delete the map(s), add that task to the vCalls Array
+				  //If we should delete the map(s), do so
 				  console.log('should we delete maps: ' + $('#modal-delete-group input[name=delete-map]:checked').val() );
 				  if( $('#modal-delete-group input[name=delete-map]:checked').val() == 'yes' )
 				  {
-				    $(getMapsForGroupResp.items).each(function(i, itemId)
+				    $(getMapsForGroupResp.items).each(function(i, item)
 				    {
-						  vCalls.deleteMap(itemId);
+						  vCalls.deleteMap(item.id).then(
+						    function(deleteMapResult)
+							{ 
+//@TODO: provide UI feedback							
+							  console.log('deleteMap is done. Result:', deleteMapResult); 
+							}
+						  );
                     }
 				    );
 				  }
+return false;
 				  
-				  //If we should delete questions, add that task to the vCalls array
+				  //If we should delete questions, do so
 				  console.log('should we delete questions: ' + $('#modal-delete-group input[name=delete-questions]:checked').val() );
 				  if($('#modal-delete-group input[name=delete-questions]:checked').val() == 'yes')
 				  {
-	//@TODO: make functuon deleteQuestionsForGroup work
-	console.log('we gaan delete-qeustions vall toevoegen');
+//@TODO: make functuon deleteQuestionsForGroup work
+console.log('we gaan delete-qeustions vall toevoegen');
 					  vCalls.deleteQuestionsForGroup(getMapsForGroupResp.items[0].id, groupid);
 				  }
 				  
-				  //If we should delete users, add every call to the vCalls array
+				  //If we should delete users, do so
 				  console.log('should we delete users: ' + $('#modal-delete-group input[name=delete-users]:checked').val());
 				  if($('#modal-delete-group input[name=delete-users]:checked').val() == 'yes')
 				  {  
@@ -365,10 +371,10 @@ require([
 				     );
 				  }
 				  
-				  	//UI update
-					$('#modal-delete-group').modal('hide');
-					$('#groups-list li[data-groupid='+groupid+']').remove();
-					$('select[name=add-to-group] option[data-groupid='+groupid+']').remove();
+				  //UI update
+				  $('#modal-delete-group').modal('hide');
+				  $('#groups-list li[data-groupid='+groupid+']').remove();
+				  $('select[name=add-to-group] option[data-groupid='+groupid+']').remove();
   
 				 
 			    },
@@ -562,18 +568,18 @@ require([
       function selectWebmap(webmapid)
       {
       
-      currentWebmapId = webmapid;
+          currentWebmapId = webmapid;
           
-//@TODO: create a check: each webmap needs to have 1 layer with the word 'vragen' in it's title
-		  vCalls.getVragenLayer(webmapid)
+		  vCalls.getVragenLayerUrl(webmapid)
 		  .then(
-		    function(getVragenLayerResponse)
+		    function(getVragenLayerUrlResponse)
 			{
-				console.log(getVragenLayerResponse);
-				if(!getVragenLayerResponse){
+				console.log(getVragenLayerUrlResponse);
+				if(!getVragenLayerUrlResponse){
 				  alert('De geselecteerde webmap bevat geen laag met het woord \'vragen\' in de titel. Selecteer een andere webmap of pas de gekozen webmap aan in ArcGIS Online.');
 				  throw 'No questions layer found, cancelling deferred chain';
 				}else{
+				  store.set('veldwerkWorkflowProgress', { webmapid: webmapid, questionsLayerUrl: getVragenLayerUrlResponse })
 				  return vCalls.getGroupsForMap(webmapid);
 				}
 			},
@@ -605,7 +611,6 @@ require([
 				  
 			  }
 			  query(".webmap-list-container").style("display", 'none');
-			  store.set('veldwerkWorkflowProgress', { webmapid: webmapid, userdata: 'CSV/XLSX content' })
 			  $.smoothScroll({
 				  offset: -220,
 				  scrollTarget: '#col-selected-webmapp'
@@ -678,16 +683,6 @@ require([
           console.log(newtxt);//logTxt.value = newtxt;
           }
       }
-
-      
-      function PocDuplicateMap()
-      {
-          //id's are on mvanhulzendev portal
-          var mapId = "5670eac7cd734c6e9bbf6fd7f2025170";
-          var groupId = "7857a21c2dcf43369ca743f486587a26";
-          var groupName = "TEST2";
-          vCalls.createMap(mapId, groupId, groupName);
-      }
       
       function createNewGroupAndDependencies(groupName){
 		$(this).button('loading');
@@ -717,7 +712,7 @@ require([
   //@TODO: check if a map exists that has a title which refers to this groups tile
 	  
 			//if not, create one:
-			  return vCalls.createMap(stored.webmapid, createGroupResults.group.id, createGroupResults.group.title); 
+			  return vCalls.createMap(stored.webmapid, stored.questionsLayerUrl, createGroupResults.group.id, createGroupResults.group.title); 
 			  $('#groups-list').append('<li data-listSearchValue="'+createGroupResults.group.title + createGroupResults.group.id+'" data-groupid="'+createGroupResults.group.id+'" data-groupname="'+createGroupResults.group.title+'><a href="#group-'+createGroupResults.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+createGroupResults.group.id+'">'+createGroupResults.group.title+' <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span></a><ul id="group-'+createGroupResults.group.id+'" class="collapse" data-groupid="'+createGroupResults.group.id+'"></ul></li>');
 				  
 			  //Add to the dropdown buttons

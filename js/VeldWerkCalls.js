@@ -104,7 +104,7 @@ define([
             }
         },
 		
-		getVragenLayer: function(mapid)
+		getVragenLayerUrl: function(mapid)
 		{
 			var deferred = new Deferred();
 			
@@ -120,14 +120,21 @@ define([
 			  function(itemRequestItemResult)
 			  {
 				  opLayers = itemRequestItemResult.operationalLayers;
+				  if(!opLayers)
+				  {
+					  deferred.resolve(false);
+				  }
+				  
 				  var vragenLayer = itemRequestItemResult.operationalLayers.filter(function ( obj ) {
 					return (obj.title.match(/vragen/i) || obj.title.match(/opgaven/i) || obj.title.match(/opdrachten/i) )
 				  })[0];
 				  if(vragenLayer)
+				  {
 				    deferred.resolve(vragenLayer.url);
-				  else
+				  }else
+				  {
 				    deferred.resolve(false)
-				  
+				  }
 					
 				  deferred.resolve;
 			  }
@@ -373,7 +380,7 @@ define([
         },
         
         
-        createMap: function(mastermapid, groupid, groupname)
+        createMap: function(mastermapid, questionsLayerUrl, groupid, groupname)
         {
 			var deferred = new Deferred();
 
@@ -403,7 +410,7 @@ define([
 					console.log('error');
 					return;
 				}
-
+//@TODO: we are recieving questionsLayerUrl, therefore should not use the check below but benefit from the check that's already been performed and resulted in questionsLayerUrl (for example http://services3.arcgis.com/oecFpSTGbkyJV2e0/arcgis/rest/services/Veldwerk2_0_Template_kaartlaag/FeatureServer/1)
 				for (var i = 0; i < itemRequestDataResp.operationalLayers.length; i++)
                 {
 				    var opLayer = itemRequestDataResp.operationalLayers[i];
@@ -411,7 +418,8 @@ define([
 				    //if(opLayer.title.toUpperCase()== "VRAGEN" || opLayer.title.toUpperCase() == "OPGAVEN" || opLayer.title.toUpperCase() == "OPDRACHTEN" )
 					if( opLayer.title.match(/vragen/i) || opLayer.title.match(/opgaven/i) || opLayer.title.match(/opdrachten/i) )
 				    {
-						console.log('vragenlayer gevonden');
+						console.log('vragenlayer gevonden. opLayer:', opLayer);
+						console.log('questionsLayerId in localStorage:', questionsLayerId);
 				        if (!opLayer.layerDefinition)
 				        {
 				            opLayer.layerDefinition = {};
@@ -569,16 +577,33 @@ define([
 			return deferred.promise;
 		},
 		
-		deleteQuestionsForGroup: function(mapid, groupid)
+		deleteQuestionsForGroup: function(fLayerUrl, groupid)
 		{
 			console.log('start function deleteQuestionsForGroup');
+//@TODO: query the featureLayer that contains the questions for groupID=groupid
+//@TODO: for each recored, deleteFeature (http://<featurelayer-url>/deleteFeatures)
+
+			//requestUrl = http://<featureservice-url>/query
+
+			//requestUrl = portalUrl+"/sharing/rest/content/users/" + username + "/items/"+mapid +"/delete"
+			var itemRequest = esriRequest({
+                url: requestUrl,
+                content: { f: "json"},
+                handleAs: "json",
+				usePost: true
+				},
+				{ usePost: true
+			});
+			return itemRequest;
+			
 			return true;
 		},
         
         
         deleteMap: function(mapid)
         {
-        	console.log('map ' + mapid + 'is deleted;');
+			var deferred = new Deferred();
+			
 			username = portal.user.username;
             requestUrl = portalUrl+"/sharing/rest/content/users/" + username + "/items/"+mapid +"/delete"
 			var itemRequest = esriRequest({
@@ -590,6 +615,9 @@ define([
 				{ usePost: true
 			});
 			return itemRequest;
+			
+			deferred.resolve();
+			return deferred.promise;
         },
 		
 		
