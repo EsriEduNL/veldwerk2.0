@@ -217,7 +217,7 @@ require([
 		  /////////////////////////////////////////
 		  //Modal: add-group, tab add-groups-file//
 		  //$('#initAssiningUsersToGroup').on('click', function(){ initAssiningUsersToGroup(); });
-	  	  //$('#manageUsersDragdrop').on('click', function(){initAssiningUsersToGroup(); });
+	  	  $('#manageUsersDragdrop').on('click', function(){initAssiningUsersToGroup(); });
 		  $("#groupBulkExcelDropArea").on('dragenter', function (e) 
 		  {
 			  e.stopPropagation();
