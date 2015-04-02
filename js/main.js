@@ -65,6 +65,7 @@ require([
 		  
 		  /*Initialize some UI stuff*/
           $("input.style-as-switch").bootstrapSwitch();
+		  $('span.currentYear').html( new Date().getFullYear() );
           
 		  
           vCalls = new VeldWerkCalls();
@@ -83,7 +84,15 @@ require([
           on(dom.byId('loginLink'), 'click', logIn);
           on(dom.byId('logoutLink'), 'click', logOut);
 
-          
+          //Toggle introduction tekst
+		  $('#toggleIntroduction').on('click', function(){
+			  $('#introduction-text').toggle();
+			  if( $(this).html() == 'Verberg' ){
+				  $(this).html('Toon');
+			  }else{
+				  $(this).html('Verberg');
+			  }
+		  });
           
           //Select webmapp, show it and scroll to it
           on(wind.doc, ".btn-select-this-webmap:click", function(e){
@@ -799,6 +808,7 @@ require([
       	
 		allTheUsers = {};
 		usersInAGroup = [];
+		
 		//put users in array
       	vCalls.getPortalUsers().then(
 		  function(response) 
@@ -849,16 +859,16 @@ require([
 
 					  drop: function(event, ui) 
 					    {
-					      //remove
+					      //remove user from group
 						  if(ui.draggable.attr("data-group-id-prev")) {
-						  	//hiero
 						  	console.log('should remove user ' + ui.draggable.attr("data-user-id") + ' from group '+ ui.draggable.attr("data-group-id-prev"));
 						  	vCalls.removeStudentUserFromGroup(ui.draggable.attr("data-user-id"), ui.draggable.attr("data-group-id-prev"));
 						  }
 							ui.draggable.attr("data-group-id-prev",  $(this).attr("data-group-id"));
-						 //add
+						 //add user to group
 						  var tmp = $(this).children()[0];
 						  $(tmp).append($(ui.draggable));
+						  //vCalls.doesUserHasPrivilege(ui.draggable.attr("data-user-id"));
 						  vCalls.addStudentUserToGroup(ui.draggable.attr("data-user-id"), $(this).attr("data-group-id"));
 
 

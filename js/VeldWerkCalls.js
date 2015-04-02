@@ -253,6 +253,11 @@ define([
 			return deferred.promise;
 		},
         
+		getPortalRoles: function()
+		{
+			//Get all roles that have the right privelege: http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Get_Roles_By_Privilege/02r30000020q000000/ 
+		},
+
         createStudentUser: function(data)
         {
 //Looks like a user will be added without recieving a mail, when a password is set
@@ -267,6 +272,7 @@ define([
 			}else
 			{
 //@TODO: check if custom role existst for the organisation. If not, data.role = 'account_user';
+//@TODO: check if role has the right priveleges
 			}
 			
 			var contentStr = {
@@ -301,6 +307,23 @@ define([
 			return itemRequest;
 		},
         
+		doesUserHasPrivilege: function(username, privilege)
+		{
+			//Since http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Get_Privilege_For_User/02r3000001vs000000/ doens't work (return is not as expected) we have to use work-around.
+			var requestUrl = portalUrl + "/sharing/rest/portals/"+portal.id+"/roles/getRolesForUser";
+            var getRolesRequest = esriRequest({
+                    url: requestUrl,
+                    content: { f: "json", username: username},
+                    handleAs: "json"
+            }, {usePost: true});
+			
+			getRolesRequest.then(
+				function(getRolesResult)
+				{
+					console.log(getRolesResult);
+				}
+			)
+		},
         
         deleteUser: function(username)
         {
