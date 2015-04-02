@@ -575,7 +575,7 @@
           <label>Wilt u de kaart die hoort bij deze groep verwijderen?</label>
           <div class="radio">
             <label>
-              <input type="radio" name="delete-map" id="donot-delete-map" value="no" autocomplete="off">
+              <input type="radio" name="delete-map" id="donot-delete-map" value="no" checked>
               Nee
             </label>
           </div>
@@ -589,7 +589,7 @@
           <label>Wilt u de gebruikers die lid zijn van deze groep verwijderen uit ArcGIS Online?</label>
           <div class="radio">
             <label>
-              <input type="radio" name="delete-users" id="donot-delete-users" value="no" autocomplete="off">
+              <input type="radio" name="delete-users" id="donot-delete-users" value="no" checked>
               Nee
             </label>
           </div>
@@ -603,15 +603,20 @@
           <label>Wilt u de vragen van deze groep verwijderen uit de kaartlaag?</label>
           <div class="radio">
             <label>
-              <input type="radio" name="delete-questions" id="donot-delete-questions" value="no" autocomplete="off">
+              <input type="radio" name="delete-questions" id="donot-delete-questions" value="no" checked>
               Nee
             </label>
           </div>
           <div class="radio">
             <label>
-              <input type="radio" name="delete-questions" id="do-delete-questions" value="yes" autocomplete="off">
+              <input type="radio" name="delete-questions" id="do-delete-questions" value="yes">
               Ja, verwijder de vragen van deze groep
             </label>
+          </div>
+          
+          <div id="deleteGroup-resultArea">
+            <ul>
+            </ul>
           </div>
           
         </div>

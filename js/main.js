@@ -68,7 +68,8 @@ require([
           
 		  
           vCalls = new VeldWerkCalls();
-		  esri.config.defaults.io.proxyUrl = "/proxy.php";
+		  //esri.config.defaults.io.proxyUrl = "proxy.php";
+		  esri.config.defaults.io.proxyUrl = "http://dennishunink.nl/playground/veldwerk/proxy.php";
 
           if(vCalls.signInCheck()) {
               logIn();/*Handels login, get webmaps, get users*/
@@ -137,6 +138,7 @@ require([
 		  
 		  //On opening delete group modal: copy group name and groupid
 		  $('#modal-delete-group').on('show.bs.modal', function(e){
+			  $('#deleteGroup-resultArea').html('');
 			  var groupname = $(e.relatedTarget).parent('li').data('groupname');
 			  var groupid = $(e.relatedTarget).parent('li').data('groupid');
 	
@@ -318,8 +320,17 @@ require([
 		  //////////////////////
 		  //Modal delete group//
 		  $('#modal-delete-group .btn-primary').on('click', function(){
+
 //@TODO: check if all radio's have a :checked; since autocomplete="off" the don't have on by default	
+			  
+			  $('#deleteGroup-resultArea').html('<ul class="list-group"><li class="list-group-item list-group-item-info">Gestart. Dit venster sluit automatisch na afronding.</li></ul>');
+			  
 			  var groupid = $('#modal-delete-group input[name=groupid]').val();
+			  var groupname = $('#modal-delete-group span.groupname').html();
+			  var lsVeldwerk = store.get('veldwerkWorkflowProgress');
+			  var qLayerUrl = lsVeldwerk.questionsLayerUrl;
+			  
+			  
 			  
 			  All([vCalls.getUsersForGroup(groupid), vCalls.getMapsForGroup(groupid)])
 			  .then(
@@ -329,8 +340,19 @@ require([
 				
 				  var getUsersForGroupResp = results[0],
 				  getMapsForGroupResp = results[1]
-					  
-			// vCalls.deleteGroup(groupid).then(function(deleteGroupResults){console.log('deleteGroup is done. Result:', deleteGroupResults)});
+				
+				  //We will always delete the group itself	  
+			      vCalls.deleteGroup(groupid).then(
+				  	function(deleteGroupResults)
+					{
+ 						$('#deleteGroup-resultArea ul').append('<li class="list-group-item list-group-item-success">Groep <strong>'+groupname+'</strong> is verwijderd.</li>');
+						console.log('deleteGroup is done. Result:', deleteGroupResults)
+					},
+					function(deleteGroupError)
+					{
+						$('#deleteGroup-resultArea ul').append('<li class="list-group-item list-group-item-warning">Er is een fout opgetreden bij het verwijderen van groep <strong>'+groupname+'</strong>. <small>Technische details: '+deleteGroupError+'</small></li>');
+					}
+				  );
 				  
 				  //If we should delete the map(s), do so
 				  console.log('should we delete maps: ' + $('#modal-delete-group input[name=delete-map]:checked').val() );
@@ -341,22 +363,32 @@ require([
 						  vCalls.deleteMap(item.id).then(
 						    function(deleteMapResult)
 							{ 
-//@TODO: provide UI feedback							
+							  $('#deleteGroup-resultArea ul').append('<li class="list-group-item list-group-item-success">Kaart van groep <strong>'+groupname+'</strong> is verwijderd.</li>');						
 							  console.log('deleteMap is done. Result:', deleteMapResult); 
+							},
+							function(deleteMapError)
+							{
+								$('#deleteGroup-resultArea ul').append('<li class="list-group-item list-group-item-warning">Er is een fout opgetreden bij het verwijderen van de kaart van groep <strong>'+groupname+'</strong>. <small>Technische details: '+deleteGroupError+'</small></li>');
 							}
 						  );
-                    }
-				    );
+                    });
 				  }
-return false;
 				  
 				  //If we should delete questions, do so
 				  console.log('should we delete questions: ' + $('#modal-delete-group input[name=delete-questions]:checked').val() );
 				  if($('#modal-delete-group input[name=delete-questions]:checked').val() == 'yes')
 				  {
-//@TODO: make functuon deleteQuestionsForGroup work
-console.log('we gaan delete-qeustions vall toevoegen');
-					  vCalls.deleteQuestionsForGroup(getMapsForGroupResp.items[0].id, groupid);
+					  vCalls.deleteQuestionsForGroup(qLayerUrl, groupid).then(
+					  	  function(deleteQuestionsForGroupResult)
+					      {
+							  $('#deleteGroup-resultArea ul').append('<li class="list-group-item list-group-item-success">Vragen van groep <strong>'+groupname+'</strong> zijn verwijderd.</li>');						
+						      console.log('deleteQuestionsForGroup is done. Result:', deleteQuestionsForGroupResult);
+					      },
+						  function(deleteQuestionsError)
+						  {
+							  $('#deleteGroup-resultArea ul').append('<li class="list-group-item list-group-item-warning">Er is een fout opgetreden bij het verwijderen van de vragen van groep <strong>'+groupname+'</strong>. <small>Technische details: '+deleteQuestionsError+'</small></li>');
+						  }
+					  );
 				  }
 				  
 				  //If we should delete users, do so
@@ -365,8 +397,17 @@ console.log('we gaan delete-qeustions vall toevoegen');
 				  {  
 				     $(getUsersForGroupResp.users).each(function(i, username)
 				     {
-	//@TODO: make function deleteUser work
-						  vCalls.deleteUser(username);
+						  vCalls.deleteUser(username).then(
+						    function(deleteUserResult)
+							{
+								$('#deleteGroup-resultArea ul').append('<li class="list-group-item list-group-item-success">Gebruiker met gebruikersnaam <strong>'+username+'</strong> is verwijderd.</li>');						
+						      console.log('deleteQuestionsForGroup is done. Result:', deleteUserResult);
+							},
+							function(deleteUserError)
+						    {
+							  $('#deleteGroup-resultArea ul').append('<li class="list-group-item list-group-item-warning">Er is een fout opgetreden bij het verwijderen van de gebruiker met gebruikersnaam <strong>'+username+'</strong>. <small>Technische details: '+deleteUserError+'</small></li>');
+						    }
+						  );
                      }
 				     );
 				  }
@@ -380,7 +421,7 @@ console.log('we gaan delete-qeustions vall toevoegen');
 			    },
 				function(err)
 				{
-					alert('Fout, niets verwijderd. Error details: ', err);
+					alert('Er is een fout opgetreden. Error details: ', err);
 				}
 			  )
 			  
@@ -698,7 +739,7 @@ console.log('we gaan delete-qeustions vall toevoegen');
 		{
 		  var stored = store.get('veldwerkWorkflowProgress');
 			  
-		  vCalls.createGroup(name)
+		  vCalls.createGroup(name, stored.webmapid)
 		  .then(
 			function(createGroupResults) 
 			{ 

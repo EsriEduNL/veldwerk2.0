@@ -164,7 +164,7 @@ define([
         },
         
         
-        createGroup: function(groupName)
+        createGroup: function(groupName, mastermapid)
         {
 			var deferred = new Deferred();
             
@@ -172,7 +172,7 @@ define([
             var requestUrl = portalUrl + "/sharing/rest/community/createGroup";
             var itemRequest = esriRequest({
                     url: requestUrl,
-                    content: { f: "json", access: 'private', tags: 'veldwerk', title: groupName, description: 'Groep aangemaakt tbv Veldwerk'},
+                    content: { f: "json", access: 'private', tags: 'veldwerk, veldwerk-mastermap-'+mastermapid, title: groupName, description: 'Groep aangemaakt tbv Veldwerk'},
                     handleAs: "json"
             }, {usePost: true});
             
@@ -304,9 +304,19 @@ define([
         
         deleteUser: function(username)
         {
+			var deferred = new Deferred();
 			console.log('start delete user ', username);
-            //Delete AOL user account with userid
-            return true;//Return true if function has finished succesfully 
+
+			var requestUrl = portalUrl + "/sharing/rest/community/users/"+username+"/delete";
+            var itemRequest = esriRequest({
+                    url: requestUrl,
+					content: {f:"json"},
+                    handleAs: "json",
+					usePost: true
+            }, {usePost: true});
+			return itemRequest;
+			deferred.resolve;
+			return deferred.promise;
         },
         
         getUsersForGroup: function(groupid)
@@ -579,24 +589,24 @@ define([
 		
 		deleteQuestionsForGroup: function(fLayerUrl, groupid)
 		{
-			console.log('start function deleteQuestionsForGroup');
-//@TODO: query the featureLayer that contains the questions for groupID=groupid
-//@TODO: for each recored, deleteFeature (http://<featurelayer-url>/deleteFeatures)
+			var deferred = new Deferred();
+			
+			console.log('start function deleteQuestionsForGroup. fLayerUrl:', fLayerUrl);
 
-			//requestUrl = http://<featureservice-url>/query
-
-			//requestUrl = portalUrl+"/sharing/rest/content/users/" + username + "/items/"+mapid +"/delete"
-			var itemRequest = esriRequest({
+			requestUrl = fLayerUrl+"/deleteFeatures";
+			var itemRequest = esriRequest(
+			  {
                 url: requestUrl,
-                content: { f: "json"},
+                content: { f: "json", where: "GROUPID='"+groupid+"'" },
                 handleAs: "json",
 				usePost: true
-				},
-				{ usePost: true
-			});
-			return itemRequest;
+			  },
+			  { usePost: true }
+			);
 			
-			return true;
+			return itemRequest;
+			deferred.resolve();
+			return deferred.promise;
 		},
         
         
