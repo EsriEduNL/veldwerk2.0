@@ -217,7 +217,7 @@ define([
         },
         
         
-		getPortalUsers: function()
+		getPortalUsers_old: function()
 		{
 			var deferred = new Deferred();
 //@TODO: get ALL users, in chuncks of 50 per request, and return all the API responses			
@@ -252,6 +252,56 @@ define([
 			deferred.resolve;
 			return deferred.promise;
 		},
+		
+		getPortalUsers: function()
+		{
+			var inLoop = function(nextStart) {
+				console.log(nextStart);
+				var deferred = new Deferred();
+				var requestUrl = portalUrl + "/sharing/rest/portals/"+portal.id+"/users";
+				var itemRequest = esriRequest({
+						url: requestUrl,
+						content: { f: "json", num: 50, start: nextStart},
+						handleAs: "json",
+						
+				}, {usePost: true});
+			
+				itemRequest.then(function(response){
+					//console.log('part', response.users);
+				});
+				return itemRequest;
+
+				deferred.resolve;
+				return deferred.promise;				
+			}
+						
+			var users = new Object;
+			users.users = [];
+			var def = new Deferred();
+	
+			var currDef = def;
+	
+			for (var i = 0; i < 10; i++) {
+					currDef = currDef.then (function(response) {
+						users.users = users.users.concat(response.users);
+						if(response.nextStart < 0) {
+							return users;
+						}
+						else {
+							return inLoop(response.nextStart);
+						}
+					});
+			}
+			
+			
+			
+
+			def.resolve(users);
+			return (currDef);
+
+
+		},
+        
         
 		getPortalRoles: function()
 		{

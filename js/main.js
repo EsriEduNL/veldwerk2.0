@@ -654,7 +654,7 @@ require([
 				  addGroupsToUI(objForUI);
 				  
 				  //Get users for groups
-				  initAssiningUsersToGroup();//FOR NOW!!! This function should be moved to here, since several calls in that funtion are already done here
+				  //initAssiningUsersToGroup();//FOR NOW!!! This function should be moved to here, since several calls in that funtion are already done here
 //@TODO: load users and assign them to groups; the getGroupsForMap result is available as getGroupsForMapResponse();
 //We possibly have to add vCalls.getPortalUsers().then as a call that needs to be performed in the start of this function(use All([]))
 //Niels: maybe we should wait to fix this nice-to-have-things untill we have AngularJs:)
