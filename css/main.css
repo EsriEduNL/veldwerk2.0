@@ -11,6 +11,7 @@ body, html{
 	color:#4D4D4D;
 }
 
+
 /*////////////////////////
 //Font and text settings//
 ////////////////////////*/
@@ -368,10 +369,20 @@ div.selected-webmap-groups{
 }
 
 /*
-//Section contact//
+//Section footer//
 */
 #section-footer{
 	
+}
+footer.navbar-default.navbar-fixed-bottom{
+      background:#007AC2;
+      color:white;
+      padding:0.5em 0;
+}
+footer.navbar-default.navbar-fixed-bottom p{
+      margin:0;
+	  font-size:0.8em;
+	  text-align:right;
 }
 
 /*
