@@ -1054,6 +1054,7 @@ require([
 			$('#groupBulkExcelGroups-step3').show();
 		  });
 		  
+		  /*
 		  //make a fresh list of all current groups so we can use it it in createUsersFromExcel() later on
 		  window.currentGroups = {};
 		  vCalls.getGroupsForMap(currentWebmapId).then(function(response) 
@@ -1062,15 +1063,32 @@ require([
 			{
 				window.currentGroups[value.title] = value.id;
 			});
-		  });	
+		  });
+		  */
 		  
 		}//end function createGroupsFromExcel
 		
+
+		function createUsersFromExcel() {
+		//make a fresh list of all current groups so we can use it it in createUsersFromExcel() later on
+		  window.currentGroups = {};
+		  vCalls.getGroupsForMap(currentWebmapId).then(function(response) 
+		  {
+			$.each( response.results, function( key, value ) 
+			{
+				window.currentGroups[value.title] = value.id;
+			});
+		  });
+		  console.log('we do have a fresh overview of the groups: ', window.currentGroups);
+		  //and now, link some users to groups
+		  createUsersFromExcel1();
+		
+		}
 		
 
-		function createUsersFromExcel() 
+		function createUsersFromExcel1() 
 		{
-		
+		console.log('and now, link some users to groups');
 		  numberOfRows = workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/\d+/)[0];
 		  
 		  $('#groupBulkExcelUsers-resultArea').show();
