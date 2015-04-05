@@ -228,7 +228,10 @@ require([
 		  /////////////////////////////////////////
 		  //Modal: add-group, tab add-groups-file//
 		  //$('#initAssiningUsersToGroup').on('click', function(){ initAssiningUsersToGroup(); });
-	  	  $('#manageUsersDragdrop').on('click', function(){initAssiningUsersToGroup(); });
+	  	  $('#manageUsersDragdrop').on('click', function()
+		  {
+			  initAssiningUsersToGroup(); 
+		  });
 		  $("#groupBulkExcelDropArea").on('dragenter', function (e) 
 		  {
 			  e.stopPropagation();
@@ -805,7 +808,8 @@ require([
 	  function initAssiningUsersToGroup()
 	  {
       	console.log('lets go initAssiningUsersToGroup');
-      	
+      	$('#assiningUsersToGroupUsers').html('gebruikers laden...');
+		
 		allTheUsers = {};
 		usersInAGroup = [];
 		
@@ -813,17 +817,21 @@ require([
       	vCalls.getPortalUsers().then(
 		  function(response) 
 		  {
+			  console.log('getPortalUsers:', response);
 			allTheUsers = {};
 			$.each( response.users, function( key, value ) 
 			{
 				allTheUsers[value.username] = value;
 			});
+		  },
+		  function(respError){
+		  	console.log('error:', respError);
 		  }
 		).then( 
 		  function() {
 		    //put other users in UI
 		    $('#assiningUsersToGroupUsers').html(null);	
-		    console.log(usersInAGroup);
+		    console.log('usersInGroup:',usersInAGroup);
 		    $.each( allTheUsers, function( key, value ) 
 		    {
 			$('#assiningUsersToGroupUsers').html($('#assiningUsersToGroupUsers').html() + '<li class="list-group-item" data-user-id="'+ value.username +'" data-listSearchValue="' + value.fullName + '" style="z-index: 1051">' + value.fullName + '</li>');

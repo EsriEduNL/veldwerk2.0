@@ -255,21 +255,6 @@ define([
 		
 		getPortalUsers: function()
 		{
-			var iniCall = function()
-			{
-				var deferred = new Deferred();
-				var requestUrl = portalUrl + "/sharing/rest/portals/"+portal.id+"/users";
-				var itemRequest = esriRequest({
-						url: requestUrl,
-						content: { f: "json", num: 100, start: 1},
-						handleAs: "json",
-						
-				}, {usePost: true});
-				return itemRequest;
-				deferred.resolve;
-				return deferred.promise;
-			}
-			
 			function inLoop(nextStart) 
 			{
 				console.log(nextStart);
@@ -294,13 +279,19 @@ define([
 						
 			var users = new Object;
 			users.users = [];
-			var def = new Deferred();
+			var deferred = new Deferred();
+			var currDef = deferred;
 	
-			var currDef = def;
-			
-//@TODO: do one initial call to get the total number of users, then proceed to a for-loop comparing total and nextStart
-			
-			iniCall().then(function(iniResponse)
+			/*var requestUrl = portalUrl + "/sharing/rest/portals/"+portal.id+"/users";
+			var iniRequest = esriRequest({
+					url: requestUrl,
+					content: { f: "json", num: 100, start: 1},
+					handleAs: "json",
+					
+			}, {usePost: true});
+
+
+			iniRequest.then(function(iniResponse)
 			{
 				console.log('iniResponse:', iniResponse);
 				var totalUsers = iniResponse.total;
@@ -316,19 +307,22 @@ define([
 						console.log('currDef response:', response);
 						users.users = users.users.concat(response.users);
 						if(response.nextStart < 0) 
-						{
-						 	return users;
+						{ console.log('return users:', users);
+						 	//return users;
+							deferred.resolve(users);
 						}else 
 						{
+							console.log('return nextStart');
 							return inLoop(response.nextStart);
 						}
 					});
 				}
+				return users;
 			});
 			
-			
+			return deferred.promise;*/
 	
-			/*for (var i = 0; i < 10; i++) 
+			for (var i = 0; i < 10; i++) 
 			{
 				currDef = currDef.then (function(response) 
 				{
@@ -341,10 +335,11 @@ define([
 						return inLoop(response.nextStart);
 					}
 				});
-			}*/
-
-			def.resolve(users);
+			}
+			
+			deferred.resolve(users);
 			return (currDef);
+			
 
 		},
         
