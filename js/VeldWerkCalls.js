@@ -304,14 +304,16 @@ define([
 			{
 				console.log('iniResponse:', iniResponse);
 				var totalUsers = iniResponse.total;
-				var nOfRuns = totalUsers / 100;
+				var nOfRuns = Math.round((totalUsers / 100))+1; 
+				//The first run won't return any users, therefore we have to add 1 to the number of runs
+				
 				console.log(totalUsers, nOfRuns);
 				
 				for (var i = 0; i < nOfRuns; i++) 
 				{
 					currDef = currDef.then (function(response) 
 					{
-						console.log('response:', response);
+						console.log('currDef response:', response);
 						users.users = users.users.concat(response.users);
 						if(response.nextStart < 0) 
 						{
