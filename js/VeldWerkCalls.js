@@ -317,7 +317,7 @@ define([
 						users.users = users.users.concat(response.users);
 						if(response.nextStart < 0) 
 						{
-							return users;
+						 	return users;
 						}else 
 						{
 							return inLoop(response.nextStart);
