@@ -255,7 +255,22 @@ define([
 		
 		getPortalUsers: function()
 		{
-			var inLoop = function(nextStart) 
+			var iniCall = function()
+			{
+				var deferred = new Deferred();
+				var requestUrl = portalUrl + "/sharing/rest/portals/"+portal.id+"/users";
+				var itemRequest = esriRequest({
+						url: requestUrl,
+						content: { f: "json", num: 100, start: 1},
+						handleAs: "json",
+						
+				}, {usePost: true});
+				return itemRequest;
+				deferred.resolve;
+				return deferred.promise;
+			}
+			
+			function inLoop(nextStart) 
 			{
 				console.log(nextStart);
 				var deferred = new Deferred();
@@ -282,8 +297,36 @@ define([
 			var def = new Deferred();
 	
 			var currDef = def;
+			
+//@TODO: do one initial call to get the total number of users, then proceed to a for-loop comparing total and nextStart
+			
+			iniCall().then(function(iniResponse)
+			{
+				console.log('iniResponse:', iniResponse);
+				var totalUsers = iniResponse.total;
+				var nOfRuns = totalUsers / 100;
+				console.log(totalUsers, nOfRuns);
+				
+				for (var i = 0; i < nOfRuns; i++) 
+				{
+					currDef = currDef.then (function(response) 
+					{
+						console.log('response:', response);
+						users.users = users.users.concat(response.users);
+						if(response.nextStart < 0) 
+						{
+							return users;
+						}else 
+						{
+							return inLoop(response.nextStart);
+						}
+					});
+				}
+			});
+			
+			
 	
-			for (var i = 0; i < 10; i++) 
+			/*for (var i = 0; i < 10; i++) 
 			{
 				currDef = currDef.then (function(response) 
 				{
@@ -296,7 +339,7 @@ define([
 						return inLoop(response.nextStart);
 					}
 				});
-			}
+			}*/
 
 			def.resolve(users);
 			return (currDef);
