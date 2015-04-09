@@ -543,7 +543,7 @@ define([
 					if( opLayer.title.match(/vragen/i) || opLayer.title.match(/opgaven/i) || opLayer.title.match(/opdrachten/i) )
 				    {
 						console.log('vragenlayer gevonden. opLayer:', opLayer);
-						console.log('questionsLayerId in localStorage:', questionsLayerId);
+						console.log('questionsLayerUrl in localStorage:', questionsLayerUrl);
 				        if (!opLayer.layerDefinition)
 				        {
 				            opLayer.layerDefinition = {};
