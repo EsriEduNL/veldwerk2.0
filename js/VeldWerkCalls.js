@@ -145,7 +145,7 @@ define([
         getGroupsForMap: function (mapid) {
             //Search all groups that have a tag in which the mapid is included
 			var params = {
-			  q: 'tags:"veldwerk-mastermap-'+mapid+'"'
+			  q: 'tags:"veldwerk-mastermap-'+mapid+'"', num: 100
 			};
 			return portal.queryGroups(params)
         },
