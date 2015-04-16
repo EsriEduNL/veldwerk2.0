@@ -544,7 +544,7 @@ require([
       
       function GetWebMaps()
       {
-          LogMessage("function GetWebMaps: Start getting info");
+          //LogMessage("function GetWebMaps: Start getting info");
           //getting all webmaps for this user and add them to the list
           vCalls.getMapsForTeacher()
 		  .then(function (response) 
@@ -554,33 +554,30 @@ require([
             {
                 $(response.results).each(function(i, e) {
 
-					if($.inArray('veldwerk-childmap', e.tags) > -1){
-					  return true; //If childmap, don't show this
+					if( (e.tags).indexOf('veldwerk-childmap') == -1)
+					{
+						if(!e.thumbnailUrl)
+						  e.thumbnailUrl = ''
+							
+						if(!e.description)
+						  e.description = '<em>geen</em>'
+						
+						if(e.access == 'public')
+						  var access = 'iedereen'
+						else if(e.access == 'private')
+						  var access = 'niemand'
+						else if(e.access == 'org')
+						  var access = 'organisatie'
+						else if(e.access == 'shared')
+						  var access = 'groep(en)'
+						  
+						created = new Date(parseInt(e.created));
+						modified = new Date(parseInt(e.modified));
+						
+						$('.webmap-list-container').append('<div class="col-sm-6 col-md-4 col-lg-3 col-webmap-'+e.id+'"><div class="thumbnail"><img src="'+e.thumbnailUrl+'" width="200" height="133" alt="Afbeelding voor webmap '+e.title+'"><div class="caption"><h3 id="map1Title">'+e.title+'</h3><p>Omschrijving: '+e.description+'</p><ul class="webmap-meta"><li>Gedeeld met: '+access+'</li><li>Aangemaakt op '+created+'</li><li>Laatst bewerkt op '+modified+'</li></ul><p><a href="#" data-webmapid="'+e.id+'" class="btn btn-default btn-select-this-webmap" data-webmapid="'+e.id+'" role="button">Selecteer</a></p></div></div></div>');
+		
+						//LogMessage("just added to the UI: webmap with id: " + e.id + " (" + e.title + ")");  
 					}
-					
-					
-					
-					if(!e.thumbnailUrl)
-                      e.thumbnailUrl = ''
-                        
-                    if(!e.description)
-                      e.description = '<em>geen</em>'
-                    
-                    if(e.access == 'public')
-                      var access = 'iedereen'
-                    else if(e.access == 'private')
-                      var access = 'niemand'
-                    else if(e.access == 'org')
-                      var access = 'organisatie'
-                    else if(e.access == 'shared')
-                      var access = 'groep(en)'
-                      
-                    created = new Date(parseInt(e.created));
-                    modified = new Date(parseInt(e.modified));
-                    
-                    $('.webmap-list-container').append('<div class="col-sm-6 col-md-4 col-lg-3 col-webmap-'+e.id+'"><div class="thumbnail"><img src="'+e.thumbnailUrl+'" width="200" height="133" alt="Afbeelding voor webmap '+e.title+'"><div class="caption"><h3 id="map1Title">'+e.title+'</h3><p>Omschrijving: '+e.description+'</p><ul class="webmap-meta"><li>Gedeeld met: '+access+'</li><li>Aangemaakt op '+created+'</li><li>Laatst bewerkt op '+modified+'</li></ul><p><a href="#" data-webmapid="'+e.id+'" class="btn btn-default btn-select-this-webmap" data-webmapid="'+e.id+'" role="button">Selecteer</a></p></div></div></div>');
-    
-                    //LogMessage("just added to the UI: webmap with id: " + e.id + " (" + e.title + ")");  
                   });//End response each
 				  
                   //Let's check if any webmapp has been stored in localstorage
