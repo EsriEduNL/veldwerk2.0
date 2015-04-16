@@ -754,17 +754,16 @@ require([
 		  vCalls.createGroup(name, stored.webmapid)
 		  .then(
 			function(createGroupResults) 
-			{ 
+			{ 			
 			  groupid = createGroupResults.group.id
 			  console.log('createGroup done, proceeding to createMap');
+			  
 			  //update UI
 			  var objForUI = {};
 			  objForUI[0] = {groupid: createGroupResults.group.id, groupname: createGroupResults.group.title};
 			  addGroupsToUI(objForUI, false);
-  
-  //@TODO: check if a map exists that has a title which refers to this groups tile
-	  
-			//if not, create one:
+		 	  
+			  //Create a map for this group
 			  return vCalls.createMap(stored.webmapid, stored.questionsLayerUrl, createGroupResults.group.id, createGroupResults.group.title); 
 			  $('#groups-list').append('<li data-listSearchValue="'+createGroupResults.group.title + createGroupResults.group.id+'" data-groupid="'+createGroupResults.group.id+'" data-groupname="'+createGroupResults.group.title+'><a href="#group-'+createGroupResults.group.id+'" data-parent="#groups-list" data-toggle="collapse" data-groupid="'+createGroupResults.group.id+'">'+createGroupResults.group.title+' <span class="glyphicon glyphicon-pencil" aria-hidden="true" data-toggle="modal" data-target="#modal-edit-group"></span> <span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="modal" data-target="#modal-delete-group"></span></a><ul id="group-'+createGroupResults.group.id+'" class="collapse" data-groupid="'+createGroupResults.group.id+'"></ul></li>');
 				  
@@ -775,12 +774,19 @@ require([
 		  ).then(
 			function(createMapResult) 
 			{  
-			  return vCalls.duplicateQuestions(groupid, stored.webmapid);//groupname, mastermapid	
+			  return vCalls.duplicateQuestions(groupid, stored.webmapid);	
 			}, 
 			function (error) 
 			{
 			  if(error.messageCode == 'COM_0044'){
-				alert('Fout: er bestaat al een groep met deze naam. Kies een andere naam.');
+//@TODO: Check if a map and a set of questions exists for the group
+			    /*vCalls.getMapsForGroup(groupid).then(
+				  function(getMapsForGroup)
+				  {
+					  //@TODO: if none of the maps for this group is a child of the current mastermap, we should create the map
+				  }
+				);	*/
+				alert('Fout: er bestaat al een groep met deze naam. Kies een andere naam.');			
 			  }else{
 				alert('Er is een fout opgetreden. Details: '+error.details);
 			  }
@@ -851,7 +857,7 @@ require([
 					{	
 					  usersInAGroup.push(value1);
 				      usersInThisGroupHtml = usersInThisGroupHtml + '<li data-group-id-prev="'+ value.id +'" class="list-group-item" data-user-id="'+ allTheUsers[value1].username +'" style="z-index: 1051">' + allTheUsers[value1].fullName + '</li>';
-					  $('#assiningUsersToGroupUsers').children('li[data-user-id=' + value1 + ']').remove();
+					  $('#assiningUsersToGroupUsers').children('li[data-user-id=' + allTheUsers[value1].username + ']').remove();
 								
 					});
 

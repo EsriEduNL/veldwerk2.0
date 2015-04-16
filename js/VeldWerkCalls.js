@@ -216,6 +216,17 @@ define([
 
         },
         
+		getMapsForGroup: function(groupid)
+		{
+			//http:// <content-url>/groups/<groupId>
+			//requestUrl = portalUrl + "/sharing/rest/community/groups/"+groupid+"/delete"
+			var itemRequest = esriRequest({
+                    url: requestUrl,
+                    content: { f: "json"},
+                    handleAs: "json"
+            }, {usePost: true});
+			return itemRequest;
+		},
         
 		getPortalUsers_old: function()
 		{
@@ -564,6 +575,9 @@ define([
 				contentObj.title = groupname + "_map";
 				contentObj.tags.push("veldwerk-childmap", "veldwerk-mastermap-for-this-map-ID-"+mastermapid); 
 				contentObj.tags = (contentObj.tags).join(",");
+				contentObj.typeKeywords.push("Collector", "Data Editing", "Offline");
+				contentObj.typeKeywords = (contentObj.typeKeywords).join(",");
+				contentObj.extent = (contentObj.extent).join(",");
 				contentObj.text = JSON.stringify(itemRequestDataResp);
 				
 				username = portal.user.username;
@@ -572,7 +586,7 @@ define([
 					url: addItemUrl,
 					content: contentObj,
 					usePost: true
-				}, { usePost: true });
+				}, { usePost: true });		
 				
 				//itemRequestAddItem.then(function(res){console.log(res);});
 				return itemRequestAddItem;
