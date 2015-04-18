@@ -809,6 +809,18 @@ define([
                 handleAs: "json"
             });
 			
+			var d = new Date();
+			var month = d.getMonth()+1;
+			var day = d.getDate();
+			var hour = d.getHours();
+			var minutes = d.getMinutes();
+				
+			var datetimestamp = ((''+day).length<2 ? '0' : '') + day + "-" +
+					((''+month).length<2 ? '0' : '') + month + '-' +
+					d.getFullYear() + " " +
+					((''+hour).length<2 ? '0' : '') + hour + ":"+
+					((''+minutes).length<2 ? '0' : '') + minutes;
+	
 			itemRequestData
 			.then(
 				function (data) {
@@ -821,7 +833,7 @@ define([
 					
 					var itemRequestExportItem = esriRequest({
 						url: requestUrl,
-						content: { f: "json", itemId: itemid, exportFormat: "CSV", exportParameters: JSON.stringify({ "layers": [{"id": qLayerIdWithinItem}] }) },
+						content: { f: "json", itemId: itemid, exportFormat: "CSV", title: "Export van kaartlaag "+qLayerObj[0].title+" (geexporteerd op "+datetimestamp+")", exportParameters: JSON.stringify({ "layers": [{"id": qLayerIdWithinItem}] }) },
 						usePost: true
 					}, { usePost: true });
 					return itemRequestExportItem;
