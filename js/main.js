@@ -450,10 +450,10 @@ require([
 			  $("#modal-export-item p.msg-job-working").removeClass('hidden');
 			  
 			  var stored = store.get('veldwerkWorkflowProgress');
-              if(stored.webmapid)
+              if(stored.webmapid && stored.questionsLayerUrl)
               {
 				  
-              	vCalls.exportItem(stored.webmapid)
+              	vCalls.exportItem(stored.webmapid, stored.questionsLayerUrl)
 				.then(function(response){
 				  	console.log(response);
 				  	$("#modal-export-item p.msg-job-working").addClass('hidden');

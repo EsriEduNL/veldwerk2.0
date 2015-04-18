@@ -759,7 +759,7 @@ define([
         },
 		
 		
-		exportItem: function(webmapid)
+		/*exportItem: function(webmapid)
 		{
 			var deferred = new Deferred();
             
@@ -795,9 +795,48 @@ define([
 			
 			return deferred.promise;
 			
-		},
+		},*/
      
+		exportItem: function(webmapid, qLayerUrl)
+		{
+			var deferred = new Deferred();
+            
+			//download (meta)data of the mastermap so we can discover the right itemid
+            dataUrl = portalUrl + "/sharing/rest/content/items/" + webmapid + "/data";
+			var itemRequestData = esriRequest({
+                url: dataUrl,
+                content: { f: "json"},
+                handleAs: "json"
+            });
+			
+			itemRequestData
+			.then(
+				function (data) {
+					username = portal.user.username;
+					requestUrl = portalUrl+"/sharing/rest/content/users/" + username + "/export";
 
+					qLayerObj = data["operationalLayers"].filter(function(layerObj){ return layerObj.url == qLayerUrl; });
+					itemid = qLayerObj[0].itemId;
+					qLayerIdWithinItem = parseInt((qLayerObj[0].url).substring((qLayerObj[0].url).lastIndexOf("/")+1));
+					
+					var itemRequestExportItem = esriRequest({
+						url: requestUrl,
+						content: { f: "json", itemId: itemid, exportFormat: "CSV", exportParameters: JSON.stringify({ "layers": [{"id": qLayerIdWithinItem}] }) },
+						usePost: true
+					}, { usePost: true });
+					return itemRequestExportItem;
+				},
+				function (error) {
+					console.log("Error: ", error.message);
+					deferred.resolve(error);
+				}
+			).then(function(exportResult){
+				deferred.resolve(exportResult);
+			});
+			
+			return deferred.promise;
+			
+		},
 
         
 
