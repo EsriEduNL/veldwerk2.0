@@ -250,12 +250,14 @@ require([
 			  $(this).css('border', '2px dashed #0B85A1');
 			  e.stopPropagation();
 			  e.preventDefault();
+			  $('#groupBulkExcelLoaded').hide();
 			  var files = e.originalEvent.dataTransfer.files;
 			  readExcelFile(files);
 		  });
 		  $('#groupBulkExcelInput').on('change', function(e){
 			  e.stopPropagation();
 			  e.preventDefault();
+			  $('#groupBulkExcelLoaded').hide();
 			  var files = e.target.files;
 			  readExcelFile(files);
 		  });
@@ -975,7 +977,7 @@ require([
 					  return false;
 				  }
 				  
-				  $('#groupBulkExcelLoaded').css('visibility', 'visible');
+				  $('#groupBulkExcelLoaded').show();
 				  $('#groupBulkExcelLoadedName').html(name);
 				  $('#groupBulkExcelGroups-step2').show();
 				  $('#groupBulkExcelGroups-resultArea').html('');
