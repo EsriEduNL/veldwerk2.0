@@ -601,15 +601,15 @@ require([
 		  vCalls.getPortalUsers()
 		  .then(
 		    function(response)
-			{
+			{ 
 				//construct the user-list in the modal-add-users -> tab users-aol
 				var userList = '';
-				$(response.users).each(function(i, e) {
+				$(response).each(function(i, e) {
 					userList += '<li class="list-group-item">' + e.fullName + ' <a href="#" class="pull-right" data-username="' + e.username + '" data-user-fullname="' + e.fullName + '"><small>toevoegen</small></a></li>';
 				});
-				if(!userList)
+				if(!userList){
 				  userList = 'Geen AOL gebruikers gevonden';
-				  
+				}
 				$('#users-aol-all').html(userList);
 			}
 		  );

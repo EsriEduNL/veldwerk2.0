@@ -268,7 +268,7 @@ define([
 		{
 			function inLoop(nextStart) 
 			{
-				console.log(nextStart);
+				console.log('starting inLoop with nextStart=',nextStart);
 				var deferred = new Deferred();
 				var requestUrl = portalUrl + "/sharing/rest/portals/"+portal.id+"/users";
 				var itemRequest = esriRequest({
@@ -281,59 +281,108 @@ define([
 				itemRequest.then(function(response)
 				{
 					//console.log('part', response.users);
+					deferred.resolve(response);
 				});
-				return itemRequest;
+				//return itemRequest;
 
-				deferred.resolve;
-				return deferred.promise;				
+				
+				//deferred.progress(itemRequest);	
+				return deferred.promise;		
+				//deferred.progress(itemRequest);		
 			}
 						
+			/*var users = new Object;
+			users.users = [];
+			var deferred = new Deferred();
+			var currDef = deferred;
+			
+			var first = inLoop(0);	
+			first.then(function(response)
+			{ 
+				console.log(response); 
+				users.users = response.users;
+				//number of additional calls to make
+				times = Math.ceil( (response.total-100)/100 ); 
+				console.log('Number of additional calls to make:', times);
+				
+				for (var i = 0; i < times; i++) 
+				{
+					inLoop( ((i+1)*100)+1 ).then(function(resp)
+					{ 
+						users.users = users.users.concat(resp.users);
+						//console.log('call done. Length users=', users);//This count is correct
+						if (i == times)
+						{
+							console.log('i==times. Useres length=', users.users.length);
+							currDef.resolve(users);
+						}
+					});
+				}
+				console.log('forLoop done. Length users=', users);//This count isn't
+	
+			});
+	
+			return (currDef);*/
+			
+			//NEW SUggestion
+			/*
+			In the example: process() is like first()
+			var process = asyncProcess();
+			process.then(function(results){
+			  dom.byId("output").innerHTML += "<br/>I'm finished, and the result was: " + results;
+			}, function(err){
+			  dom.byId("output").innerHTML += "<br/>I errored out with: " + err;
+			}, function(progress){
+			  dom.byId("output").innerHTML += "<br/>I made some progress: " + progress;
+			});*/
 			var users = new Object;
 			users.users = [];
 			var deferred = new Deferred();
 			var currDef = deferred;
-	
-			/*var requestUrl = portalUrl + "/sharing/rest/portals/"+portal.id+"/users";
-			var iniRequest = esriRequest({
-					url: requestUrl,
-					content: { f: "json", num: 100, start: 1},
-					handleAs: "json",
-					
-			}, {usePost: true});
-
-
-			iniRequest.then(function(iniResponse)
-			{
-				console.log('iniResponse:', iniResponse);
-				var totalUsers = iniResponse.total;
-				var nOfRuns = Math.round((totalUsers / 100))+1; 
-				//The first run won't return any users, therefore we have to add 1 to the number of runs
+			
+			var first = inLoop(0);	
+			first.then(function(response)
+			{ 
+			    console.log("first.then resolve");
 				
-				console.log(totalUsers, nOfRuns);
+				//number of additional calls to make
+				times = Math.ceil( (response.total-100)/100 ); 
+				console.log('Number of additional calls to make:', times);
 				
-				for (var i = 0; i < nOfRuns; i++) 
+				iResolved = 0;
+				
+				for (var i = 0; i < times; i++) 
 				{
-					currDef = currDef.then (function(response) 
-					{
-						console.log('currDef response:', response);
-						users.users = users.users.concat(response.users);
-						if(response.nextStart < 0) 
-						{ console.log('return users:', users);
-						 	//return users;
-							deferred.resolve(users);
-						}else 
+					inLoop( ((i+1)*100)+1 ).then(function(resp)
+					{ 
+						console.log("inLoop then.resolve");
+
+						iResolved++;
+						users.users = users.users.concat(resp.users);
+	
+						if (iResolved === times)
 						{
-							console.log('return nextStart');
-							return inLoop(response.nextStart);
+							//All calls have resolved; let's send the user object back!
+							currDef.resolve(users);
 						}
+					}, function(err){
+					  console.log("inLoop then.error");
+					}, function(resp){
+					  console.log("inLoop then.update");
 					});
 				}
-				return users;
+				
+			}, function(err){
+		 		console.log("first.then error");
+			}, function(response){
+				console.log("first.then update");
+			    
 			});
-			
-			return deferred.promise;*/
 	
-			for (var i = 0; i < 10; i++) 
+			return (currDef);
+			
+			
+			/*for (var i = 0; i < 10; i++) 
 			{
 				currDef = currDef.then (function(response) 
 				{
@@ -342,14 +391,16 @@ define([
 					{
 						return users;
 					}else 
-					{
+					{ 
 						return inLoop(response.nextStart);
 					}
+					
 				});
-			}
+			}*/
 			
-			deferred.resolve(users);
-			return (currDef);
+	
+			//deferred.resolve(users);
+			//return (currDef);
 			
 
 		},
@@ -670,7 +721,7 @@ define([
 				  fsQueryUrl = vragenLayer.url+"/query";
 				  var fsRequestQuery = esriRequest({
 					url: fsQueryUrl,
-					content: { f: "json", outFields : "*", where : "GROUPID IS NULL"},
+					content: { f: "json", outFields : "*", where : "GROUPID IS NULL OR GROUPID=''"},
 					handleAs: "json"
 				 });
 				 return fsRequestQuery;
@@ -824,12 +875,12 @@ define([
 			itemRequestData
 			.then(
 				function (data) {
-					username = portal.user.username;
-					requestUrl = portalUrl+"/sharing/rest/content/users/" + username + "/export";
-
 					qLayerObj = data["operationalLayers"].filter(function(layerObj){ return layerObj.url == qLayerUrl; });
 					itemid = qLayerObj[0].itemId;
 					qLayerIdWithinItem = parseInt((qLayerObj[0].url).substring((qLayerObj[0].url).lastIndexOf("/")+1));
+					
+					username = portal.user.username;
+					requestUrl = portalUrl+"/sharing/rest/content/users/" + username + "/export";
 					
 					var itemRequestExportItem = esriRequest({
 						url: requestUrl,
