@@ -76,9 +76,6 @@ require([
               logIn();/*Handels login, get webmaps, get users*/
           };
           
-          //POC:
-//heeft niet uit gezet
-//          on(dom.byId('btnPOCDuplicatMap'), 'click', PocDuplicateMap);
           
           //search when enter key is pressed or button is clicked
           on(dom.byId('loginLink'), 'click', logIn);
@@ -188,7 +185,7 @@ require([
 		  
 		  $('form#form-add-single-user').on( "submit", function(event){
 		    event.preventDefault();
-			console.log( $(this).serializeArray() );
+			//console.log( $(this).serializeArray() );
 			vCalls.createStudentUser( $( this ).serializeArray() );
 		  });
 		  
@@ -791,17 +788,9 @@ require([
 			  }
 			}
 		  ).then(
-			  /*
-				function(duplicateQuestionsResult)
-				{
-					console.log('duplicateQuestionsResult:', duplicateQuestionsResult);
-  
-				}
-				*/	
-		  ).then(
 			function () {
 				  //Close the modal
-	  
+	  console.log("!!!WE ARE DONE. SHOULD THIS BE THE MOMENT OT ALTER THE UI?");
 			}
 		  );
 			  
@@ -1091,17 +1080,18 @@ require([
 			{
 				window.currentGroups[value.title] = value.id;
 			});
+			console.log('we do have a fresh overview of the groups: ', window.currentGroups);
+		  	//and now, link some users to groups
+		  	createUsersFromExcel1();
 		  });
-		  console.log('we do have a fresh overview of the groups: ', window.currentGroups);
-		  //and now, link some users to groups
-		  createUsersFromExcel1();
+		  
 		
 		}
 		
 
 		function createUsersFromExcel1() 
 		{
-		console.log('and now, link some users to groups');
+		  console.log('and now, link some users to groups');
 		  numberOfRows = workbook.Sheets[workbook.SheetNames[0]]['!ref'].split(':')[1].match(/\d+/)[0];
 		  
 		  $('#groupBulkExcelUsers-resultArea').show();
@@ -1115,9 +1105,11 @@ require([
 			{
 				allTheUsers.push(value.username);
 			});
+			console.log('allTheUsers:', allTheUsers);
 		  })
 		  .then(function() 
 		  {
+			  console.log('Ready to loop over users and add them to their group(s)');
 			for(var i=2; i<=numberOfRows; i++) 
 			{
 			  var user = workbook.Sheets[workbook.SheetNames[0]][alphabet[$('#groupBulkExcelColumnUsers').val()-1]+i].v;

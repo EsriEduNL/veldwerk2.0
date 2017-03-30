@@ -345,8 +345,11 @@ define([
 			{ 
 			    console.log("first.then resolve");
 				
+				users.users = users.users.concat(response.users);//Add the users off the first resolve to the users object
+				
 				//number of additional calls to make
 				times = Math.ceil( (response.total-100)/100 ); 
+				if(times <= 1){ times = 0; currDef.resolve(users); };//Correct for times resulting in -0; if no additional calls required, resolve and return users
 				console.log('Number of additional calls to make:', times);
 				
 				iResolved = 0;
